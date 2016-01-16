@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<jpa:entity-mappings jaxb-support="false" id="_14216256114051" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm orm_2_1.xsd" xmlns:java="http://jcp.org/en/jsr/detail?id=270" xmlns:jpa="http://java.sun.com/xml/ns/persistence/orm" xmlns:ns4="http://nbmodeler.java.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <jpa:package>com.cami.persistence.model</jpa:package>
+    <jpa:mapped-superclass class="EntityObject" jaxb-root-element="false" static-metamodel="false" visibile="true" minimized="false" id="_1421627053094">
+        <jpa:attributes>
+            <jpa:id name="id" attribute-type="Long" visibile="true" id="_142162709382048">
+                <jpa:column unique="false" nullable="true" insertable="true" updatable="true"/>
+                <jpa:generated-value strategy="AUTO"/>
+            </jpa:id>
+            <jpa:basic name="version" attribute-type="long" visibile="true" id="_142162710075249">
+                <jpa:column unique="false" nullable="true" insertable="true" updatable="true" length="255"/>
+            </jpa:basic>
+        </jpa:attributes>
+    </jpa:mapped-superclass>
+    <jpa:entity class="Materiel" jaxb-root-element="false" static-metamodel="false" superclassId="_1421627053094" visibile="true" minimized="false" id="_1421625648098">
+        <jpa:attributes>
+            <jpa:basic name="code" attribute-type="String" visibile="true" id="_14216262161346">
+                <jpa:column unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:basic>
+            <jpa:basic name="nom" attribute-type="String" visibile="true" id="_14216262173887">
+                <jpa:column unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:basic>
+            <jpa:basic name="description" attribute-type="String" visibile="true" id="_14216262185488">
+                <jpa:column unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:basic>
+            <jpa:many-to-one name="typeMateriel" target-entity="TypeMateriel" optional="true" primaryKey="true" connected-entity-id="_1421625651168" visibile="true" id="_142162678375938">
+                <jpa:join-table/>
+            </jpa:many-to-one>
+        </jpa:attributes>
+    </jpa:entity>
+    <jpa:entity class="TypeMateriel" jaxb-root-element="false" static-metamodel="false" superclassId="_1421627053094" visibile="true" minimized="false" id="_1421625651168">
+        <jpa:attributes>
+            <jpa:basic name="code" attribute-type="String" visibile="true" id="_142162626975211">
+                <jpa:column unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:basic>
+            <jpa:basic name="nom" attribute-type="String" visibile="true" id="_142162627101412">
+                <jpa:column unique="false" nullable="true" insertable="true" updatable="true" length="255"/>
+            </jpa:basic>
+        </jpa:attributes>
+    </jpa:entity>
+    <jpa:entity class="Filiale" jaxb-root-element="false" static-metamodel="false" superclassId="_1421627053094" visibile="true" minimized="false" id="_1421626376339">
+        <jpa:attributes>
+            <jpa:basic name="code" attribute-type="String" visibile="true" id="_142162639100417">
+                <jpa:column unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:basic>
+            <jpa:basic name="nom" attribute-type="String" visibile="true" id="_142162639197218">
+                <jpa:column unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:basic>
+            <jpa:basic name="agence" attribute-type="String" visibile="true" id="_142162639413019">
+                <jpa:column unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:basic>
+        </jpa:attributes>
+    </jpa:entity>
+    <jpa:entity class="AppelOffre" jaxb-root-element="false" static-metamodel="false" superclassId="_1421627053094" visibile="true" minimized="false" id="_1421626377907">
+        <jpa:attributes>
+            <jpa:basic name="numero" attribute-type="String" visibile="true" id="_142162655564429">
+                <jpa:column unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:basic>
+            <jpa:basic name="intitule" attribute-type="String" visibile="true" id="_142162655745430">
+                <jpa:column unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:basic>
+            <jpa:basic name="maitreDouvrage" attribute-type="String" visibile="true" id="_142162655840631">
+                <jpa:column unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:basic>
+            <jpa:basic name="dateDepot" attribute-type="String" visibile="true" id="_142162655929432">
+                <jpa:column unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:basic>
+            <jpa:many-to-one name="filiale" target-entity="Filiale" optional="true" primaryKey="true" connected-entity-id="_1421626376339" visibile="true" id="_142162693765143">
+                <jpa:join-table/>
+            </jpa:many-to-one>
+        </jpa:attributes>
+    </jpa:entity>
+    <jpa:entity class="Caution" jaxb-root-element="false" static-metamodel="false" superclassId="_1421627053094" visibile="true" minimized="false" id="_1421626379223">
+        <jpa:attributes>
+            <jpa:basic name="numero" attribute-type="String" visibile="true" id="_142162649418024">
+                <jpa:column unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:basic>
+            <jpa:basic name="montant" attribute-type="String" visibile="true" id="_142162649518625">
+                <jpa:column unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:basic>
+            <jpa:basic name="banque" attribute-type="String" visibile="true" id="_142162649709626">
+                <jpa:column unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:basic>
+            <jpa:basic name="dateDebut" attribute-type="String" visibile="true" id="_142162649761427">
+                <jpa:column unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:basic>
+            <jpa:basic name="dateFin" attribute-type="String" visibile="true" id="_142162649857428">
+                <jpa:column unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:basic>
+            <jpa:many-to-one name="typeCaution" target-entity="TypeCaution" optional="true" primaryKey="true" connected-entity-id="_1421626380539" visibile="true" id="_142162680862539">
+                <jpa:join-table/>
+            </jpa:many-to-one>
+        </jpa:attributes>
+    </jpa:entity>
+    <jpa:entity class="TypeCaution" jaxb-root-element="false" static-metamodel="false" superclassId="_1421627053094" visibile="true" minimized="false" id="_1421626380539">
+        <jpa:attributes>
+            <jpa:basic name="code" attribute-type="String" visibile="true" id="_142162644345821">
+                <jpa:column unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:basic>
+            <jpa:basic name="nom" attribute-type="String" visibile="true" id="_142162644392222">
+                <jpa:column unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:basic>
+            <jpa:basic name="pourcentage" attribute-type="String" visibile="true" id="_142162644439423">
+                <jpa:column unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:basic>
+        </jpa:attributes>
+    </jpa:entity>
+    <jpa:entity class="LigneAppel" jaxb-root-element="false" static-metamodel="false" superclassId="_1421627053094" visibile="true" minimized="false" id="_1421626616127">
+        <jpa:attributes>
+            <jpa:basic name="prixUnitaire" attribute-type="String" visibile="true" id="_142162662020234">
+                <jpa:column unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:basic>
+            <jpa:basic name="quantite" attribute-type="String" visibile="true" id="_142162662633035">
+                <jpa:column unique="false" nullable="true" insertable="true" updatable="true"/>
+            </jpa:basic>
+            <jpa:many-to-one name="materiel" target-entity="Materiel" optional="true" primaryKey="true" connected-entity-id="_1421625648098" visibile="true" id="_142162687756240">
+                <jpa:join-table/>
+            </jpa:many-to-one>
+            <jpa:many-to-one name="appelOffre" target-entity="AppelOffre" optional="true" primaryKey="true" connected-entity-id="_1421626377907" visibile="true" id="_142162691600142">
+                <jpa:join-table/>
+            </jpa:many-to-one>
+        </jpa:attributes>
+    </jpa:entity>
+    <jpa:diagram id="_14216256114062">
+        <plane elementRef="_14216256114051" id="_14216256114063_p">
+            <shape elementRef="_1421625648098" id="_1421625648098_gui">
+                <Bounds x="42.0" y="176.0" width="155.0" height="127.0"/>
+            </shape>
+            <shape elementRef="_1421625651168" id="_1421625651168_gui">
+                <Bounds x="8.0" y="482.0" width="189.0" height="75.0"/>
+            </shape>
+            <shape elementRef="_1421626376339" id="_1421626376339_gui">
+                <Bounds x="642.0" y="462.0" width="138.0" height="95.0"/>
+            </shape>
+            <shape elementRef="_1421626377907" id="_1421626377907_gui">
+                <Bounds x="349.0" y="462.0" width="172.0" height="147.0"/>
+            </shape>
+            <shape elementRef="_1421626379223" id="_1421626379223_gui">
+                <Bounds x="737.0" y="136.0" width="151.0" height="167.0"/>
+            </shape>
+            <shape elementRef="_1421626380539" id="_1421626380539_gui">
+                <Bounds x="691.0" y="-3.0" width="185.0" height="95.0"/>
+            </shape>
+            <shape elementRef="_1421626616127" id="_1421626616127_gui">
+                <Bounds x="275.0" y="203.0" width="175.0" height="127.0"/>
+            </shape>
+            <shape elementRef="_1421627053094" id="_1421627053094_gui">
+                <Bounds x="415.0" y="64.0" width="183.0" height="86.0"/>
+            </shape>
+        </plane>
+    </jpa:diagram>
+</jpa:entity-mappings>

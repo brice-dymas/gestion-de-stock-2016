@@ -1,0 +1,131 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/*
+    Created on : Dec 22, 2014, 10:30:23 PM
+    Author     : gervais
+*/
+
+/* Space out content a bit */
+body {
+    font-family: Ubuntu;
+    font-size: 12px;
+
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+/* Everything but the jumbotron gets side spacing for mobile first views */
+.header,
+.marketing,
+.footer {
+    padding-right: 15px;
+    padding-left: 15px;
+}
+
+#header_menu{
+    height: 10px;
+    background-color: white;
+}
+
+.sidebar{
+    background-color: whitesmoke;
+}
+
+.pager{
+    margin: 0px 0px;
+}
+.pager_detail{
+    width: 50px;
+}
+
+.dropdown{
+    margin-bottom: 5px;
+}
+
+#accordion .panel-title{
+    font-size: 12px;
+}
+
+/* Show page */
+#table_show .table tr{
+
+    border-style: hidden;
+}
+
+.row-align{
+    vertical-align: middle;
+    text-align: center;
+}
+h2{
+    margin: 0;
+    color: #000000;
+    padding-top: 90px;
+    font-size: 52px;
+    font-family: "trebuchet ms", sans-serif;
+}
+.item{
+    background: #0078a3;
+    text-align: center;
+    height: 300px !important;
+}
+.carousel{
+    margin-top: 20px;
+}
+.bs-example{
+    margin: 20px;
+}
+
+.panel-title a {
+    font-size: 12px;
+}
+
+.list-unstyled li {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+ul.pager{
+    margin-top: 0px;
+    padding-top: 0px;
+}
+
+ul.pager input {
+    width: 100px;
+}
+
+#dropdownMenu1{
+    margin-bottom: 5px;
+}
+
+.breadcrumb{
+    margin-top: 10px;
+}
+
+#dropzone {
+    background: #ccccc;
+    width: 150px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    font-weight: bold;
+}
+#dropzone.in {
+    width: 600px;
+    height: 200px;
+    line-height: 200px;
+    font-size: larger;
+}
+#dropzone.hover {
+    background: lawngreen;
+}
+#dropzone.fade {
+    -webkit-transition: all 0.3s ease-out;
+    -moz-transition: all 0.3s ease-out;
+    -ms-transition: all 0.3s ease-out;
+    -o-transition: all 0.3s ease-out;
+    transition: all 0.3s ease-out;
+    opacity: 1;
+}
