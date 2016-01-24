@@ -185,7 +185,7 @@ public class SortieController
         else
         {
             redirectAttributes.addFlashAttribute("info", "alert.success.new");
-            sortieService.restoreInitialBdState(sortieForm.getSortie());
+            //sortieService.restoreInitialBdState(sortieForm.getSortie());
             sortieService.update(sortieForm.getSortie());
             return "redirect:/sortie/" + sortieForm.getSortie().getId() + "/show";
         }
