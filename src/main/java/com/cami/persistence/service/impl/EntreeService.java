@@ -5,12 +5,12 @@
  */
 package com.cami.persistence.service.impl;
 
-import com.cami.persistence.dao.IDepartementDao;
+import com.cami.persistence.dao.ICategorieDao;
 import com.cami.persistence.dao.IEntreeDao;
 import com.cami.persistence.dao.IFournitureDao;
 import com.cami.persistence.dao.ILotDao;
 import com.cami.persistence.dao.IRoleDao;
-import com.cami.persistence.model.Departement;
+import com.cami.persistence.model.Categorie;
 import com.cami.persistence.model.Entree;
 import com.cami.persistence.model.Fourniture;
 import com.cami.persistence.model.Lot;
@@ -51,7 +51,7 @@ public class EntreeService extends AbstractService<Entree> implements IEntreeSer
     IRoleDao roleDao;
 
     @Autowired
-    IDepartementDao departementDao;
+    ICategorieDao categorieDao;
 
     @Autowired
     IEntreeDao entreeDao;
@@ -74,9 +74,9 @@ public class EntreeService extends AbstractService<Entree> implements IEntreeSer
         entity.setDateEntree(new Date());
         entity.setUser(userConnected);
         System.out.println("setting user =" + entity.getUser().getId());
-        System.out.println("setting dept");
-        entity.setDepartement(departementDao.findOne(entity.getDepartement().getId()));
-        System.out.println("departement setted = " + entity.getDepartement().getId());
+        System.out.println("setting cat");
+        entity.setCategorie(categorieDao.findOne(entity.getCategorie().getId()));
+        System.out.println("categorie setted = " + entity.getCategorie().getId());
         System.out.println("saving entry");
         final Entree entree = entreeDao.save(entity);
         System.out.println("entree saved id=" + entity.getId());
@@ -138,7 +138,7 @@ public class EntreeService extends AbstractService<Entree> implements IEntreeSer
 
         entreeToUpdate.setDateEntree(new Date());
         entreeToUpdate.setUser(userConnected);
-        entreeToUpdate.setDepartement(departementDao.findOne(entity.getDepartement().getId()));
+        entreeToUpdate.setCategorie(categorieDao.findOne(entity.getCategorie().getId()));
         final Entree entree = entreeDao.save(entreeToUpdate);
 
         for (Lot lot : entity.getLots())
@@ -182,9 +182,9 @@ public class EntreeService extends AbstractService<Entree> implements IEntreeSer
     }
 
     @Override
-    public List<Entree> findByDepartement(Departement departement)
+    public List<Entree> findByCategorie(Categorie categorie)
     {
-        return entreeDao.findByDepartement(departement);
+        return entreeDao.findByCategorie(categorie);
     }
 
     @Override

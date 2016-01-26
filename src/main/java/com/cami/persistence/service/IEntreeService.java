@@ -6,7 +6,7 @@
 package com.cami.persistence.service;
 
 import com.cami.persistence.IOperations;
-import com.cami.persistence.model.Departement;
+import com.cami.persistence.model.Categorie;
 import com.cami.persistence.model.Entree;
 import com.cami.persistence.model.User;
 import java.util.Date;
@@ -20,7 +20,7 @@ import org.springframework.data.domain.Page;
 public interface IEntreeService extends IOperations<Entree>
 {
 
-    public List<Entree> findByDepartement(Departement departement);
+    public List<Entree> findByCategorie(Categorie categorie);
 
     public List<Entree> findByUser(User user);
 

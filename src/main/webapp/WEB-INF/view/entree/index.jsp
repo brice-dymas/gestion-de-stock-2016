@@ -41,7 +41,7 @@
                         <tr>
                             <th> <span class="btn"> <spring:message code="entree.numero" /> </span> </th>
                             <th> <span class="btn"> <spring:message code="entree.dateEntree" /> </span> </th>
-                            <th> <span class="btn"> <spring:message code="entree.departement" /> </span> </th>
+                            <th> <span class="btn"> <spring:message code="entree.categorie" /> </span> </th>
                             <th> <span class="btn"> <spring:message code="entree.user" /> </span> </th>
                             <th> <span class="btn"> <spring:message code="action.titre" /> </span> </th>
                         </tr>
@@ -59,11 +59,36 @@
                     </table>
 
                     <div class="row">
-                        <a href="${entreeNew}" class="btn btn-primary btn-sm">
-                            <span class="glyphicon glyphicon-new-window"></span>
-                            <spring:message code="action.nouveau" />
-                        </a>
 
+                        <div class="dropdown pull-left ">
+                            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenus" data-toggle="dropdown" aria-expanded="true">
+                                <spring:message code="action.nouveau" />
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenus">
+                                <li>
+                                    <spring:url value="/entree/bureau/new" var="newMatBureau" htmlEscape="true" />
+                                    <a href="${newMatBureau}">
+                                        <span class="glyphicon glyphicon-book"></span>
+                                        <spring:message code="matBureau.new" />
+                                    </a>
+                                </li>
+                                <li>
+                                    <spring:url value="/entree/informatique/new" var="newMatInfo" htmlEscape="true" />
+                                    <a href="${newMatInfo}">
+                                        <span class="glyphicon glyphicon-camera"></span>
+                                        <spring:message code="matInfo.new" />
+                                    </a>
+                                </li>
+                                <li>
+                                    <spring:url value="/entree/publicitaire/new" var="newMatPub" htmlEscape="true" />
+                                    <a href="${newMatPub}" >
+                                        <span class="glyphicon glyphicon-sound-stereo"></span>
+                                        <spring:message code="matPub.new" />
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
 
                         <div class="pull-right">
                             <ul class="pager">
@@ -92,7 +117,7 @@
                         <tr>
                             <td>${entree.numero}</td>
                             <td>${entree.dateEntree}</td>
-                            <td>${entree.departement.intitule}</td>
+                            <td>${entree.categorie.intitule}</td>
                             <td>${entree.user.user.nom}</td>
                             <td>
                                 <spring:url value="/entree/${entree.id}/edit" htmlEscape="true" var="entree_edit" />
@@ -113,10 +138,37 @@
                     </tbody>
                     </table>
                     <div class="row">
-                        <a href="${entreeNew}" class="btn btn-primary btn-sm">
-                            <span class="glyphicon glyphicon-new-window"></span>
-                            <spring:message code="action.nouveau" />
-                        </a>
+
+                        <div class="dropdown pull-left ">
+                            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenus" data-toggle="dropdown" aria-expanded="true">
+                                <spring:message code="action.nouveau" />
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenus">
+                                <li>
+                                    <spring:url value="/entree/bureau/new" var="newMatBureau" htmlEscape="true" />
+                                    <a href="${newMatBureau}">
+                                        <span class="glyphicon glyphicon-book"></span>
+                                        <spring:message code="matBureau.new" />
+                                    </a>
+                                </li>
+                                <li>
+                                    <spring:url value="/entree/informatique/new" var="newMatInfo" htmlEscape="true" />
+                                    <a href="${newMatInfo}">
+                                        <span class="glyphicon glyphicon-camera"></span>
+                                        <spring:message code="matInfo.new" />
+                                    </a>
+                                </li>
+                                <li>
+                                    <spring:url value="/entree/publicitaire/new" var="newMatPub" htmlEscape="true" />
+                                    <a href="${newMatPub}" >
+                                        <span class="glyphicon glyphicon-sound-stereo"></span>
+                                        <spring:message code="matPub.new" />
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
                         <div class="pull-right">
                             <ul class="pager">
 

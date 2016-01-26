@@ -25,6 +25,9 @@ public interface IFournitureDao extends JpaRepository<Fourniture, Long>, JpaSpec
     @Query("SELECT f FROM Fourniture f WHERE f.categorie = :categorie")
     public List<Fourniture> findByCategorie(@Param("categorie") Categorie categorie);
 
+    @Query("SELECT f FROM Fourniture f WHERE f.categorie.intitule LIKE :categorie")
+    public List<Fourniture> findByCategorieName(@Param("categorie") String categorie);
+
     @Query("SELECT f FROM Fourniture f WHERE f.quantite>0")
     public List<Fourniture> findExisting();
 

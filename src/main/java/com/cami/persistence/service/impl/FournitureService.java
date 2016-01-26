@@ -87,4 +87,10 @@ public class FournitureService extends AbstractService<Fourniture> implements IF
         return iFournitureDao.findByCategorie(categorie);
     }
 
+    @Override
+    public List<Fourniture> findByCategorieName(String categorie)
+    {
+        return iFournitureDao.findByCategorieName('%' + categorie + '%');
+    }
+
 }

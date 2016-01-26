@@ -20,6 +20,8 @@ public interface IFournitureService extends IOperations<Fourniture>
 
     public List<Fourniture> findByCategorie(Categorie categorie);
 
+    public List<Fourniture> findByCategorieName(String categorie);
+
     public List<Fourniture> findExisting();
 
     public Page<Fourniture> findPaginated(String reference, String designation,

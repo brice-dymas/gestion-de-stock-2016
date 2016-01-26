@@ -5,7 +5,7 @@
  */
 package com.cami.persistence.dao;
 
-import com.cami.persistence.model.Departement;
+import com.cami.persistence.model.Categorie;
 import com.cami.persistence.model.Entree;
 import com.cami.persistence.model.User;
 import java.util.Date;
@@ -24,8 +24,8 @@ import org.springframework.data.repository.query.Param;
 public interface IEntreeDao extends JpaSpecificationExecutor<Entree>, JpaRepository<Entree, Long>
 {
 
-    @Query("SELECT e FROM Entree e WHERE e.departement = :departement")
-    public List<Entree> findByDepartement(@Param("departement") Departement departement);
+    @Query("SELECT e FROM Entree e WHERE e.categorie = :categorie")
+    public List<Entree> findByCategorie(@Param("categorie") Categorie categorie);
 
     @Query("SELECT e FROM Entree e WHERE e.user = :user")
     public List<Entree> findByUser(@Param("user") User user);

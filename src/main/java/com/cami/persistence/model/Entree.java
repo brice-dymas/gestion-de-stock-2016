@@ -39,8 +39,8 @@ public class Entree extends EntityObject
 
     protected Long ligneAuditId;
 
-    @ManyToOne(targetEntity = Departement.class, fetch = FetchType.EAGER, optional = false)
-    private Departement departement;
+    @ManyToOne(targetEntity = Categorie.class, fetch = FetchType.EAGER, optional = false)
+    private Categorie categorie;
 
     @ManyToOne(targetEntity = Role.class, optional = false, fetch = FetchType.EAGER)
     protected Role user;
@@ -72,14 +72,14 @@ public class Entree extends EntityObject
         this.dateEntree = dateEntree;
     }
 
-    public Departement getDepartement()
+    public Categorie getCategorie()
     {
-        return departement;
+        return categorie;
     }
 
-    public void setDepartement(Departement departement)
+    public void setCategorie(Categorie categorie)
     {
-        this.departement = departement;
+        this.categorie = categorie;
     }
 
     public Long getLigneAuditId()
@@ -119,7 +119,7 @@ public class Entree extends EntityObject
         int hash = 7;
         hash = 29 * hash + Objects.hashCode(this.numero);
         hash = 29 * hash + Objects.hashCode(this.dateEntree);
-        hash = 29 * hash + Objects.hashCode(this.departement);
+        hash = 29 * hash + Objects.hashCode(this.categorie);
         hash = 29 * hash + Objects.hashCode(this.user);
         return hash;
     }
@@ -144,7 +144,7 @@ public class Entree extends EntityObject
         {
             return false;
         }
-        if (!Objects.equals(this.departement, other.departement))
+        if (!Objects.equals(this.categorie, other.categorie))
         {
             return false;
         }
@@ -183,7 +183,7 @@ public class Entree extends EntityObject
     @Override
     public String toString()
     {
-        return "Entree{" + "numero=" + numero + ", dateEntree=" + dateEntree + ", departement=" + departement + ", user=" + user + '}';
+        return "Entree{" + "numero=" + numero + ", dateEntree=" + dateEntree + ", categorie=" + categorie + ", user=" + user + '}';
     }
 
 }
