@@ -19,5 +19,7 @@ public interface ICategorieService extends IOperations<Categorie>
 
     List<Categorie> retrieveByCategorie(String intitule);
 
+    public Categorie getCategorie(String intitule);
+
     Page<Categorie> findPaginated(String intitule, int page, Integer size);
 }

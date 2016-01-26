@@ -9,6 +9,7 @@ import com.cami.persistence.IOperations;
 import com.cami.persistence.model.Categorie;
 import com.cami.persistence.model.Fourniture;
 import java.util.List;
+import java.util.Map;
 import org.springframework.data.domain.Page;
 
 /**
@@ -20,7 +21,7 @@ public interface IFournitureService extends IOperations<Fourniture>
 
     public List<Fourniture> findByCategorie(Categorie categorie);
 
-    public List<Fourniture> findByCategorieName(String categorie);
+    public Map<Long, String> findByCategorieName(String categorie);
 
     public List<Fourniture> findExisting();
 

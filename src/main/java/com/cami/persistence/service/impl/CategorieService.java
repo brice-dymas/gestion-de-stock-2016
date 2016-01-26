@@ -71,4 +71,10 @@ public class CategorieService extends AbstractService<Categorie> implements ICat
 
         return iCategorieDao.searchCategories('%' + intitule + '%', new PageRequest(page, size));
     }
+
+    @Override
+    public Categorie getCategorie(String intitule)
+    {
+        return iCategorieDao.getCategorie('%' + intitule + '%');
+    }
 }

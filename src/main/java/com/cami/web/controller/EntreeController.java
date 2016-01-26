@@ -5,17 +5,15 @@
  */
 package com.cami.web.controller;
 
-import com.cami.persistence.model.Departement;
+import com.cami.persistence.model.Categorie;
 import com.cami.persistence.model.Entree;
-import com.cami.persistence.model.Fourniture;
 import com.cami.persistence.model.Lot;
-import com.cami.persistence.service.IDepartementService;
+import com.cami.persistence.service.ICategorieService;
 import com.cami.persistence.service.IEntreeService;
 import com.cami.persistence.service.IFournitureService;
 import com.cami.persistence.service.ILotService;
 import com.cami.persistence.service.IRoleService;
 import com.cami.web.form.EntreeForm;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.validation.Valid;
@@ -24,7 +22,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -49,7 +46,7 @@ public class EntreeController
     private IEntreeService entreeService;
 
     @Autowired
-    private IDepartementService iDepartementService;
+    private ICategorieService categorieService;
 
     @Autowired
     private IRoleService roleService;
@@ -90,6 +87,20 @@ public class EntreeController
     {
         final EntreeForm entree = new EntreeForm();
         model.addAttribute("entreeForm", entree);
+        return "entree/new";
+    }
+
+    @RequestMapping(value = "/{type}/new", method = RequestMethod.GET)
+    public String newEntreeAction(@PathVariable("type") final String categorie, final ModelMap model)
+    {
+        Map<Long, String> fournitures = fournitureService.findByCategorieName(categorie);
+        final Categorie categori = categorieService.getCategorie(categorie);
+        Entree entree = new Entree();
+        entree.setCategorie(categori);
+        final EntreeForm entreeForm = new EntreeForm();
+        entreeForm.setEntree(entree);
+        model.addAttribute("entreeForm", entreeForm);
+        model.addAttribute("fournitures", fournitures);
         return "entree/new";
     }
 
@@ -151,29 +162,26 @@ public class EntreeController
             return "redirect:/entree/" + entree.getEntree().getId() + "/show";
         }
     }
+    /**
+     * @ModelAttribute("fournitures") public Map<Long, String>
+     * getfournitures(@PathVariable("type") final String categorie) { if
+     * (categorie.length() > 3) { Map<Long, String> listMap = new HashMap<>();
+     * final List<Fourniture> fournitures =
+     * fournitureService.findByCategorieName(categorie); for (Fourniture
+     * fourniture : fournitures) { listMap.put(fourniture.getId(),
+     * fourniture.getDesignation()); } return listMap; } return null; }
+     *
+     */
+//    @ModelAttribute("fournitures")
+//    public Map<Long, String> getfournitures()
+//    {
+//        Map<Long, String> listMap = new HashMap<>();
+//        final List<Fourniture> fournitures = fournitureService.findAll();
+//        for (Fourniture fourniture : fournitures)
+//        {
+//            listMap.put(fourniture.getId(), fourniture.getDesignation());
+//        }
+//        return listMap;
+//    }
 
-    @ModelAttribute("fournitures")
-    public Map<Long, String> getfournitures()
-    {
-        Map<Long, String> listMap = new HashMap<>();
-        final List<Fourniture> fournitures = fournitureService.findAll();
-        for (Fourniture fourniture : fournitures)
-        {
-            listMap.put(fourniture.getId(), fourniture.getDesignation());
-        }
-        return listMap;
-    }
-
-    @ModelAttribute("departements")
-    public Map<Long, String> getdepartements()
-    {
-        Map<Long, String> listMap = new HashMap<>();
-        final List<Departement> departements = iDepartementService.findAll();
-        for (Departement departement : departements)
-        {
-            listMap.put(departement.getId(), departement.getIntitule() + " - "
-                    + departement.getAgence().getIntitule());
-        }
-        return listMap;
-    }
 }

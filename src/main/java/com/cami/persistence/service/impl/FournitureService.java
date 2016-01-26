@@ -11,7 +11,9 @@ import com.cami.persistence.model.Categorie;
 import com.cami.persistence.model.Fourniture;
 import com.cami.persistence.service.IFournitureService;
 import com.cami.persistence.service.common.AbstractService;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -88,9 +90,15 @@ public class FournitureService extends AbstractService<Fourniture> implements IF
     }
 
     @Override
-    public List<Fourniture> findByCategorieName(String categorie)
+    public Map<Long, String> findByCategorieName(String categorie)
     {
-        return iFournitureDao.findByCategorieName('%' + categorie + '%');
+        final List<Fourniture> fournitures = iFournitureDao.findByCategorieName('%' + categorie + '%');
+        Map<Long, String> listMap = new HashMap<>();
+        for (Fourniture fourniture : fournitures)
+        {
+            listMap.put(fourniture.getId(),
+                    fourniture.getDesignation());
+        }
+        return listMap;
     }
-
 }

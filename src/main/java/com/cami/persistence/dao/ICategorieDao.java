@@ -25,6 +25,9 @@ public interface ICategorieDao extends JpaRepository<Categorie, Long>, JpaSpecif
     public List<Categorie> retrieveByCategorie(@Param("intitule") String intitule);
 
     @Query("SELECT c FROM Categorie c WHERE c.intitule LIKE :intitule")
+    public Categorie getCategorie(@Param("intitule") String intitule);
+
+    @Query("SELECT c FROM Categorie c WHERE c.intitule LIKE :intitule")
     Page<Categorie> searchByIntitutle(@Param("intitule") String intitule, Pageable pageable);
 
     @Query("SELECT c FROM Categorie c WHERE c.intitule LIKE :intitule")
