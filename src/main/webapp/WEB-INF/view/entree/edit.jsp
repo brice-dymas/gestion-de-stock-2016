@@ -40,14 +40,11 @@
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
-                        <form:label for="dept" path="">
-                            <spring:message code="departement.intitule" />
+                        <form:label for="categorie" path="">
+                            <spring:message code="entree.categorie" />
                         </form:label>
-                        <form:select id="dept" path="entree.departement.id" cssClass="form-control">
-                            <form:options items="${departements}" />
-                        </form:select>
-                        <form:errors path="entree.departement.id" cssClass="text-danger" />
-                        <form:hidden path="entree.id" id="id"/>
+                        <form:input readonly="true" enabled="false" id="date" path="entree.categorie.intitule" cssClass="form-control input-sm"/>
+                        <form:errors path="entree.categorie.id" cssClass="text-danger" />
                     </div>
                 </div>
             </div>

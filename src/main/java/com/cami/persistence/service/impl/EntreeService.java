@@ -40,9 +40,6 @@ public class EntreeService extends AbstractService<Entree> implements IEntreeSer
 
     @Autowired
     ILotDao lotDao;
-//
-//    @Autowired
-//    IFournitureService fournitureService;
 
     @Autowired
     IFournitureDao fournitureDao;
@@ -66,47 +63,21 @@ public class EntreeService extends AbstractService<Entree> implements IEntreeSer
     @Transactional
     public Entree create(Entree entity)
     {
-        System.out.println("in service method ...");
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println("fetching user connected");
         final Role userConnected = roleDao.retrieveAUser(auth.getName()); // get the current logged user
-        System.out.println("setting date entree");
         entity.setDateEntree(new Date());
         entity.setUser(userConnected);
-        System.out.println("setting user =" + entity.getUser().getId());
-        System.out.println("setting cat");
-        entity.setCategorie(categorieDao.findOne(entity.getCategorie().getId()));
-        System.out.println("categorie setted = " + entity.getCategorie().getId());
-        System.out.println("saving entry");
+        entity.setCategorie(categorieDao.getCategorie(entity.getCategorie().getIntitule()));
         final Entree entree = entreeDao.save(entity);
-        System.out.println("entree saved id=" + entity.getId());
         for (Lot lot : entity.getLots())
         {
-            System.out.println("tour ligne 1");
-
-            System.out.println("affichage du lot");
             Fourniture fourniture = fournitureDao.findOne(lot.getFourniture().getId());
-//            fourniture.setQuantite(fourniture.getQuantite() + lot.getQuantite());
-//            fourniture = fournitureDao.save(fourniture);
-            System.out.println("Ligne lot correct");
-            System.out.println("setting lot");
             lot.setDateEntree(new Date());
             lot.setTotalMontant(lot.getPrixUnitaire() * lot.getQuantite());
             lot.setEntree(entree);
-            System.out.println("lot setted id =" + lot.getEntree().getId());
-            System.out.println("setting fourniture");
             lot.setFourniture(fourniture);
-            System.out.println("fourniture setted id=" + lot.getFourniture().getId());
-            System.out.println("now saving");
             lotDao.save(lot);
-            System.out.println("item saved id =" + lot.getId());
-            System.out.println(lot);
-
         }
-
-        System.out.println("returning lot saved");
-        System.out.println("affichage des éléments ...");
-        System.out.println(entity);
         return entree;
     }
 
@@ -117,54 +88,32 @@ public class EntreeService extends AbstractService<Entree> implements IEntreeSer
 
         //On recupere tous les lots
         List<Lot> lotsToRemove = lotDao.findByEntreeIdForEdit(entity.getId());
-//        List<Lot> lotsToRemove = lotDao.findByEntreeId(entity.getId());
 
-        System.out.println("ToRemove = " + lotsToRemove.size());
         //On retire les anciennes quantités des lots
         for (Lot lot : lotsToRemove)
         {
             fourniture = lot.getFourniture();
-            System.out.println("avant modif fourniture.qte=" + fourniture.getQuantite() + " et nom=" + fourniture.getDesignation());
             fourniture.setQuantite(fourniture.getQuantite() - lot.getQuantite());
             fournitureDao.save(fourniture);
-            System.out.println("apres modif fourniture.qte=" + fourniture.getQuantite() + " et nom=" + fourniture.getDesignation());
             lotDao.delete(lot);
         }
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         final Role userConnected = roleDao.retrieveAUser(auth.getName());
-
         final Entree entreeToUpdate = entreeDao.findOne(entity.getId());
-
         entreeToUpdate.setDateEntree(new Date());
         entreeToUpdate.setUser(userConnected);
-        entreeToUpdate.setCategorie(categorieDao.findOne(entity.getCategorie().getId()));
+        entreeToUpdate.setCategorie(categorieDao.getCategorie(entity.getCategorie().getIntitule()));
         final Entree entree = entreeDao.save(entreeToUpdate);
 
         for (Lot lot : entity.getLots())
         {
-            System.out.println("tour ligne 1");
-
-            System.out.println("affichage du lot");
             fourniture = fournitureDao.findOne(lot.getFourniture().getId());
-            System.out.println("autre boucle");
-            System.out.println("\n avant creation des lots, frture.qte=" + fourniture.getQuantite() + " et nom=" + fourniture.getDesignation());
-//            fourniture.setQuantite(fourniture.getQuantite() + lot.getQuantite());
-//            fourniture = fournitureDao.save(fourniture);
-            System.out.println("\n apres creation des lots, frture.qte=" + fourniture.getQuantite() + " et nom=" + fourniture.getDesignation());
-            System.out.println("Ligne lot correct");
-            System.out.println("setting lot");
             lot.setDateEntree(new Date());
             lot.setTotalMontant(lot.getPrixUnitaire() * lot.getQuantite());
             lot.setEntree(entree);
-            System.out.println("lot setted id =" + lot.getEntree().getId());
-            System.out.println("setting fourniture");
             lot.setFourniture(fourniture);
-            System.out.println("fourniture setted id=" + lot.getFourniture().getId());
-            System.out.println("now saving");
             lotDao.save(lot);
-            System.out.println("item saved id =" + lot.getId());
-            System.out.println(lot);
 
         }
 
@@ -198,18 +147,4 @@ public class EntreeService extends AbstractService<Entree> implements IEntreeSer
     {
         return entreeDao.findPaginated('%' + numero + '%', dateOperation, new PageRequest(page, size));
     }
-    /**
-     * public final String generateNumberOf(Object object) { String
-     * numberGenerated = "COD", day = "", month = "", year = ""; Date today =
-     * new Date(); day += today.getDate(); month += today.getMonth(); year +=
-     * (today.getYear() + 1900); numberGenerated = numberGenerated + year +
-     * month + day; if (object.getClass() == Lot.class) { Lot l = (Lot) object;
-     * String prix = l.getPrixUnitaire() + ""; prix = prix.substring(0, 3);
-     * numberGenerated += l.getFourniture().getId(); numberGenerated += prix;
-     * numberGenerated += "LT"; } else { Entree e = (Entree) object;
-     * numberGenerated += e.getDepartement().getId(); numberGenerated +=
-     * e.getLots().size(); numberGenerated += "ET"; }
-     *
-     * return numberGenerated; }
-     */
 }

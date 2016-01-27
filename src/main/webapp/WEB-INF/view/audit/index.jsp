@@ -97,7 +97,7 @@
                             <td>${audit.user.user.nom}</td>
                             <td>
                                 <spring:url value="/audit/${audit.id}/edit" htmlEscape="true" var="audit_edit" />
-                                <a href="${audit_edit}" class="btn btn-primary btn-sm">
+                                <a href="${audit_edit}" class="btn btn-primary btn-warning">
                                     <span class="glyphicon glyphicon-edit"></span>
                                     <spring:message code="action.modifier" />
                                 </a>

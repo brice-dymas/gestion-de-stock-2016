@@ -89,7 +89,7 @@
                             <td>${agence.region}</td>
                             <td>
                                 <spring:url value="/agence/${agence.id}/edit" htmlEscape="true" var="agence_edit" />
-                                <a href="${agence_edit}" class="btn btn-primary btn-sm">
+                                <a href="${agence_edit}" class="btn btn-primary btn-warning">
                                     <span class="glyphicon glyphicon-edit"></span>
                                     <spring:message code="action.modifier" />
                                 </a>

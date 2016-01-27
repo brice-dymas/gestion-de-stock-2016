@@ -9,6 +9,7 @@ import com.cami.persistence.IOperations;
 import com.cami.persistence.model.Lot;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import org.springframework.data.domain.Page;
 
 /**
@@ -23,6 +24,8 @@ public interface ILotService extends IOperations<Lot>
     public List<Lot> findLotsForFifo(final long id);
 
     public List<Lot> findByEntreeId(final long id);
+
+    public Map<Long, String> getEntreeFournitures(final long id);
 
     public List<Lot> filterByLigneAudit(final long id);
 

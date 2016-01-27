@@ -45,7 +45,7 @@
                             <spring:message code="entree.categorie" />
                         </form:label>
                         <form:input readonly="true" enabled="false" id="date" path="entree.categorie.intitule" cssClass="form-control input-sm"/>
-                        <form:errors path="entree.categorie.id" cssClass="text-danger" />
+                        <form:errors path="entree.categorie.intitule" cssClass="text-danger" />
                     </div>
                 </div>
             </div>

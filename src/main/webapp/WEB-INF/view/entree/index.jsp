@@ -121,7 +121,7 @@
                             <td>${entree.user.user.nom}</td>
                             <td>
                                 <spring:url value="/entree/${entree.id}/edit" htmlEscape="true" var="entree_edit" />
-                                <a href="${entree_edit}" class="btn btn-primary btn-sm">
+                                <a href="${entree_edit}" class="btn btn-primary btn-warning">
                                     <span class="glyphicon glyphicon-edit"></span>
                                     <spring:message code="action.modifier" />
                                 </a>

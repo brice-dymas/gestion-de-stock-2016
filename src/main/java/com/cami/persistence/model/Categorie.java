@@ -66,7 +66,7 @@ public class Categorie extends EntityObject
     @Override
     public String toString()
     {
-        return "Categorie{" + "intitule=" + intitule + '}';
+        return "Categorie{" + " ID = " + id + "intitule=" + intitule + '}';
     }
 
 }

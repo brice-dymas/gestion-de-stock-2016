@@ -65,11 +65,24 @@ public class EntreeController
     public String editAction(@PathVariable("id") final Long id, final ModelMap model)
     {
         final Entree et = entreeService.findOne(id);
+        Map<Long, String> fournitures = lotService.getEntreeFournitures(id);
         final EntreeForm entree = new EntreeForm();
         List<Lot> listeLots = lotService.findByEntreeIdForEdit(id);
         entree.setEntree(et);
         entree.setListeLots(listeLots);
+        model.addAttribute("fournitures", fournitures);
 //        entree.
+
+//        Map<Long, String> fournitures = fournitureService.findByCategorieName(categorie);
+//        final Categorie categori = categorieService.getCategorie(categorie);
+//        Entree entree = new Entree();
+//        entree.setCategorie(categori);
+//        System.out.println(categori);
+//        final EntreeForm entreeForm = new EntreeForm();
+//        entreeForm.setEntree(entree);
+//        model.addAttribute("entreeForm", entreeForm);
+//        model.addAttribute("fournitures", fournitures);
+//
         model.addAttribute("entreeForm", entree);
         return "/entree/edit";
     }
@@ -97,6 +110,7 @@ public class EntreeController
         final Categorie categori = categorieService.getCategorie(categorie);
         Entree entree = new Entree();
         entree.setCategorie(categori);
+        System.out.println(categori);
         final EntreeForm entreeForm = new EntreeForm();
         entreeForm.setEntree(entree);
         model.addAttribute("entreeForm", entreeForm);
@@ -129,14 +143,18 @@ public class EntreeController
         if (result.hasErrors())
         {
             System.out.println(" dans le entree controller avec errerur ");
+            Map<Long, String> fournitures = fournitureService.findByCategorieName(entree.getEntree().getCategorie().getIntitule());
             model.addAttribute("error", "error");
             model.addAttribute("entreeForm", entree);
+            model.addAttribute("fournitures", fournitures);
             return "entree/new";
         }
         else
         {
             System.out.println(" dans le entree controller sans erreur ");
             redirectAttributes.addFlashAttribute("info", "alert.success.new");
+            System.out.println("Categorie = " + entree.getEntree().getCategorie().getIntitule());
+            System.out.println("categorie ID = " + entree.getEntree().getCategorie().getId());
             entreeService.create(entree.getEntree());
             System.out.println("tout est fini");
             return "redirect:/entree/" + entree.getEntree().getId() + "/show";
@@ -144,7 +162,7 @@ public class EntreeController
     }
 
     @RequestMapping(value = "/{id}/update", method = RequestMethod.POST)
-    public String updateAction(final ModelMap model, @Valid final EntreeForm entree,
+    public String updateAction(@PathVariable("id") final Long id, final ModelMap model, @Valid final EntreeForm entree,
             final BindingResult result, final RedirectAttributes redirectAttributes)
     {
         if (result.hasErrors())
@@ -158,30 +176,9 @@ public class EntreeController
         {
             System.out.println(" dans le entree controller sans errerur ");
             redirectAttributes.addFlashAttribute("info", "alert.success.new");
+            entree.getEntree().setId(id);
             entreeService.update(entree.getEntree());
             return "redirect:/entree/" + entree.getEntree().getId() + "/show";
         }
     }
-    /**
-     * @ModelAttribute("fournitures") public Map<Long, String>
-     * getfournitures(@PathVariable("type") final String categorie) { if
-     * (categorie.length() > 3) { Map<Long, String> listMap = new HashMap<>();
-     * final List<Fourniture> fournitures =
-     * fournitureService.findByCategorieName(categorie); for (Fourniture
-     * fourniture : fournitures) { listMap.put(fourniture.getId(),
-     * fourniture.getDesignation()); } return listMap; } return null; }
-     *
-     */
-//    @ModelAttribute("fournitures")
-//    public Map<Long, String> getfournitures()
-//    {
-//        Map<Long, String> listMap = new HashMap<>();
-//        final List<Fourniture> fournitures = fournitureService.findAll();
-//        for (Fourniture fourniture : fournitures)
-//        {
-//            listMap.put(fourniture.getId(), fourniture.getDesignation());
-//        }
-//        return listMap;
-//    }
-
 }

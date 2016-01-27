@@ -97,7 +97,7 @@
                                     <spring:message code="action.detail" />
                                 </a>
                                 &nbsp; &nbsp;
-                                <a href="${edit}" class="btn btn-primary btn-sm">
+                                <a href="${edit}" class="btn btn-primary btn-warning">
                                     <span class="glyphicon glyphicon-edit"></span>
                                     <spring:message code="action.modifier" />
                                 </a>

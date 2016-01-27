@@ -5,6 +5,7 @@
  */
 package com.cami.persistence.dao;
 
+import com.cami.persistence.model.Fourniture;
 import com.cami.persistence.model.Lot;
 import java.util.Date;
 import java.util.List;
@@ -32,6 +33,10 @@ public interface ILotDao extends JpaRepository<Lot, Long>, JpaSpecificationExecu
 
     @Query("SELECT l FROM Lot l WHERE l.entree.id= :id")
     public List<Lot> findByEntreeId(@Param("id") long id);
+
+    @Query("SELECT F FROM Lot l, Fourniture F WHERE l.entree.id= :id AND "
+            + " l.entree.categorie.id=F.categorie.id AND l.modifiable=true")
+    public List<Fourniture> getEntreeFournitures(@Param("id") long id);
 
     @Query("SELECT l FROM Lot l WHERE l.fourniture.id = :id")
     public List<Lot> filterByLigneAudit(@Param("id") long id);

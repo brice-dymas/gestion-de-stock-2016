@@ -119,7 +119,7 @@
                                 <td class="text-center">
                                     <sec:authorize access="hasRole('ROLE_ADMIN')" >
                                         <spring:url value="/user/${user_var.id}/edit" htmlEscape="true" var="user_edit" />
-                                        <a href="${user_edit}" class="btn btn-primary btn-sm">
+                                        <a href="${user_edit}" class="btn btn-primary btn-warning">
                                             <span class="glyphicon glyphicon-edit"></span>
                                             <spring:message code="action.modifier" />
                                         </a>
@@ -148,7 +148,7 @@
                                 <td class="text-center">
                                     <sec:authorize access="hasRole('ROLE_ADMIN')" >
                                         <spring:url value="/user/${user_var.id}/edit" htmlEscape="true" var="user_edit" />
-                                        <a href="${user_edit}" class="btn btn-primary btn-sm">
+                                        <a href="${user_edit}" class="btn btn-primary btn-warning">
                                             <span class="glyphicon glyphicon-edit"></span>
                                             <spring:message code="action.modifier" />
                                         </a>

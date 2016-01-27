@@ -33,9 +33,9 @@
                             </th>
                             <td>${entree.numero}</td>
                             <th>
-                                <spring:message code="departement.intitule" />
+                                <spring:message code="entree.categorie" />
                             </th>
-                            <td>${entree.departement.intitule}</td>
+                            <td>${entree.categorie.intitule}</td>
                             <th>
                                 <spring:message code="entree.dateEntree" />
                             </th>
@@ -83,11 +83,11 @@
                             <tr>
                                 <td>${lot.numero}</td>
                                 <td>${lot.fourniture.designation} </td>
-                                <td> <fmt:formatDate value="${lot.dateEntree}" pattern="dd/MM/yyyy" /> </td>
-                                <td>${lot.quantite} </td>
-                                <td>${lot.prixUnitaire} </td>
-                                <td>${lot.prixVenteUnitaire} </td>
-                                <td>${lot.totalMontant} </td>
+                                <td> <fmt:formatDate value="${lot.dateEntree}" pattern="dd-MM-yyyy" /> </td>
+                                <td> <fmt:formatNumber value="${lot.quantite}" pattern="#,##0" /> </td>
+                                <td> <fmt:formatNumber value="${lot.prixUnitaire}" pattern="#,##0" /> </td>
+                                <td> <fmt:formatNumber value="${lot.prixVenteUnitaire}" pattern="#,##0" /> </td>
+                                <td> <fmt:formatNumber value="${lot.totalMontant}" pattern="#,##0" /> </td>
                                 <td>${lot.etat} </td>
                             </tr>
                         </c:forEach>

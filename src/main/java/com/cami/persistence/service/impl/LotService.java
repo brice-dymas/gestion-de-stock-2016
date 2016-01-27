@@ -14,7 +14,9 @@ import com.cami.persistence.model.Lot;
 import com.cami.persistence.service.ILotService;
 import com.cami.persistence.service.common.AbstractService;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -139,6 +141,19 @@ public class LotService extends AbstractService<Lot> implements ILotService
     public Lot findOneByLigneAudit(long id)
     {
         return iLotDao.findOneByLigneAudit(id);
+    }
+
+    @Override
+    public Map<Long, String> getEntreeFournitures(long id)
+    {
+        List<Fourniture> fournitures = iLotDao.getEntreeFournitures(id);
+        Map<Long, String> listMap = new HashMap<>();
+        for (Fourniture fourniture : fournitures)
+        {
+            listMap.put(fourniture.getId(),
+                    fourniture.getDesignation());
+        }
+        return listMap;
     }
 
 }

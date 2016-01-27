@@ -267,7 +267,6 @@ public class Lot extends EntityObject
 
         //Ajout de la quantité du lot à la fourniture
         this.getFourniture().setQuantite(this.getFourniture().getQuantite() + this.quantite);
-        System.out.println("dan lot et fourniture " + this.getFourniture().getDesignation() + ".Qté = " + this.getFourniture().getQuantite());
 
     }
 

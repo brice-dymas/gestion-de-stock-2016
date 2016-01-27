@@ -210,10 +210,7 @@ public class OperationService extends AbstractService<Operation> implements IOpe
 //        restoreBDState(operation);
 
         Fourniture fourniture = null;
-        Lot lot = null;
-        Journal journalTemp = null;
 
-        System.out.println("DEBUT UPDATE");
         Operation editOperation = operationDao.findOne(operation.getId());
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -223,47 +220,28 @@ public class OperationService extends AbstractService<Operation> implements IOpe
         editOperation.setUser(userConnected);
         editOperation = operationDao.save(editOperation);
 
-        System.out.println("Debut LigneOperation - size : " + operation.getLigneOperations().size());
         for (final LigneOperation ligneOperation : operation.getLigneOperations())
         {
-            System.out.println("tour ligne 1");
             if (ligneOperation == null)
             {
                 System.out.println("Ligne Operation null");
             }
             else
             {
-                System.out.println("operation setted");
+                ligneOperation.setId(null);
                 ligneOperation.setOperation(editOperation);
                 fourniture = fournitureDao.findOne(ligneOperation.getFourniture().getId());
                 ligneOperation.setFourniture(fourniture);
-                System.out.println("fourniture setted");
-                System.out.println("launching fifo ...");
                 List<Lot> lotsToUpdate = doFifoForUpdate(ligneOperation);
-                System.out.println("fifo done");
                 fourniture.setQuantite(fourniture.getQuantite() - ligneOperation.getQuantite());
                 fournitureDao.save(fourniture);
-                System.out.println("fourniture updated \n \t updating lots");
                 for (Lot lotsToUpdate1 : lotsToUpdate)
                 {
-                    System.out.println("updating lot n° xx");
                     lotService.update(lotsToUpdate1);
-                    System.out.println("lot n°--xx-- updated");
                 }
-                System.out.println("updating ligne opération with opération ID=" + editOperation.getId());
                 ligneOperationDao.save(ligneOperation);
-                System.out.println("ligne op updated");
-                System.out.println("item saved");
-                journalTemp = new Journal();
-                journalTemp.setLigneOperation(ligneOperation);
-                journalTemp.setLot(lot);
-                journalTemp.setQuantiteRetirer(ligneOperation.getQuantite());
-                journalDao.save(journalTemp);
-
             }
         }
-
-        System.out.println("FIN SAVE");
         return editOperation;
     }
 
@@ -271,7 +249,6 @@ public class OperationService extends AbstractService<Operation> implements IOpe
     @Transactional
     public Operation updateAudit(Operation operation)
     {
-        System.out.println("Dans Update Audit");
         List<LigneOperation> ligneOperations = ligneOperationDao.filterByOperationId(operation.getId());
         for (LigneOperation ligneOp : ligneOperations)
         {
@@ -323,35 +300,26 @@ public class OperationService extends AbstractService<Operation> implements IOpe
     @Override
     public void restoreInitialBdState(final Operation operation)
     {
-        System.out.println(" \t Restoring BD State ... ");
         Fourniture fourniture;
         Lot lot;
         //On recupere tous les lots
         List<LigneOperation> ligneOperationsToRemove = ligneOperationDao.filterByOperationId(operation.getId());
 
-        System.out.println("ToRemove = " + ligneOperationsToRemove.size());
         //On retire les anciennes quantités des lots
         for (LigneOperation ligneOperation : ligneOperationsToRemove)
         {
             fourniture = ligneOperation.getFourniture();
-            System.out.println("ici update et avant suppress fourniture " + fourniture.getDesignation() + ".Qte=" + fourniture.getQuantite());
             fourniture.setQuantite(fourniture.getQuantite() + ligneOperation.getQuantite());
             fournitureDao.save(fourniture);
-            System.out.println("ici update et apres suppress fourniture " + fourniture.getDesignation() + ".Qte=" + fourniture.getQuantite());
             List<Journal> journals = journalDao.findByLigneOperationID(ligneOperation.getId());
             for (Journal journal : journals)
             {
                 lot = journal.getLot();
-                System.out.println(" avant modif lot N°" + lot.getNumero() + " qte=" + lot.getQuantite());
                 lot.setQuantite(lot.getQuantite() + journal.getQuantiteRetirer());
                 iLotDao.save(lot);
-                System.out.println("suppression du journal concerné ...");
                 journalDao.delete(journal);
-                System.out.println("journal supprimé ");
-                System.out.println(" apres modif lot N°" + lot.getNumero() + " qte=" + lot.getQuantite());
             }
             ligneOperationDao.delete(ligneOperation);
-            System.out.println("\t BD State restored");
         }
 
     }
@@ -368,19 +336,14 @@ public class OperationService extends AbstractService<Operation> implements IOpe
 
             if (listLots.get(i).getQuantite() <= quantiteRetrait)
             {
-                System.out.println("listLots.get(i).getQuantite() <= quantiteRetrait");
                 quantiteRetrait -= listLots.get(i).getQuantite();
-                System.out.println("et donc quantiteRetrait=" + quantiteRetrait);
-
                 journal.setLot(listLots.get(i));
                 journal.setQuantiteRetirer(listLots.get(i).getQuantite());
-
                 listLots.get(i).setQuantite(0);
             }
             if (listLots.get(i).getQuantite() > quantiteRetrait)
             {
                 listLots.get(i).setQuantite(listLots.get(i).getQuantite() - quantiteRetrait);
-
                 journal.setLot(listLots.get(i));
                 journal.setQuantiteRetirer(quantiteRetrait);
                 quantiteRetrait = 0;
@@ -395,29 +358,18 @@ public class OperationService extends AbstractService<Operation> implements IOpe
     // Pour l'update
     public List<Lot> doFifoForUpdate(LigneOperation ligneOperation)
     {
-        System.out.println("now in doFifoForUpdate() method ");
-        System.out.println("here, Fourniture ID = " + ligneOperation.getFourniture().getId());
         final List<Lot> listLots = lotService.findLotsForFifo(ligneOperation.getFourniture().getId());
-        System.out.println("liste de lots à utiliser trouvée");
-        System.out.println("lots de la fourniture " + ligneOperation.getFourniture().getDesignation() + " = " + listLots.size());
         List<Lot> lotsModifier = new ArrayList<>();
         int quantiteRetrait = ligneOperation.getQuantite();
-        System.out.println("quantité à retirer = " + quantiteRetrait);
         for (int i = 0; i < listLots.size() && quantiteRetrait > 0; i++)
         {
             Journal journal = new Journal();
-            System.out.println("journal n°" + i + " instancié");
             journal.setLigneOperation(ligneOperation);
-            System.out.println("journal a sa ligne d'opération");
             if (listLots.get(i).getQuantite() <= quantiteRetrait)
             {
-                System.out.println("listLots.get(i).getQuantite() <= quantiteRetrait");
                 quantiteRetrait -= listLots.get(i).getQuantite();
-                System.out.println("et donc quantiteRetrait=" + quantiteRetrait);
-
                 journal.setLot(listLots.get(i));
                 journal.setQuantiteRetirer(listLots.get(i).getQuantite());
-
                 listLots.get(i).setQuantite(0);
             }
             if (listLots.get(i).getQuantite() > quantiteRetrait)
@@ -432,7 +384,6 @@ public class OperationService extends AbstractService<Operation> implements IOpe
             lotsModifier.add(listLots.get(i));
             journalDao.save(journal);
         }
-        System.out.println("journal crée \n redirection ...");
         return lotsModifier;
     }
 
