@@ -27,6 +27,8 @@ public interface ILotService extends IOperations<Lot>
 
     public Map<Long, String> getEntreeFournitures(final long id);
 
+    public Map<Long, String> getFournituresForPerte(final long id);
+
     public List<Lot> filterByLigneAudit(final long id);
 
     public Lot findOneByLigneAudit(final long id);

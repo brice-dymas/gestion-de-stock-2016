@@ -31,7 +31,10 @@ public interface ILotDao extends JpaRepository<Lot, Long>, JpaSpecificationExecu
     @Query("SELECT l FROM Lot l WHERE l.fourniture.id = :idFourniture")
     public List<Lot> findByFourniture(@Param("idFourniture") long id);
 
-    @Query("SELECT l FROM Lot l WHERE l.entree.id= :id")
+    @Query("SELECT l FROM Lot l WHERE l.fourniture.id = :idFourniture AND l.quantite > 0")
+    public List<Lot> findByFournitureForPerte(@Param("idFourniture") long id);
+
+    @Query("SELECT l FROM Lot l WHERE l.entree.id= :id ")
     public List<Lot> findByEntreeId(@Param("id") long id);
 
     @Query("SELECT F FROM Lot l, Fourniture F WHERE l.entree.id= :id AND "

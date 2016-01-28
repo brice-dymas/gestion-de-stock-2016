@@ -9,7 +9,6 @@ import com.cami.persistence.dao.IFournitureDao;
 import com.cami.persistence.dao.ILigneOperationDao;
 import com.cami.persistence.dao.ILotDao;
 import com.cami.persistence.dao.IPerteDao;
-import com.cami.persistence.model.Equilibre;
 import com.cami.persistence.model.Fourniture;
 import com.cami.persistence.model.Perte;
 import com.cami.persistence.service.IPerteService;
@@ -76,12 +75,6 @@ public class PerteService extends AbstractService<Perte> implements IPerteServic
     public Perte findPerteByLigneAudit(Long ligneAuditId)
     {
         return perteDao.findPerteByLigneAudit(ligneAuditId);
-    }
-
-    @Override
-    public void create(Equilibre equilibre)
-    {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

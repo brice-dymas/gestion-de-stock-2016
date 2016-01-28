@@ -5,7 +5,6 @@
  */
 package com.cami.web.controller;
 
-import com.cami.persistence.model.Equilibre;
 import com.cami.persistence.model.LigneOperation;
 import com.cami.persistence.model.Lot;
 import com.cami.persistence.model.Perte;
@@ -14,6 +13,7 @@ import com.cami.persistence.service.ILigneOperationService;
 import com.cami.persistence.service.ILotService;
 import com.cami.persistence.service.IOperationService;
 import com.cami.persistence.service.IPerteService;
+import com.cami.web.form.PerteForm;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -89,21 +89,16 @@ public class PerteController
     public String newAction(@PathVariable("id") final Long id,
             final ModelMap model)
     {
-
         final LigneOperation ligneOperation = ligneOperationService.findOne(id);
-        System.out.println("Dans perte controller fourniture id = " + ligneOperation.getFourniture().getId());
-        Perte perte = new Perte();
-        Equilibre equilibre = new Equilibre();
-        perte.setLigneOperation(ligneOperation);
+        Map<Long, String> lots = lotService.getFournituresForPerte(ligneOperation.getFourniture().getId());
+        PerteForm perte = new PerteForm();
         model.addAttribute("perte", perte);
-        model.addAttribute("equilibre", equilibre);
-        System.out.println("Dans perte controller quantite ligne operation = " + perte.getLigneOperation().getQuantitePhysique());
-        System.out.println("Ligne Operation = " + perte.getLigneOperation().getId());
+        model.addAttribute("lots", lots);
         return "perte/new";
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public String createAction(final ModelMap model, Equilibre equilibre,
+    public String createAction(final ModelMap model,
             final BindingResult result,
             final RedirectAttributes redirectAttributes)
     {
@@ -117,7 +112,7 @@ public class PerteController
         else
         {
             System.out.println("Dans Perte Controller sans erreur debut...");
-            perteService.create(equilibre);
+//            perteService.create(equilibre);
             System.out.println("Dans perte controller fin...");
             redirectAttributes.addFlashAttribute("info", "alert.success.new");
             return "redirect:/audit/";

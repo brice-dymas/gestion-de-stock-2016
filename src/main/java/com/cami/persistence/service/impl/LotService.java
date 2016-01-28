@@ -156,4 +156,16 @@ public class LotService extends AbstractService<Lot> implements ILotService
         return listMap;
     }
 
+    @Override
+    public Map<Long, String> getFournituresForPerte(long id)
+    {
+        List<Lot> lots = iLotDao.findByFournitureForPerte(id);
+        Map<Long, String> listMap = new HashMap<>();
+        for (Lot lot : lots)
+        {
+            listMap.put(lot.getId(), lot.getNumero() + " - " + lot.getDateEntree());
+        }
+        return listMap;
+    }
+
 }
