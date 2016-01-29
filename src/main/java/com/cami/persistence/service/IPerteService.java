@@ -8,6 +8,7 @@ package com.cami.persistence.service;
 import com.cami.persistence.IOperations;
 import com.cami.persistence.model.Perte;
 import java.util.Date;
+import java.util.List;
 import org.springframework.data.domain.Page;
 
 /**
@@ -16,6 +17,8 @@ import org.springframework.data.domain.Page;
  */
 public interface IPerteService extends IOperations<Perte>
 {
+
+    public List<Perte> create(List<Perte> pertes);
 
     public Perte findPerteByLigneAudit(Long ligneAuditId);
 

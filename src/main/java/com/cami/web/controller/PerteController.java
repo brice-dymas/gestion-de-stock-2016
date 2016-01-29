@@ -91,32 +91,45 @@ public class PerteController
     {
         final LigneOperation ligneOperation = ligneOperationService.findOne(id);
         Map<Long, String> lots = lotService.getFournituresForPerte(ligneOperation.getFourniture().getId());
-        PerteForm perte = new PerteForm();
-        model.addAttribute("perte", perte);
+        PerteForm perteForm = new PerteForm();
+        model.addAttribute("perteForm", perteForm);
+        model.addAttribute("ligneOperation", ligneOperation);
         model.addAttribute("lots", lots);
         return "perte/new";
     }
 
-    @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public String createAction(final ModelMap model,
-            final BindingResult result,
+    @RequestMapping(value = "/{id}/create", method = RequestMethod.POST)
+    public String createAction(@PathVariable("id") final long id, @Valid PerteForm perteForm,
+            final ModelMap model, final BindingResult result,
             final RedirectAttributes redirectAttributes)
     {
+        final LigneOperation ligneOperation = ligneOperationService.findOne(id);
+        List<Perte> pertes = perteForm.getListPertes();
+        int totalPerte = 0;
+        for (Perte perte : pertes)
+        {
+            perte.setLigneOperation(ligneOperation);
+            totalPerte += perte.getQuantite();
+        }
 
-        if (result.hasErrors())
+        if (result.hasErrors() | totalPerte > ligneOperation.getQuantiteEcart())
         {
             System.out.println("Dans Perte controller erreur" + result.getFieldError());
+            Map<Long, String> lots = lotService.getFournituresForPerte(ligneOperation.getFourniture().getId());
+            model.addAttribute("perte", perteForm);
+            model.addAttribute("ligneOperation", ligneOperation);
+            model.addAttribute("lots", lots);
             model.addAttribute("error", "error");
-            return "perte/new";
         }
         else
         {
             System.out.println("Dans Perte Controller sans erreur debut...");
 //            perteService.create(equilibre);
+            perteService.create(pertes);
             System.out.println("Dans perte controller fin...");
             redirectAttributes.addFlashAttribute("info", "alert.success.new");
-            return "redirect:/audit/";
         }
+        return "redirect:/perte/";
     }
 
     @RequestMapping(value = "/delete", method = RequestMethod.POST)

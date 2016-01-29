@@ -17,13 +17,13 @@
         <div class="row">
             <div class="col-md-12">
                 <h3>
-                    <spring:message code="perte.new" />
+                    <spring:message code="perte.new" /> : ${ligneOperation.fourniture.designation}
                	</h3>
                 <hr/>
             </div>
         </div>
 
-        <spring:url value="/perte/create" var="perte_create" htmlEscape="true" />
+        <spring:url value="/perte/${ligneOperation.id}/create" var="perte_create" htmlEscape="true" />
 
         <form:form method="post" commandName="perteForm" action="${perte_create}?${_csrf.parameterName}=${_csrf.token}">
             <div class="row">
@@ -32,64 +32,31 @@
                         <form:errors path="*" cssClass="text-danger"/>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <form:label for="date" path="">
-                                <spring:message code="operation.dateOperation" />
-                            </form:label>
-                            <form:input id="date" path="perte.dateOperation" cssClass="form-control input-sm"/>
-                            <form:errors path="perte.dateOperation" cssClass="text-danger"/>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <form:label for="observation" path="">
-                                <spring:message code="operation.observation" />
-                            </form:label>
-                            <form:input id="date" path="perte.observation" cssClass="form-control input-sm"/>
-                            <form:errors path="perte.observation" cssClass="text-danger"/>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <form:label for="dept" path="">
-                                <spring:message code="operation.departement" />
-                            </form:label>
-                            <form:select id="dept" path="perte.departement.id" cssClass="form-control">
-                                <form:options items="${departements}" />
-                            </form:select>
-                            <form:errors path="perte.departement.id" cssClass="text-danger" />
-                        </div>
-                    </div>
-                </div>
                 <hr/>
 
                 <div class="row">
-
                     <div class="col-md-12">
                         <fieldset>
-                            <legend><spring:message code="perte.ligneOperations" />  </legend>
+                            <legend><spring:message code="perte.lots" />  </legend>
 
-                            <div id="ligneOperation">
+                            <div id="listPerte">
                                 <table class="table table-bordered">
                                     <thead>
                                         <tr class="btn-primary">
-                                            <th><spring:message code="fourniture.designation" /></th>
-                                            <th><spring:message code="ligneOperation.quantite" /></th>
-                                            <th><spring:message code="ligneOperation.observation" /></th>
+                                            <th><spring:message code="perte.lot" /></th>
+                                            <th><spring:message code="perte.quantite" /></th>
                                             <th><spring:message code="action.effacer" /></th>
                                         </tr>
                                     </thead>
-                                    <tbody data-size="${perteForm.ligneOperations.size()}">
+                                    <tbody data-size="${perteForm.listPertes.size()}">
 
-                                        <c:if test="${0 le perteForm.ligneOperations.size()}">
+                                        <c:if test="${0 le perteForm.listPertes.size()}">
 
-                                            <c:forEach items="${perteForm.ligneOperations}" varStatus="status" begin="0">
+                                            <c:forEach items="${perteForm.listPertes}" varStatus="status" begin="0">
 
-                                                <tr class="list-ligneOperation">
+                                                <tr class="list-listPerte">
                                                     <td>
-                                                        <spring:bind path="ligneOperations[${status.index}].fourniture.id">
+                                                        <spring:bind path="listPertes[${status.index}].lot.id">
                                                             <form:select path="${status.expression}" cssClass="form-control input-sm" >
                                                                 <form:options items="${lots}" />
                                                             </form:select>
@@ -97,19 +64,13 @@
                                                         </spring:bind>
                                                     </td>
                                                     <td>
-                                                        <spring:bind path="ligneOperations[${status.index}].quantitePhysique">
-                                                            <form:input path="${status.expression}" cssClass="form-control input-sm" />
-                                                            <form:errors path="${status.expression}" cssClass="text-danger"/>
-                                                        </spring:bind>
-                                                    </td>
-                                                    <td>
-                                                        <spring:bind path="ligneOperations[${status.index}].observation">
+                                                        <spring:bind path="listPertes[${status.index}].quantite">
                                                             <form:input path="${status.expression}" cssClass="form-control input-sm" />
                                                             <form:errors path="${status.expression}" cssClass="text-danger"/>
                                                         </spring:bind>
                                                     </td>
                                                     <td class="row-align">
-                                                        <button type="button" id="removeLigneOperationButton" class="btn btn-sm btn-default remove-ligneOperation" >
+                                                        <button type="button" id="removeLignePerteButton" class="btn btn-sm btn-default remove-listPerte" >
                                                             <span class="glyphicon glyphicon-minus-sign"></span>
                                                         </button>
                                                     </td>
@@ -117,22 +78,19 @@
                                             </c:forEach>
                                         </c:if>
 
-                                        <c:if test="${0 eq perteForm.ligneOperations.size()}">
+                                        <c:if test="${0 eq perteForm.listPertes.size()}">
 
-                                            <tr class="list-ligneOperation">
+                                            <tr class="list-listPerte">
                                                 <td>
-                                                    <form:select path="ligneOperations[0].fourniture.id" cssClass="form-control input-sm" >
-                                                        <form:options items="${fournitures}" />
+                                                    <form:select path="listPertes[0].lot.id" cssClass="form-control input-sm" >
+                                                        <form:options items="${lots}" />
                                                     </form:select>
                                                 </td>
                                                 <td>
-                                                    <form:input path="ligneOperations[0].quantitePhysique" cssClass="form-control input-sm" />
-                                                </td>
-                                                <td>
-                                                    <form:input path="ligneOperations[0].observation" cssClass="form-control input-sm" />
+                                                    <form:input path="listPertes[0].quantite" cssClass="form-control input-sm" />
                                                 </td>
                                                 <td class="row-align">
-                                                    <button type="button" id="removeLigneOperationButton"  class="btn btn-sm btn-default remove-ligneOperation" >
+                                                    <button type="button" id="removeLignePerteButton"  class="btn btn-sm btn-default remove-listPerte" >
                                                         <span class="glyphicon glyphicon-minus-sign"></span>
                                                     </button>
                                                 </td>
@@ -143,7 +101,7 @@
                                     </tbody>
                                 </table>
 
-                                <button type="button" id="addLigneOperationButton" class="btn btn-sm btn-default add-ligneOperation">
+                                <button type="button" id="addLignePerteButton" class="btn btn-sm btn-default add-listPerte">
                                     <span class="glyphicon glyphicon-plus-sign"></span>
                                     <spring:message code="action.ajouter" />
                                 </button>
@@ -162,7 +120,7 @@
                         <spring:url value="/perte/" htmlEscape="true" var="perte_home" />
                         <a href="${perte_home}" class="btn btn-sm btn-default">
                             <span class="glyphicon glyphicon-list"></span>
-                            <spring:message code="entree.list" />
+                            <spring:message code="perte.list" />
                         </a>
                     </div>
                 </div>
@@ -175,61 +133,15 @@
 
                 $(document).ready(function () {
 
-                    function setOnLigneOperationDatePicker() {
-                        var i = 0;
-                        $(".list-ligneOperation").each(function () {
-                            $(this).on("focus", "#ligneOperations" + i + "\\.date", function () {
-                                $(this).datepicker({
-                                    changeMonth: true,
-                                    changeYear: true,
-                                    dateFormat: "dd/mm/yy",
-                                    showButtonPanel: false
-                                });
-                                return false;
-                            });
-
-                            i++;
-                        });
-
-
-                    }
-
-                    function setLigneOperationDatePicker(item) {
-
-                        $(item).on("focus", "input[name$='dateOperation']", function () {
-                            $(this).removeClass("hasDatepicker").datepicker({
-                                changeMonth: true,
-                                changeYear: true,
-                                dateFormat: "dd/mm/yy",
-                                showButtonPanel: false
-                            });
-                            return false;
-                        });
-
-                    }
-
-                    $("#ligneOperation").dynamiclist({
-                        itemClass: "list-ligneOperation",
-                        addClass: "add-ligneOperation",
-                        removeClass: "remove-ligneOperation",
-                        withEvents: true,
-                        addCallbackFn: setLigneOperationDatePicker
-
+                    $("#listPerte").dynamiclist({
+                        itemClass: "list-listPerte",
+                        addClass: "add-listPerte",
+                        removeClass: "remove-listPerte",
+                        withEvents: true
                     });
-
-                    $("#date").datepicker({
-                        changeMonth: true,
-                        changeYear: true,
-                        dateFormat: "dd/mm/yy",
-                        showButtonPanel: false
-                    });
-
-                    setOnLigneOperationDatePicker();
-
                 });
 
             </script>
-
 
         </tiles:putAttribute>
     </tiles:insertDefinition>

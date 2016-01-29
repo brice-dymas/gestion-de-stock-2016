@@ -5,8 +5,7 @@
  */
 package com.cami.web.form;
 
-import com.cami.persistence.model.LigneOperation;
-import com.cami.persistence.model.Operation;
+import com.cami.persistence.model.Perte;
 import com.cami.web.util.ShrinkableLazyList;
 import java.util.ArrayList;
 import java.util.Date;
@@ -19,37 +18,38 @@ import org.hibernate.validator.constraints.NotEmpty;
  *
  * @author samuel   < smlfolong@gmail.com >
  */
-public class PerteForm {
-
-    @Valid
-    private Operation perte;
+public class PerteForm
+{
 
     @Valid
     @NotEmpty(message = "{empty.message}")
-    private List<LigneOperation> ligneOperations = ShrinkableLazyList.decorate(
-            new ArrayList<>(), FactoryUtils.instantiateFactory(LigneOperation.class));
+    private List<Perte> listPertes = ShrinkableLazyList.decorate(
+            new ArrayList<>(), FactoryUtils.instantiateFactory(Perte.class));
 
-    public PerteForm() {
+    public PerteForm()
+    {
     }
 
-    public Operation getPerte() {
-        if (perte != null) {
-            perte.setDateOperation(new Date());
-            perte.setLigneOperations(ligneOperations);
+    public List<Perte> getPertes()
+    {
+        if (listPertes.size() > 0)
+        {
+            for (Perte perte : listPertes)
+            {
+                perte.setDatePerte(new Date());
+            }
         }
-        return perte;
+        return listPertes;
     }
 
-    public void setPerte(Operation perte) {
-        this.perte = perte;
+    public List<Perte> getListPertes()
+    {
+        return listPertes;
     }
 
-    public List<LigneOperation> getLigneOperations() {
-        return ligneOperations;
-    }
-
-    public void setLigneOperations(List<LigneOperation> ligneOperations) {
-        this.ligneOperations = ligneOperations;
+    public void setListPertes(List<Perte> listPertes)
+    {
+        this.listPertes = listPertes;
     }
 
 }

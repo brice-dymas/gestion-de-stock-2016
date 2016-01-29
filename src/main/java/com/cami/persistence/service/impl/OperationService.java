@@ -19,7 +19,6 @@ import com.cami.persistence.model.Journal;
 import com.cami.persistence.model.LigneOperation;
 import com.cami.persistence.model.Lot;
 import com.cami.persistence.model.Operation;
-import com.cami.persistence.model.Perte;
 import com.cami.persistence.model.Role;
 import com.cami.persistence.model.User;
 import com.cami.persistence.service.IDepartementService;
@@ -166,10 +165,11 @@ public class OperationService extends AbstractService<Operation> implements IOpe
             }
             else
             {
+                Fourniture fourniture = fournitureDao.findOne(ligneOperation.getFourniture().getId());
                 System.out.println("ligne operation non nulle");
                 ligneOperation.setOperation(audit);
                 System.out.println("quantitePhysique = " + ligneOperation.getQuantitePhysique());
-                ligneOperation.setFourniture(fournitureDao.findOne(ligneOperation.getFourniture().getId()));
+                ligneOperation.setFourniture(fourniture);
                 System.out.println("Quantite Machine =" + ligneOperation.getFourniture().getQuantite());
                 System.out.println("type opération = " + ligneOperation.getOperation().getTypeOperation().getIntitule());
                 System.out.println("avant save ligne operation = " + ligneOperation);
@@ -178,12 +178,14 @@ public class OperationService extends AbstractService<Operation> implements IOpe
 
                 if (lp.getQuantiteEcart() > 0)
                 {
-                    Perte perte = new Perte();
-                    perte.setDatePerte(new Date());
-                    perte.setLigneOperation(lp);
-                    perte.setQuantite(lp.getQuantiteEcart());
-                    perte.setLot(iLotDao.findOneByLigneAudit(ligneOperation.getId()));
-                    perteDao.save(perte);
+                    fourniture.setPerte(lp.getQuantiteEcart());
+                    fournitureDao.save(fourniture);
+//                    Perte perte = new Perte();
+//                    perte.setDatePerte(new Date());
+//                    perte.setLigneOperation(lp);
+//                    perte.setQuantite(lp.getQuantiteEcart());
+//                    perte.setLot(iLotDao.findOneByLigneAudit(ligneOperation.getId()));
+//                    perteDao.save(perte);
                 }
             }
         }
