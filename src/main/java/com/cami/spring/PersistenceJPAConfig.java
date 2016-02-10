@@ -55,9 +55,9 @@ public class PersistenceJPAConfig
         final BasicDataSource dataSource = new BasicDataSource();
         dataSource.setDriverClassName("com.mysql.jdbc.Driver");
         dataSource
-                .setUrl("jdbc:mysql://localhost:3306/camiMerged?useUnicode=yes&characterEncoding=UTF-8");
+                .setUrl("jdbc:mysql://localhost:3306/cami?useUnicode=yes&characterEncoding=UTF-8");
         dataSource.setUsername("root");
-        dataSource.setPassword("");
+        dataSource.setPassword("elise");
         return dataSource;
     }
 

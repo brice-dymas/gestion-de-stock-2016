@@ -7,13 +7,17 @@ package com.cami.web.controller;
 
 import com.cami.persistence.model.Categorie;
 import com.cami.persistence.model.Entree;
+import com.cami.persistence.model.Fourniture;
+import com.cami.persistence.model.LigneOperation;
 import com.cami.persistence.model.Lot;
 import com.cami.persistence.service.ICategorieService;
 import com.cami.persistence.service.IEntreeService;
 import com.cami.persistence.service.IFournitureService;
+import com.cami.persistence.service.ILigneOperationService;
 import com.cami.persistence.service.ILotService;
 import com.cami.persistence.service.IRoleService;
 import com.cami.web.form.EntreeForm;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.validation.Valid;
@@ -34,8 +38,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
  */
 @Controller
 @RequestMapping("/entree")
-public class EntreeController
-{
+public class EntreeController {
 
     @Autowired
     ILotService lotService;
@@ -51,9 +54,11 @@ public class EntreeController
     @Autowired
     private IRoleService roleService;
 
+    @Autowired
+    private ILigneOperationService ligneOperationService;
+
     @RequestMapping(value = "/{id}/show", method = RequestMethod.GET)
-    public String showAction(@PathVariable("id") final Long id, final ModelMap model)
-    {
+    public String showAction(@PathVariable("id") final Long id, final ModelMap model) {
         final Entree entree = entreeService.findOne(id);
         List<Lot> listeLots = lotService.findByEntreeId(id);
         model.addAttribute("lots", listeLots);
@@ -61,9 +66,26 @@ public class EntreeController
         return "/entree/show";
     }
 
+    @RequestMapping(value = "/{id}/equilibre", method = RequestMethod.GET)
+    public String equilibreAction(@PathVariable("id") final Long id, final ModelMap model) {
+        LigneOperation ligneOperation = ligneOperationService.findOne(id);
+        Fourniture fourniture = fournitureService.findOne(ligneOperation.getFourniture().getId());
+        Map<Long, String> fournitures = new HashMap<>();
+        fournitures.put(fourniture.getId(), fourniture.getReference());
+        final Categorie categori = fourniture.getCategorie();
+        Entree entree = new Entree();
+        entree.setLigneAuditId(id);
+        entree.setCategorie(categori);
+        System.out.println(categori);
+        final EntreeForm entreeForm = new EntreeForm();
+        entreeForm.setEntree(entree);
+        model.addAttribute("entreeForm", entreeForm);
+        model.addAttribute("fournitures", fournitures);
+        return "entree/new";
+    }
+
     @RequestMapping(value = "/{id}/edit", method = RequestMethod.GET)
-    public String editAction(@PathVariable("id") final Long id, final ModelMap model)
-    {
+    public String editAction(@PathVariable("id") final Long id, final ModelMap model) {
         final Entree et = entreeService.findOne(id);
         Map<Long, String> fournitures = lotService.getEntreeFournitures(id);
         final EntreeForm entree = new EntreeForm();
@@ -88,24 +110,21 @@ public class EntreeController
     }
 
     @RequestMapping(value = "/{id}/delete", method = RequestMethod.POST)
-    public String deleteAction(@PathVariable("id") final Long id, final RedirectAttributes redirectAttributes)
-    {
+    public String deleteAction(@PathVariable("id") final Long id, final RedirectAttributes redirectAttributes) {
         final Entree entreeToDisable = entreeService.findOne(id);
         entreeService.delete(entreeToDisable);
         return "redirect:/entree/";
     }
 
     @RequestMapping(value = "/new", method = RequestMethod.GET)
-    public String newAction(final ModelMap model)
-    {
+    public String newAction(final ModelMap model) {
         final EntreeForm entree = new EntreeForm();
         model.addAttribute("entreeForm", entree);
         return "entree/new";
     }
 
     @RequestMapping(value = "/{type}/new", method = RequestMethod.GET)
-    public String newEntreeAction(@PathVariable("type") final String categorie, final ModelMap model)
-    {
+    public String newEntreeAction(@PathVariable("type") final String categorie, final ModelMap model) {
         Map<Long, String> fournitures = fournitureService.findByCategorieName(categorie);
         final Categorie categori = categorieService.getCategorie(categorie);
         Entree entree = new Entree();
@@ -119,8 +138,7 @@ public class EntreeController
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public String indexAction(final ModelMap model, final WebRequest webRequest)
-    {
+    public String indexAction(final ModelMap model, final WebRequest webRequest) {
 
         final Integer page = webRequest.getParameter("page") != null ? Integer.valueOf(webRequest.getParameter("page")) : 0;
         final Integer size = webRequest.getParameter("size") != null ? Integer.valueOf(webRequest.getParameter("size")) : 55;
@@ -130,50 +148,48 @@ public class EntreeController
         model.addAttribute("page", page);
         model.addAttribute("Totalpage", resultPage.getTotalPages());
         model.addAttribute("size", size);
-        model.addAttribute("entrees", resultPage.getContent());
+        model.addAttribute("entrees", entreeService.findAll());
+        //model.addAttribute("entrees", resultPage.getContent());
         return "entree/index";
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public String createAction(final ModelMap model, @Valid final EntreeForm entree,
-            final BindingResult result, final RedirectAttributes redirectAttributes)
-    {
+            final BindingResult result, final RedirectAttributes redirectAttributes) {
         System.out.println("dans la methode create du controller");
         System.out.println("tout parametre pret");
-        if (result.hasErrors())
-        {
+        if (result.hasErrors()) {
             System.out.println(" dans le entree controller avec errerur ");
             Map<Long, String> fournitures = fournitureService.findByCategorieName(entree.getEntree().getCategorie().getIntitule());
             model.addAttribute("error", "error");
             model.addAttribute("entreeForm", entree);
             model.addAttribute("fournitures", fournitures);
             return "entree/new";
-        }
-        else
-        {
+        } else {
             System.out.println(" dans le entree controller sans erreur ");
             redirectAttributes.addFlashAttribute("info", "alert.success.new");
             System.out.println("Categorie = " + entree.getEntree().getCategorie().getIntitule());
             System.out.println("categorie ID = " + entree.getEntree().getCategorie().getId());
             entreeService.create(entree.getEntree());
             System.out.println("tout est fini");
-            return "redirect:/entree/" + entree.getEntree().getId() + "/show";
+            if (entree.getEntree().getLigneAuditId()!=null){
+                return "redirect:/audit/" + entree.getEntree().getLigneAuditId()+ "/show";
+            }else{
+                return "redirect:/entree/" + entree.getEntree().getId() + "/show";
+            }
+            
         }
     }
 
     @RequestMapping(value = "/{id}/update", method = RequestMethod.POST)
     public String updateAction(@PathVariable("id") final Long id, final ModelMap model, @Valid final EntreeForm entree,
-            final BindingResult result, final RedirectAttributes redirectAttributes)
-    {
-        if (result.hasErrors())
-        {
+            final BindingResult result, final RedirectAttributes redirectAttributes) {
+        if (result.hasErrors()) {
             System.out.println(" dans le entree controller pour update avec errerur ");
             model.addAttribute("error", "error");
             model.addAttribute("entreeForm", entree);
             return "entree/edit";
-        }
-        else
-        {
+        } else {
             System.out.println(" dans le entree controller sans errerur ");
             redirectAttributes.addFlashAttribute("info", "alert.success.new");
             entree.getEntree().setId(id);
