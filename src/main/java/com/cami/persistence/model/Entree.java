@@ -38,7 +38,6 @@ public class Entree extends EntityObject
     @Temporal(TemporalType.DATE)
     protected Date dateEntree;
 
-    @Transient
     protected Long ligneAuditId;
 
     @ManyToOne(targetEntity = Categorie.class, fetch = FetchType.EAGER, optional = false)

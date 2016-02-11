@@ -45,6 +45,9 @@
                         </form:label>
                         <form:input readonly="true" enabled="false" id="date" path="entree.categorie.intitule" cssClass="form-control input-sm"/>
                         <form:errors path="entree.categorie.id" cssClass="text-danger" />
+                        <c:if test="${not empty entreeForm.entree.ligneAuditId}">
+                            <form:hidden id="ligneAuditId" path="entree.ligneAuditId"/>
+                        </c:if>
                     </div>
                 </div>
             </div>

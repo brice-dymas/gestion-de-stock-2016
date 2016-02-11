@@ -63,6 +63,10 @@ public class EntreeController {
         List<Lot> listeLots = lotService.findByEntreeId(id);
         model.addAttribute("lots", listeLots);
         model.addAttribute("entree", entree);
+        if (entree.getLigneAuditId() != null){
+            Long idAudit = ligneOperationService.findOne(entree.getLigneAuditId()).getOperation().getId();
+            model.addAttribute("idaudit", idAudit);
+        }
         return "/entree/show";
     }
 
@@ -71,7 +75,7 @@ public class EntreeController {
         LigneOperation ligneOperation = ligneOperationService.findOne(id);
         Fourniture fourniture = fournitureService.findOne(ligneOperation.getFourniture().getId());
         Map<Long, String> fournitures = new HashMap<>();
-        fournitures.put(fourniture.getId(), fourniture.getReference());
+        fournitures.put(fourniture.getId(), fourniture.getDesignation());
         final Categorie categori = fourniture.getCategorie();
         Entree entree = new Entree();
         entree.setLigneAuditId(id);
@@ -81,6 +85,8 @@ public class EntreeController {
         entreeForm.setEntree(entree);
         model.addAttribute("entreeForm", entreeForm);
         model.addAttribute("fournitures", fournitures);
+        model.addAttribute("fourniture", fourniture);
+        model.addAttribute("audit", ligneOperation.getOperation());
         return "entree/new";
     }
 
@@ -148,8 +154,7 @@ public class EntreeController {
         model.addAttribute("page", page);
         model.addAttribute("Totalpage", resultPage.getTotalPages());
         model.addAttribute("size", size);
-        model.addAttribute("entrees", entreeService.findAll());
-        //model.addAttribute("entrees", resultPage.getContent());
+        model.addAttribute("entrees", resultPage.getContent());
         return "entree/index";
     }
 
@@ -164,19 +169,21 @@ public class EntreeController {
             model.addAttribute("error", "error");
             model.addAttribute("entreeForm", entree);
             model.addAttribute("fournitures", fournitures);
+            System.out.println("Ligne Audit = "+entree.getEntree().getLigneAuditId());
             return "entree/new";
         } else {
+            
+            String categorieName = entree.getEntree().getCategorie().getIntitule();
+            final Categorie categorie = categorieService.getCategorie(categorieName);
+            entree.getEntree().setCategorie(categorie);
             System.out.println(" dans le entree controller sans erreur ");
             redirectAttributes.addFlashAttribute("info", "alert.success.new");
             System.out.println("Categorie = " + entree.getEntree().getCategorie().getIntitule());
             System.out.println("categorie ID = " + entree.getEntree().getCategorie().getId());
             entreeService.create(entree.getEntree());
             System.out.println("tout est fini");
-            if (entree.getEntree().getLigneAuditId()!=null){
-                return "redirect:/audit/" + entree.getEntree().getLigneAuditId()+ "/show";
-            }else{
-                return "redirect:/entree/" + entree.getEntree().getId() + "/show";
-            }
+            
+            return "redirect:/entree/" + entree.getEntree().getId() + "/show";
             
         }
     }

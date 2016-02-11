@@ -18,6 +18,10 @@
             <div class="col-md-12">
                 <h3>
                     <spring:message code="entree.show" />
+                    <c:if test="${not empty idaudit}">
+                       : (Resultat d'un audit)
+                    </a>
+                    </c:if>
                 </h3>
                 <hr/>
             </div>
@@ -110,6 +114,14 @@
                         <spring:message code="entree.list" />
                     </a>
                     <form:hidden path="id"/>
+                    
+                    <c:if test="${not empty idaudit}">
+                        <spring:url value="/audit/${idaudit}/show" var="entree_audit"/>
+                        <a href="${entree_audit}" class="btn btn-default  btn-warning">
+                        <span class="glyphicon glyphicon-edit"></span>
+                        Consulter l'audit
+                    </a>
+                    </c:if>
                     <spring:url value="/entree/${entree.id}/edit" var="entree_edit"/>
                     <a href="${entree_edit}" class="btn btn-default  btn-warning">
                         <span class="glyphicon glyphicon-edit"></span>
