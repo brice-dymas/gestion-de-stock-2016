@@ -59,7 +59,7 @@ public class FournitureService extends AbstractService<Fourniture> implements IF
         Fourniture fournitureToUpdate = iFournitureDao.findOne(entity.getId());
         fournitureToUpdate.setReference(entity.getReference());
         fournitureToUpdate.setDesignation(entity.getDesignation());
-        fournitureToUpdate.setQuantite(entity.getQuantite());
+//        fournitureToUpdate.setQuantite(entity.getQuantite());
         fournitureToUpdate.setSeuil(entity.getSeuil());
         fournitureToUpdate.setCategorie(iCategorieDao.findOne(entity.getCategorie().getId()));
         return iFournitureDao.save(fournitureToUpdate);

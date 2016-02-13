@@ -87,23 +87,45 @@
                         <spring:url value="/fourniture/${fourniture.id}/show" var="show" />
                         <spring:url value="/fourniture/${fourniture.id}/edit" var="edit" />
 
-                        <tr>
-                            <td>${fourniture.reference}</td>
-                            <td>${fourniture.designation}</td>
-                            <td>${fourniture.categorie.intitule}</td>
-                            <td>${fourniture.quantite}</td>
-                            <td>
-                                <a href="${show}" class="btn btn-primary btn-sm">
-                                    <span class="glyphicon glyphicon-open"></span>
-                                    <spring:message code="action.detail" />
-                                </a>
-                                &nbsp; &nbsp;
-                                <a href="${edit}" class="btn btn-primary btn-warning">
-                                    <span class="glyphicon glyphicon-edit"></span>
-                                    <spring:message code="action.modifier" />
-                                </a>
-                            </td>
-                        </tr>
+                        <c:if test="${fourniture.perte gt 0}">
+                            <tr class="text-danger" >
+                                <td>${fourniture.reference}</td>
+                                <td>${fourniture.designation}</td>
+                                <td>${fourniture.categorie.intitule}</td>
+                                <td>${fourniture.quantite}</td>
+                                <td>
+                                    <a href="${show}" class="btn btn-primary btn-sm">
+                                        <span class="glyphicon glyphicon-open"></span>
+                                        <spring:message code="action.detail" />
+                                    </a>
+                                    &nbsp; &nbsp;
+                                    <a href="${edit}" class="btn btn-primary btn-warning">
+                                        <span class="glyphicon glyphicon-edit"></span>
+                                        <spring:message code="action.modifier" />
+                                    </a>
+                                </td>
+                            </tr>
+                        </c:if>
+                        <c:if test="${fourniture.perte eq 0}">
+                            <tr>
+                                <td>${fourniture.reference}</td>
+                                <td>${fourniture.designation}</td>
+                                <td>${fourniture.categorie.intitule}</td>
+                                <td>${fourniture.quantite}</td>
+                                <td>
+                                    <a href="${show}" class="btn btn-primary btn-sm">
+                                        <span class="glyphicon glyphicon-open"></span>
+                                        <spring:message code="action.detail" />
+                                    </a>
+                                    &nbsp; &nbsp;
+                                    <a href="${edit}" class="btn btn-primary btn-warning">
+                                        <span class="glyphicon glyphicon-edit"></span>
+                                        <spring:message code="action.modifier" />
+                                    </a>
+                                </td>
+                            </tr>
+                        </c:if>
+
                     </c:forEach>
 
                     </tbody>
