@@ -18,7 +18,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.PostPersist;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -38,7 +37,6 @@ public class Entree extends EntityObject
     @Temporal(TemporalType.DATE)
     protected Date dateEntree;
 
-    @Transient
     protected Long ligneAuditId;
 
     @ManyToOne(targetEntity = Categorie.class, fetch = FetchType.EAGER, optional = false)

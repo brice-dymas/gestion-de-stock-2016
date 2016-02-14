@@ -66,7 +66,13 @@ public class PerteController
     public String editAction(@PathVariable("id") final Long id, final ModelMap model)
     {
         final Perte perte = perteService.findOne(id);
+        final LigneOperation ligneOperation = ligneOperationService.findOne(perte.getLigneOperation().getId());
+        final PerteForm perteForm = new PerteForm();
+        Map<Long, String> lots = lotService.getFournituresForPerte(perte.getLigneOperation().getFourniture().getId());
+        model.addAttribute("ligneOperation", ligneOperation);
         model.addAttribute("perte", perte);
+        model.addAttribute("perteForm", perteForm);
+        model.addAttribute("lots", lots);
         return "perte/edit";
     }
 
@@ -142,23 +148,31 @@ public class PerteController
         return "redirect:/perte/";
     }
 
-    @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public String updateAction(final ModelMap model, @Valid Perte perte,
-            final BindingResult result,
-            final RedirectAttributes redirectAttributes)
+    @RequestMapping(value = "/{id}/update", method = RequestMethod.POST)
+    public String updateAction(@PathVariable("id") final long id, final ModelMap model, @Valid PerteForm perteForm,
+            final BindingResult result, final RedirectAttributes redirectAttributes)
     {
+
+        final Perte perte = perteService.findOne(id);
+        final LigneOperation ligneOperation = ligneOperationService.findOne(perte.getLigneOperation().getId());
+        System.out.println("Dans perte controller ligneOperation fourniture = " + ligneOperation.getFourniture().getDesignation());
+        List<Perte> pertes = perteForm.getListPertes();
 
         if (result.hasErrors())
         {
+            Map<Long, String> lots = lotService.getFournituresForPerte(ligneOperation.getFourniture().getId());
             model.addAttribute("error", "error");
+            model.addAttribute("perteForm", perteForm);
             model.addAttribute("perte", perte);
+            model.addAttribute("ligneOperation", ligneOperation);
+            model.addAttribute("lots", lots);
             return "perte/edit";
         }
         else
         {
-            perteService.update(perte);
+            perteService.update(id, pertes);
             redirectAttributes.addFlashAttribute("info", "alert.success.new");
-            return "redirect:/perte/" + perte.getId() + "/show";
+            return "redirect:/perte/";
         }
     }
 
