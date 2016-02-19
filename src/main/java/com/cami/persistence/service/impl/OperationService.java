@@ -180,12 +180,6 @@ public class OperationService extends AbstractService<Operation> implements IOpe
                 {
                     fourniture.setPerte(lp.getQuantiteEcart());
                     fournitureDao.save(fourniture);
-//                    Perte perte = new Perte();
-//                    perte.setDatePerte(new Date());
-//                    perte.setLigneOperation(lp);
-//                    perte.setQuantite(lp.getQuantiteEcart());
-//                    perte.setLot(iLotDao.findOneByLigneAudit(ligneOperation.getId()));
-//                    perteDao.save(perte);
                 }
             }
         }
@@ -296,7 +290,8 @@ public class OperationService extends AbstractService<Operation> implements IOpe
     @Override
     public Page<Operation> findPaginated(String numero, Date dateOperation, String observation, int page, Integer size)
     {
-        return operationDao.findPaginated("%" + numero + "%", dateOperation, "%" + observation + "%", new PageRequest(page, size));
+//        return operationDao.findPaginated("%" + numero + "%", dateOperation, "%" + observation + "%", new PageRequest(page, size));
+        return null;
     }
 
     @Override

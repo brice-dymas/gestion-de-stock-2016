@@ -10,8 +10,10 @@
 
         <div class="row">
             <div class="col-md-9">
-                <div class="row">
-                    <spring:message code="fourniture.list" />
+                <div>
+                    <h3>
+                        <spring:message code="fourniture.list" />
+                    </h3>
                     <hr/>
                 </div>
                 <div class="dropdown pull-right ">
@@ -21,12 +23,12 @@
                         <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-                        <li role="presentation"><a role="menuitem" tabindex="-1" href="?size=5">5</a></li>
-                        <li role="presentation"><a role="menuitem" tabindex="-1" href="?size=10">10</a></li>
-                        <li role="presentation"><a role="menuitem" tabindex="-1" href="?size=20">20</a></li>
-                        <li role="presentation"><a role="menuitem" tabindex="-1" href="?size=30">30</a></li>
-                        <li role="presentation"><a role="menuitem" tabindex="-1" href="?size=40">40</a></li>
-                        <li role="presentation"><a role="menuitem" tabindex="-1" href="?size=50">50</a></li>
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="?querycategorie=${fourniture.categorie.id}&querydesignation=${fourniture.designation}&queryreference=${fourniture.reference}&size=5">5</a></li>
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="?querycategorie=${fourniture.categorie.id}&querydesignation=${fourniture.designation}&queryreference=${fourniture.reference}&size=10">10</a></li>
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="?querycategorie=${fourniture.categorie.id}&querydesignation=${fourniture.designation}&queryreference=${fourniture.reference}&size=20">20</a></li>
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="?querycategorie=${fourniture.categorie.id}&querydesignation=${fourniture.designation}&queryreference=${fourniture.reference}&size=30">30</a></li>
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="?querycategorie=${fourniture.categorie.id}&querydesignation=${fourniture.designation}&queryreference=${fourniture.reference}&size=40">40</a></li>
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="?querycategorie=${fourniture.categorie.id}&querydesignation=${fourniture.designation}&queryreference=${fourniture.reference}&size=50">50</a></li>
                     </ul>
                 </div>
                 <table class="table table-condensed table-hover table-bordered">
@@ -45,7 +47,7 @@
 
                         <c:if test="${fournitures.size() eq 0}">
                             <tr>
-                                <td class="text-center label-danger" colspan="4">
+                                <td class="text-center label-danger" colspan="5">
                                     <spring:message code="empty.data" />
                                 </td>
                             </tr>
@@ -130,7 +132,7 @@
 
                     </tbody>
                     </table>
-                    <div class="row">
+                    <div>
                         <a href="${fournitureNew}" class="btn btn-primary btn-sm">
                             <span class="glyphicon glyphicon-new-window"></span>
                             <spring:message code="action.nouveau" />
@@ -139,12 +141,12 @@
                             <ul class="pager">
 
                                 <li>
-                                    <a href="?page=0&size=${size}" <c:if test="${page eq 0}">class ="btn btn-sm disabled"</c:if>>
+                                    <a href="?querycategorie=${fourniture.categorie.id}&querydesignation=${fourniture.designation}&queryreference=${fourniture.reference}&page=0&size=${size}" <c:if test="${page eq 0}">class ="btn btn-sm disabled"</c:if>>
                                             <span class="glyphicon glyphicon-fast-backward"></span>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="?page=${page-1}&size=${size}" <c:if test="${page eq 0}">class ="btn btn-sm disabled"</c:if>>
+                                        <a href="?querycategorie=${fourniture.categorie.id}&querydesignation=${fourniture.designation}&queryreference=${fourniture.reference}&page=${page-1}&size=${size}" <c:if test="${page eq 0}">class ="btn btn-sm disabled"</c:if>>
                                             <span class="glyphicon glyphicon-backward"></span>
                                         </a>
                                     </li>
@@ -152,12 +154,12 @@
                                         <input type="text" class="pager_detail text-center" readonly value="${page+1}/${Totalpage}"/>
                                 </li>
                                 <li>
-                                    <a href="?page=${page+1}&size=${size}" <c:if test="${page+1 eq Totalpage}">class ="btn btn-sm disabled"</c:if>>
+                                    <a href="?querycategorie=${fourniture.categorie.id}&querydesignation=${fourniture.designation}&queryreference=${fourniture.reference}&page=${page+1}&size=${size}" <c:if test="${page+1 eq Totalpage}">class ="btn btn-sm disabled"</c:if>>
                                             <span class="glyphicon glyphicon-forward"></span>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="?page=${Totalpage-1}&size=${size}" <c:if test="${page+1 eq Totalpage}">class ="btn btn-sm disabled"</c:if>>
+                                        <a href="?querycategorie=${fourniture.categorie.id}&querydesignation=${fourniture.designation}&queryreference=${fourniture.reference}&page=${Totalpage-1}&size=${size}" <c:if test="${page+1 eq Totalpage}">class ="btn btn-sm disabled"</c:if>>
                                             <span class="glyphicon glyphicon-fast-forward"></span>
                                         </a>
                                     </li>
@@ -165,6 +167,56 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-md-3">
+                        <div>
+                            <h3><spring:message code="action.rechercher" /></h3>
+                        <hr/>
+                    </div>
+                    <spring:url value="/fourniture/" var="fourniture_home"
+                                htmlEscape="true" />
+                    <form:form method="get" commandName="fourniture" action="${fourniture_home}">
+                        <div class="form-group">
+                            <label>
+                                <spring:message code="fourniture.categorie" />
+                            </label>
+
+                            <select name="querycategorie" class="form-control input-sm">
+                                <option value="">---</option>
+                                <c:forEach var="cat" items="${categories}">
+                                    <option value="${cat.key}"
+                                            <c:if test="${cat.key eq fourniture.categorie.id}">
+                                                selected
+                                            </c:if>
+                                            >
+                                        ${cat.value}
+                                    </option>
+                                </c:forEach>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <spring:message code="fourniture.reference" />
+                            </label>
+                            <input type="text" value="${fourniture.reference}" class="form-control input-sm" name="queryreference"/>
+                            <input type="hidden" value="${size}" name="size"/>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <spring:message code="fourniture.designation" />
+                            </label>
+                            <input type="text" value="${fourniture.designation}" class="form-control input-sm" name="querydesignation"/>
+                        </div>
+                        <hr/>
+                        <button class="btn btn-default btn-sm">
+                            <span class="glyphicon glyphicon-search"></span> <spring:message code="search"/></button>
+                            <spring:url value="/fourniture/" htmlEscape="true" var="fourniture_home" />
+                        <a href="${fourniture_home}" class="btn btn-default btn-sm">
+                            <span class="glyphicon glyphicon-refresh"></span>
+                            <spring:message code="search.delete" />
+                        </a>
+
+                    </form:form>
+                </div>
             </c:if>
         </div>
 

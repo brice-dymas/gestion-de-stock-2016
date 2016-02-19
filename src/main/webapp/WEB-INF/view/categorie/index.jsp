@@ -10,8 +10,10 @@
 
         <div class="row">
             <div class="col-md-9">
-                <div class="row">
-                    <spring:message code="categorie.list" />
+                <div>
+                    <h3>
+                        <spring:message code="categorie.list" />
+                    </h3>
                     <hr/>
                 </div>
                 <div class="dropdown pull-right ">
@@ -104,7 +106,7 @@
 
                     </tbody>
                     </table>
-                    <div class="row">
+                    <div>
                         <a href="${categorieNew}" class="btn btn-primary btn-sm">
                             <span class="glyphicon glyphicon-new-window"></span>
                             <spring:message code="action.nouveau" />

@@ -15,17 +15,17 @@
 <tiles:insertDefinition name="layout">
     <tiles:putAttribute name="body">
         <div class="row">
-            <div class="col-md-12">
-                <h4>
+            <div class="col-md-12 col-md-offset-1">
+                <h3>
                     <spring:message code="user.nouveau" />
                     <form:errors path="*" />
-                </h4>
+                </h3>
                 <hr/>
             </div>
         </div>
 
         <div class="row">
-            <div class="col-md-6 col-md-offset-3">
+            <div class="col-md-6 col-md-offset-2">
                 <spring:url value="/user/create" var="user_create"
                             htmlEscape="true" />
                 <form:form method="post" commandName="user" action="${user_create}">

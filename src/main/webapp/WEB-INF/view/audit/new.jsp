@@ -15,7 +15,7 @@
 <tiles:insertDefinition name="layout">
     <tiles:putAttribute name="body">
         <div class="row">
-            <div class="col-md-12">
+            <div>
                 <h3>
                     <spring:message code="audit.new" />
                	</h3>

@@ -16,7 +16,7 @@
         <div class="row">
             <div class="col-md-12">
                 <h3>
-                    <spring:message code="audit.new" />
+                    <spring:message code="audit.edit" />
                	</h3>
                 <hr/>
             </div>

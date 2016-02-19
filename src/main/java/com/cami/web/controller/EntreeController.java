@@ -104,18 +104,6 @@ public class EntreeController
         entree.setEntree(et);
         entree.setListeLots(listeLots);
         model.addAttribute("fournitures", fournitures);
-//        entree.
-
-//        Map<Long, String> fournitures = fournitureService.findByCategorieName(categorie);
-//        final Categorie categori = categorieService.getCategorie(categorie);
-//        Entree entree = new Entree();
-//        entree.setCategorie(categori);
-//        System.out.println(categori);
-//        final EntreeForm entreeForm = new EntreeForm();
-//        entreeForm.setEntree(entree);
-//        model.addAttribute("entreeForm", entreeForm);
-//        model.addAttribute("fournitures", fournitures);
-//
         model.addAttribute("entreeForm", entree);
         return "/entree/edit";
     }
@@ -156,15 +144,15 @@ public class EntreeController
     {
 
         final Integer page = webRequest.getParameter("page") != null ? Integer.valueOf(webRequest.getParameter("page")) : 0;
-        final Integer size = webRequest.getParameter("size") != null ? Integer.valueOf(webRequest.getParameter("size")) : 55;
+        final Integer size = webRequest.getParameter("size") != null ? Integer.valueOf(webRequest.getParameter("size")) : 5;
 
         final Page<Entree> resultPage = entreeService.findPaginated(page, size);
 //        final Page<Entree> resultPage = iEntreeService.findPaginated(numero, dateEntree, observation, deleted, page, size);
         model.addAttribute("page", page);
         model.addAttribute("Totalpage", resultPage.getTotalPages());
         model.addAttribute("size", size);
-        model.addAttribute("entrees", entreeService.findAll());
-//        model.addAttribute("entrees", resultPage.getContent());
+//        model.addAttribute("entrees", entreeService.findAll());
+        model.addAttribute("entrees", resultPage.getContent());
         return "entree/index";
     }
 

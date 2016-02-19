@@ -9,17 +9,17 @@
     <tiles:putAttribute name="body">
 
         <div class="row">
-            <div class="col-md-12">
-                <h4>
+            <div class="col-md-12 col-md-offset-1">
+                <h3>
                     <spring:message code="fourniture.new" />
-                </h4>
+                </h3>
                 <hr/>
             </div>
             <spring:url htmlEscape="true" value="/fourniture/${fourniture.id}/update" var="fourniture_update" />
             <spring:url value="/fourniture/" var="fournitures" />
 
             <div class="row">
-                <div class="col-md-6 col-md-offset-3">
+                <div class="col-md-6 col-md-offset-2">
                     <form:form  method="post" commandName="fourniture" action="${fourniture_update}">
                         <div class="row">
                             <div class="form-group">

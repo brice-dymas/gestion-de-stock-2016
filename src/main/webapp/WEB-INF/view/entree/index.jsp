@@ -17,8 +17,10 @@
     <tiles:putAttribute name="body">
         <div class="row">
             <div class="col-md-9">
-                <div class="row">
-                    <spring:message code="entree.list" />
+                <div>
+                    <h3>
+                        <spring:message code="entree.list" />
+                    </h3>
                     <hr/>
                 </div>
                 <div class="dropdown pull-right ">
@@ -59,35 +61,38 @@
                     </table>
 
                     <div class="row">
-
-                        <div class="dropdown pull-left ">
-                            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenus" data-toggle="dropdown" aria-expanded="true">
-                                <spring:message code="action.nouveau" />
-                                <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenus">
-                                <li>
-                                    <spring:url value="/entree/bureau/new" var="newMatBureau" htmlEscape="true" />
-                                    <a href="${newMatBureau}">
-                                        <span class="glyphicon glyphicon-book"></span>
-                                        <spring:message code="matBureau.new" />
-                                    </a>
-                                </li>
-                                <li>
-                                    <spring:url value="/entree/informatique/new" var="newMatInfo" htmlEscape="true" />
-                                    <a href="${newMatInfo}">
-                                        <span class="glyphicon glyphicon-camera"></span>
-                                        <spring:message code="matInfo.new" />
-                                    </a>
-                                </li>
-                                <li>
-                                    <spring:url value="/entree/publicitaire/new" var="newMatPub" htmlEscape="true" />
-                                    <a href="${newMatPub}" >
-                                        <span class="glyphicon glyphicon-sound-stereo"></span>
-                                        <spring:message code="matPub.new" />
-                                    </a>
-                                </li>
-                            </ul>
+                        <div class="col-md-12">
+                            <div>
+                                <div class="dropdown pull-left ">
+                                    <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenus" data-toggle="dropdown" aria-expanded="true">
+                                        <spring:message code="action.nouveau" />
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenus">
+                                        <li>
+                                            <spring:url value="/entree/bureau/new" var="newMatBureau" htmlEscape="true" />
+                                            <a href="${newMatBureau}">
+                                                <span class="glyphicon glyphicon-book"></span>
+                                                <spring:message code="matBureau.new" />
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <spring:url value="/entree/informatique/new" var="newMatInfo" htmlEscape="true" />
+                                            <a href="${newMatInfo}">
+                                                <span class="glyphicon glyphicon-camera"></span>
+                                                <spring:message code="matInfo.new" />
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <spring:url value="/entree/publicitaire/new" var="newMatPub" htmlEscape="true" />
+                                            <a href="${newMatPub}" >
+                                                <span class="glyphicon glyphicon-sound-stereo"></span>
+                                                <spring:message code="matPub.new" />
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="pull-right">
@@ -137,7 +142,7 @@
 
                     </tbody>
                     </table>
-                    <div class="row">
+                    <div>
 
                         <div class="dropdown pull-left ">
                             <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenus" data-toggle="dropdown" aria-expanded="true">

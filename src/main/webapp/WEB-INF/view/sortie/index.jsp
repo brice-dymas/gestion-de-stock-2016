@@ -10,9 +10,11 @@
 <tiles:insertDefinition name="layout">
     <tiles:putAttribute name="body">
         <div class="row">
-            <div class="col-md-12">
-                <div class="row">
-                    <spring:message code="sortie.list" />
+            <div class="col-md-9">
+                <div>
+                    <h3>
+                        <spring:message code="sortie.list" />
+                    </h3>
                     <hr/>
                 </div>
                 <div class="dropdown pull-right ">
@@ -36,7 +38,6 @@
                             <th> <span class="btn"> <spring:message code="operation.numero" /> </span> </th>
                             <th> <span class="btn"> <spring:message code="operation.dateOperation" /> </span> </th>
                             <th> <span class="btn"> <spring:message code="departement.intitule" /> </span> </th>
-                            <th> <span class="btn"> <spring:message code="user.nom" /> </span> </th>
                             <th> <span class="btn"> <spring:message code="action.titre" /> </span> </th>
                         </tr>
                     </thead>
@@ -53,7 +54,7 @@
                         </tbody>
                     </table>
 
-                    <div class="row">
+                    <div>
                         <a href="${sortieNew}" class="btn btn-primary btn-sm">
                             <span class="glyphicon glyphicon-new-window"></span>
                             <spring:message code="action.nouveau" />
@@ -88,7 +89,6 @@
                             <td>${sortie.numero}</td>
                             <td>${sortie.dateOperation}</td>
                             <td>${sortie.departement.intitule}</td>
-                            <td>${sortie.user.user.nom}</td>
                             <td>
                                 <spring:url value="/sortie/${sortie.id}/edit" htmlEscape="true" var="sortie_edit" />
                                 <a href="${sortie_edit}" class="btn btn-primary btn-warning">
@@ -107,7 +107,7 @@
 
                     </tbody>
                     </table>
-                    <div class="row">
+                    <div>
                         <a href="${sortieNew}" class="btn btn-primary btn-sm">
                             <span class="glyphicon glyphicon-new-window"></span>
                             <spring:message code="action.nouveau" />

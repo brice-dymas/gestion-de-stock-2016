@@ -9,10 +9,10 @@
     <tiles:putAttribute name="body">
 
         <div class="row">
-            <div class="col-md-12">
-                <h4>
+            <div class="col-md-offset-2">
+                <h3>
                     <spring:message code="agence.new" />
-                </h4>
+                </h3>
                 <hr/>
             </div>
             <spring:url value="/agence/create" var="agence_create" htmlEscape="true" />

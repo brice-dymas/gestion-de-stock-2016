@@ -14,7 +14,7 @@
 <tiles:insertDefinition name="layout">
     <tiles:putAttribute name="body">
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-12  col-md-offset-2">
                 <h3>
                     <spring:message code="departement.show" />
                 </h3>
@@ -23,7 +23,7 @@
         </div>
 
         <div class="row">
-            <div class="col-md-4 col-md-offset-4" id="table_show">
+            <div class="col-md-4 col-md-offset-3" id="table_show">
                 <table class="table table-bordered">
                     <tbody>
                         <tr>
@@ -51,7 +51,7 @@
 
 
         <div class="row">
-            <div class="col-md-6 col-md-offset-4">
+            <div class="col-md-6 col-md-offset-3">
                 <hr/>
                 <spring:url value="/service/delete" var="departement_delete"/>
                 <form:form method="post" commandName="departement" action="${departement_delete}">

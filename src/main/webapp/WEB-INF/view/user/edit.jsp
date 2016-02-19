@@ -16,10 +16,10 @@
     <tiles:putAttribute name="body">
 
         <div class="row">
-            <div class="col-md-12">
-                <h4>
+            <div class="col-md-12 col-md-offset-1">
+                <h3>
                     <spring:message code="user.modifier" />
-                </h4>
+                </h3>
                 <hr/>
             </div>
             <div class="col-md-12">
@@ -31,7 +31,7 @@
         </div>
 
         <div class="row">
-            <div class="col-md-6 col-md-offset-3">
+            <div class="col-md-6 col-md-offset-2">
                 <spring:url value="/user/${user.id}/update" var="user_update"
                             htmlEscape="true" />
                 <form:form method="post" commandName="user" action="${user_update}?${_csrf.parameterName}=${_csrf.token}">

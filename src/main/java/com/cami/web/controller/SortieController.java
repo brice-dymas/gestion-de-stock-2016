@@ -99,7 +99,7 @@ public class SortieController
                 ? Integer.valueOf(webRequest.getParameter("size"))
                 : 5;
 
-        final Page<Operation> resultPage = sortieService.findPaginated(page, size);
+        final Page<Operation> resultPage = sortieService.findPaginated("sortie", page, size);
         final Operation sortie = new Operation();
         model.addAttribute("sortie", sortie);
         model.addAttribute("page", page);

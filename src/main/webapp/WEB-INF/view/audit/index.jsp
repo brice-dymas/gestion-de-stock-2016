@@ -17,8 +17,10 @@
     <tiles:putAttribute name="body">
         <div class="row">
             <div class="col-md-12">
-                <div class="row">
-                    <spring:message code="audit.list" />
+                <div>
+                    <h3>
+                        <spring:message code="audit.list" />
+                    </h3>
                     <hr/>
                 </div>
                 <div class="dropdown pull-right ">
@@ -59,7 +61,7 @@
                         </tbody>
                     </table>
 
-                    <div class="row">
+                    <div>
                         <a href="${auditNew}" class="btn btn-primary btn-sm">
                             <span class="glyphicon glyphicon-new-window"></span>
                             <spring:message code="action.nouveau" />
@@ -113,7 +115,7 @@
 
                     </tbody>
                     </table>
-                    <div class="row">
+                    <div>
                         <a href="${auditNew}" class="btn btn-primary btn-sm">
                             <span class="glyphicon glyphicon-new-window"></span>
                             <spring:message code="action.nouveau" />

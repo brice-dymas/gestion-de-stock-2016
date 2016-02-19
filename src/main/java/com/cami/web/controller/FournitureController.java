@@ -83,22 +83,24 @@ public class FournitureController
     public String indexAction(final ModelMap model, final WebRequest webRequest)
     {
 
-//        final String designation = webRequest.getParameter("designation") != null ? webRequest.getParameter("designation") : "";
-//        final String reference = webRequest.getParameter("reference") != null ? webRequest.getParameter("reference") : "";
-//        final Integer quantite = webRequest.getParameter("quantite") != null ? Integer.valueOf(webRequest.getParameter("quantite")) : 0;
-//        final Integer seuil = webRequest.getParameter("seuil") != null ? Integer.valueOf(webRequest.getParameter("seuil")) : 0;
-        final Integer page = webRequest.getParameter("page") != null ? Integer.valueOf(webRequest.getParameter("page")) : 0;
-        final Integer size = webRequest.getParameter("size") != null ? Integer.valueOf(webRequest.getParameter("size")) : 55;
+        final Long categorieID = (webRequest.getParameter("querycategorie") != null && !webRequest.getParameter("querycategorie").equals(""))
+                ? Long.valueOf(webRequest.getParameter("querycategorie"))
+                : -1;
+        final String designation = webRequest.getParameter("querydesignation") != null ? webRequest.getParameter("querydesignation") : "";
+        final String reference = webRequest.getParameter("queryreference") != null ? webRequest.getParameter("queryreference") : "";
+        final Integer nombrePage = webRequest.getParameter("page") != null ? Integer.valueOf(webRequest.getParameter("page")) : 0;
+        final Integer size = webRequest.getParameter("size") != null ? Integer.valueOf(webRequest.getParameter("size")) : 5;
 
-        final Page<Fourniture> resultPage = iFournitureService.findPaginated(page, size);
+        final Page<Fourniture> resultPage = iFournitureService.findPaginated(categorieID, designation, reference, nombrePage, size);
 
-//        final Fourniture fourniture = new Fourniture();
-//        fourniture.setReference(reference);
-//        fourniture.setDesignation(designation);
-//        fourniture.setQuantite(quantite);
-//        fourniture.setSeuil(seuil);
-//        model.addAttribute("fourniture", fourniture);
-        model.addAttribute("page", page);
+        final Fourniture fourniture = new Fourniture();
+        fourniture.setReference(reference);
+        fourniture.setDesignation(designation);
+        Categorie ct = new Categorie();
+        ct.setId(categorieID);
+        fourniture.setCategorie(ct);
+        model.addAttribute("fourniture", fourniture);
+        model.addAttribute("page", nombrePage);
         model.addAttribute("Totalpage", resultPage.getTotalPages());
         model.addAttribute("size", size);
         model.addAttribute("fournitures", resultPage.getContent());
