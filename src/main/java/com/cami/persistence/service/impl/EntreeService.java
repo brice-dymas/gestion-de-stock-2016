@@ -35,7 +35,8 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service("entreeService")
 @Transactional
-public class EntreeService extends AbstractService<Entree> implements IEntreeService {
+public class EntreeService extends AbstractService<Entree> implements IEntreeService
+{
 
     @Autowired
     ILotDao lotDao;
@@ -53,20 +54,23 @@ public class EntreeService extends AbstractService<Entree> implements IEntreeSer
     IEntreeDao entreeDao;
 
     @Override
-    protected PagingAndSortingRepository<Entree, Long> getDao() {
+    protected PagingAndSortingRepository<Entree, Long> getDao()
+    {
         return entreeDao;
     }
 
     @Override
     @Transactional
-    public Entree create(Entree entity) {
+    public Entree create(Entree entity)
+    {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         final Role userConnected = roleDao.retrieveAUser(auth.getName()); // get the current logged user
         entity.setDateEntree(new Date());
         entity.setUser(userConnected);
         entity.setCategorie(categorieDao.getCategorie(entity.getCategorie().getIntitule()));
         final Entree entree = entreeDao.save(entity);
-        for (Lot lot : entity.getLots()) {
+        for (Lot lot : entity.getLots())
+        {
             Fourniture fourniture = fournitureDao.findOne(lot.getFourniture().getId());
             lot.setDateEntree(new Date());
             lot.setTotalMontant(lot.getPrixUnitaire() * lot.getQuantite());
@@ -75,7 +79,8 @@ public class EntreeService extends AbstractService<Entree> implements IEntreeSer
             lotDao.save(lot);
 
             //Ajout de laquantite manquante
-            if (entree.getLigneAuditId() != null) {
+            if (entree.getLigneAuditId() != null)
+            {
                 fourniture.setManque(fourniture.getManque() - lot.getQuantite());
                 fournitureDao.save(fourniture);
             }
@@ -85,19 +90,22 @@ public class EntreeService extends AbstractService<Entree> implements IEntreeSer
     }
 
     @Override
-    public Entree update(Entree entity) {
+    public Entree update(Entree entity)
+    {
         Fourniture fourniture = null;
 
         //On recupere tous les lots
         List<Lot> lotsToRemove = lotDao.findByEntreeIdForEdit(entity.getId());
 
         //On retire les anciennes quantités des lots
-        for (Lot lot : lotsToRemove) {
+        for (Lot lot : lotsToRemove)
+        {
             fourniture = lot.getFourniture();
             fourniture.setQuantite(fourniture.getQuantite() - lot.getQuantite());
 
             //Retrait de la quantité manquante
-            if (entity.getLigneAuditId() != null) {
+            if (entity.getLigneAuditId() != null)
+            {
                 fourniture.setManque(fourniture.getManque() + lot.getQuantite());
             }
             fournitureDao.save(fourniture);
@@ -112,7 +120,8 @@ public class EntreeService extends AbstractService<Entree> implements IEntreeSer
         entreeToUpdate.setCategorie(categorieDao.getCategorie(entity.getCategorie().getIntitule()));
         final Entree entree = entreeDao.save(entreeToUpdate);
 
-        for (Lot lot : entity.getLots()) {
+        for (Lot lot : entity.getLots())
+        {
             fourniture = fournitureDao.findOne(lot.getFourniture().getId());
             lot.setDateEntree(new Date());
             lot.setTotalMontant(lot.getPrixUnitaire() * lot.getQuantite());
@@ -120,7 +129,8 @@ public class EntreeService extends AbstractService<Entree> implements IEntreeSer
             lot.setFourniture(fourniture);
 
             //Ajout de laquantite manquante
-            if (entree.getLigneAuditId() != null) {
+            if (entree.getLigneAuditId() != null)
+            {
                 fourniture.setManque(fourniture.getManque() - lot.getQuantite());
                 fournitureDao.save(fourniture);
             }
@@ -132,26 +142,38 @@ public class EntreeService extends AbstractService<Entree> implements IEntreeSer
         return entree;
     }
 
-    public int isInside(List<Lot> lots, Lot lot) {
+    public int isInside(List<Lot> lots, Lot lot)
+    {
         int i = 0;
-        for (; i < lots.size() && lots.get(i).getId().equals(lot.getId()); i++) {
+        for (; i < lots.size() && lots.get(i).getId().equals(lot.getId()); i++)
+        {
         }
 
         return i;
     }
 
     @Override
-    public List<Entree> findByCategorie(Categorie categorie) {
+    public List<Entree> findByCategorie(Categorie categorie)
+    {
         return entreeDao.findByCategorie(categorie);
     }
 
     @Override
-    public List<Entree> findByUser(User user) {
+    public List<Entree> findByUser(User user)
+    {
         return entreeDao.findByUser(user);
     }
 
     @Override
-    public Page<Entree> findPaginated(String numero, Date dateOperation, String observation, int page, Integer size) {
-        return entreeDao.findPaginated('%' + numero + '%', dateOperation, new PageRequest(page, size));
+    public Page<Entree> findPaginated(long categorieID, Date dateOperation, String designation, int page, Integer size)
+    {
+        if (categorieID == -1)
+        {
+            return entreeDao.findPaginated(dateOperation, '%' + designation + '%', new PageRequest(page, size));
+        }
+        else
+        {
+            return entreeDao.findPaginated(categorieID, dateOperation, '%' + designation + '%', new PageRequest(page, size));
+        }
     }
 }

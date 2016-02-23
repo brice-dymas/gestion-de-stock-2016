@@ -30,12 +30,12 @@
                         <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-                        <li role="presentation"><a role="menuitem" tabindex="-1" href="?size=5">5</a></li>
-                        <li role="presentation"><a role="menuitem" tabindex="-1" href="?size=10">10</a></li>
-                        <li role="presentation"><a role="menuitem" tabindex="-1" href="?size=20">20</a></li>
-                        <li role="presentation"><a role="menuitem" tabindex="-1" href="?size=30">30</a></li>
-                        <li role="presentation"><a role="menuitem" tabindex="-1" href="?size=40">40</a></li>
-                        <li role="presentation"><a role="menuitem" tabindex="-1" href="?size=50">50</a></li>
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="?querycategorie=${entree.categorie.id}&querydateentree=${entree.dateEntree}&querydesignation=${querydesignation}&size=5">5</a></li>
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="?querycategorie=${entree.categorie.id}&querydateentree=${entree.dateEntree}&querydesignation=${querydesignation}&size=10">10</a></li>
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="?querycategorie=${entree.categorie.id}&querydateentree=${entree.dateEntree}&querydesignation=${querydesignation}&size=20">20</a></li>
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="?querycategorie=${entree.categorie.id}&querydateentree=${entree.dateEntree}&querydesignation=${querydesignation}&size=30">30</a></li>
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="?querycategorie=${entree.categorie.id}&querydateentree=${entree.dateEntree}&querydesignation=${querydesignation}&size=40">40</a></li>
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="?querycategorie=${entree.categorie.id}&querydateentree=${entree.dateEntree}&querydesignation=${querydesignation}&size=50">50</a></li>
                     </ul>
                 </div>
                 <table class="table table-condensed table-hover table-bordered">
@@ -178,12 +178,12 @@
                             <ul class="pager">
 
                                 <li>
-                                    <a href="?page=0&size=${size}" <c:if test="${page eq 0}">class ="btn btn-sm disabled"</c:if>>
+                                    <a href="?querycategorie=${entree.categorie.id}&querydateentree=${entree.dateEntree}&querydesignation=${querydesignation}&page=0&size=${size}" <c:if test="${page eq 0}">class ="btn btn-sm disabled"</c:if>>
                                             <span class="glyphicon glyphicon-fast-backward"></span>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="?page=${page-1}&size=${size}" <c:if test="${page eq 0}">class ="btn btn-sm disabled"</c:if>>
+                                        <a href="?querycategorie=${entree.categorie.id}&querydateentree=${entree.dateEntree}&querydesignation=${querydesignation}&page=${page-1}&size=${size}" <c:if test="${page eq 0}">class ="btn btn-sm disabled"</c:if>>
                                             <span class="glyphicon glyphicon-backward"></span>
                                         </a>
                                     </li>
@@ -191,12 +191,12 @@
                                         <input type="text" class="pager_detail text-center" readonly value="${page+1}/${Totalpage}"/>
                                 </li>
                                 <li>
-                                    <a href="?page=${page+1}&size=${size}" <c:if test="${page+1 eq Totalpage}">class ="btn btn-sm disabled"</c:if>>
+                                    <a href="?querycategorie=${entree.categorie.id}&querydateentree=${entree.dateEntree}&querydesignation=${querydesignation}&page=${page+1}&size=${size}" <c:if test="${page+1 eq Totalpage}">class ="btn btn-sm disabled"</c:if>>
                                             <span class="glyphicon glyphicon-forward"></span>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="?page=${Totalpage-1}&size=${size}" <c:if test="${page+1 eq Totalpage}">class ="btn btn-sm disabled"</c:if>>
+                                        <a href="?querycategorie=${entree.categorie.id}&querydateentree=${entree.dateEntree}&querydesignation=${querydesignation}&page=${Totalpage-1}&size=${size}" <c:if test="${page+1 eq Totalpage}">class ="btn btn-sm disabled"</c:if>>
                                             <span class="glyphicon glyphicon-fast-forward"></span>
                                         </a>
                                     </li>
@@ -204,9 +204,73 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-md-3">
+                        <div>
+                            <h3>
+                            <spring:message code="action.rechercher" />
+                        </h3>
+                        <hr/>
+                    </div>
+                    <spring:url value="/entree/" var="entree_home"
+                                htmlEscape="true" />
+
+                    <form:form method="get" commandName="entree" action="${entree_home}">
+                        <div class="form-group">
+                            <label for="categorie">
+                                <spring:message code="entree.categorie" />
+                            </label>
+                            <select id="categorie" name="querycategorie" class="form-control input-sm">
+                                <option value="">---</option>
+                                <c:forEach var="cat" items="${categories}">
+
+                                    <option value="${cat.key}"
+                                            <c:if test="${cat.key eq entree.categorie.id}">
+                                                selected
+                                            </c:if>
+                                            >
+                                        ${cat.value}
+                                    </option>
+                                </c:forEach>
+                            </select>
+                            <input type="hidden" value="${size}" name="size"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="dateEntree">
+                                <spring:message code="entree.dateEntree" />
+                            </label>
+                            <input id="dateEntree" type="text" value="${entree.dateEntree}" class="form-control input-sm" name="querydateoperation"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="designation">
+                                <spring:message code="fourniture.designation" />
+                            </label>
+                            <input id="designation" type="text" value="${querydesignation}" class="form-control input-sm" name="querydesignation"/>
+                        </div>
+                        <hr/>
+                        <button class="btn btn-default btn-sm">
+                            <span class="glyphicon glyphicon-search"></span> <spring:message code="action.rechercher"/>
+                        </button>
+                        <spring:url value="/entree/" htmlEscape="true" var="entree_home" />
+                        <a href="${entree_home}" class="btn btn-default btn-sm">
+                            <span class="glyphicon glyphicon-refresh"></span>
+                            <spring:message code="search.delete" />
+                        </a>
+                    </form:form>
+                </div>
             </c:if>
         </div>
 
+        <script src="<c:url value="/resources/js/jquery-ui.js" />"></script>
+        <script type="text/javascript">
+            $(function () {
+                $("#dateEntree").datepicker({
+                    changeMonth: true,
+                    changeYear: true,
+                    dateFormat: "dd/mm/yy",
+                    showButtonPanel: false
+                }).datepicker("option", "showAnim", "clip");
+            });
+        </script>
     </tiles:putAttribute>
 </tiles:insertDefinition>
 

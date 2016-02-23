@@ -33,11 +33,24 @@ public interface IOperationDao extends JpaRepository<Operation, Long>, JpaSpecif
     @Query("SELECT e FROM Operation e WHERE e.user = :user")
     public List<Operation> findByUser(@Param("user") User user);
 
-    @Query("SELECT e FROM Operation e WHERE e.dateOperation >= :dateOperation AND "
-            + "e.departement.id= :id AND e.typeOperation.intitule LIKE :intitule")
+    @Query("SELECT e FROM Operation e, LigneOperation l WHERE e.dateOperation >= :dateOperation AND "
+            + "e.departement.id= :id AND e.typeOperation.intitule LIKE :intitule "
+            + " AND l.operation.id=e.id AND l.fourniture.designation LIKE :designation ")
     Page<Operation> findPaginated(
             @Param("id") long departementID,
             @Param("dateOperation") Date dateOperation,
+            @Param("intitule") String intitule,
+            @Param("designation") String designation,
+            Pageable pageable
+    );
+
+    @Query("SELECT e FROM Operation e, LigneOperation l WHERE e.dateOperation >= :dateOperation "
+            + " AND e.typeOperation.intitule LIKE :intitule "
+            + " AND l.operation.id=e.id AND l.fourniture.designation LIKE :designation ")
+    Page<Operation> findPaginated(
+            @Param("dateOperation") Date dateOperation,
+            @Param("intitule") String intitule,
+            @Param("designation") String designation,
             Pageable pageable
     );
 

@@ -17,15 +17,21 @@ import com.cami.persistence.service.ILigneOperationService;
 import com.cami.persistence.service.ILotService;
 import com.cami.persistence.service.IRoleService;
 import com.cami.web.form.EntreeForm;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -143,12 +149,45 @@ public class EntreeController
     public String indexAction(final ModelMap model, final WebRequest webRequest)
     {
 
+        SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy");
+        final long categorieID = webRequest.getParameter("querycategorie") != null
+                && !webRequest.getParameter("querycategorie").equals("")
+                        ? Long.valueOf(webRequest.getParameter("querycategorie"))
+                        : -1;
         final Integer page = webRequest.getParameter("page") != null ? Integer.valueOf(webRequest.getParameter("page")) : 0;
         final Integer size = webRequest.getParameter("size") != null ? Integer.valueOf(webRequest.getParameter("size")) : 5;
+        final String dateOperationString = webRequest.getParameter("querydateentree") != null
+                ? webRequest.getParameter("querydateentree")
+                : "01/01/1960";
+        final String designation = webRequest.getParameter("querydesignation") != null
+                ? webRequest.getParameter("querydesignation") : "";
+        Date dateOperation = new Date();
+        try
+        {
+            dateOperation = dateFormatter.parse(dateOperationString);
+        }
+        catch (ParseException ex)
+        {
+            try
+            {
+                dateOperation = dateFormatter.parse("01/01/1960");
+            }
+            catch (ParseException ex1)
+            {
+                Logger.getLogger(SortieController.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+        }
 
-        final Page<Entree> resultPage = entreeService.findPaginated(page, size);
+        Entree entree = new Entree();
+        Categorie categorie = new Categorie();
+        entree.setDateEntree(dateOperation);
+        entree.setCategorie(categorie);
+
+        final Page<Entree> resultPage = entreeService.findPaginated(categorieID, dateOperation, designation, page, size);
 //        final Page<Entree> resultPage = iEntreeService.findPaginated(numero, dateEntree, observation, deleted, page, size);
         model.addAttribute("page", page);
+        model.addAttribute("entree", entree);
+        model.addAttribute("querydesignation", designation);
         model.addAttribute("Totalpage", resultPage.getTotalPages());
         model.addAttribute("size", size);
 //        model.addAttribute("entrees", entreeService.findAll());
@@ -209,5 +248,17 @@ public class EntreeController
             entreeService.update(entree.getEntree());
             return "redirect:/entree/" + entree.getEntree().getId() + "/show";
         }
+    }
+
+    @ModelAttribute("categories")
+    public Map<Long, String> populateCategories()
+    {
+        Map<Long, String> result = new HashMap<>();
+        List<Categorie> categories = categorieService.findAll();
+        for (Categorie category : categories)
+        {
+            result.put(category.getId(), category.getIntitule());
+        }
+        return result;
     }
 }

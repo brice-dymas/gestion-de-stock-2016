@@ -34,6 +34,6 @@ public interface IOperationService extends IOperations<Operation>
 
     public void restoreInitialBdState(Operation operation);
 
-    Page<Operation> findPaginated(String numero, Date dateOperation,
-            String observation, int nombrePage, Integer size);
+    Page<Operation> findPaginated(long departementID, Date dateOperation,
+            String intitule, String designation, int page, Integer size);
 }

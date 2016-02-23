@@ -288,13 +288,6 @@ public class OperationService extends AbstractService<Operation> implements IOpe
     }
 
     @Override
-    public Page<Operation> findPaginated(String numero, Date dateOperation, String observation, int page, Integer size)
-    {
-//        return operationDao.findPaginated("%" + numero + "%", dateOperation, "%" + observation + "%", new PageRequest(page, size));
-        return null;
-    }
-
-    @Override
     public void restoreInitialBdState(final Operation operation)
     {
         Fourniture fourniture;
@@ -388,5 +381,18 @@ public class OperationService extends AbstractService<Operation> implements IOpe
     public Page<Operation> findPaginated(String intitule, int page, Integer size)
     {
         return operationDao.findPaginated('%' + intitule + '%', new PageRequest(page, size));
+    }
+
+    @Override
+    public Page<Operation> findPaginated(long departementID, Date dateOperation, String intitule, String designation, int page, Integer size)
+    {
+        if (departementID == -1)
+        {
+            return operationDao.findPaginated(dateOperation, '%' + intitule + '%', '%' + designation + '%', new PageRequest(page, size));
+        }
+        else
+        {
+            return operationDao.findPaginated(departementID, dateOperation, '%' + intitule + '%', '%' + designation + '%', new PageRequest(page, size));
+        }
     }
 }

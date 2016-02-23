@@ -30,12 +30,23 @@ public interface IEntreeDao extends JpaSpecificationExecutor<Entree>, JpaReposit
     @Query("SELECT e FROM Entree e WHERE e.user = :user")
     public List<Entree> findByUser(@Param("user") User user);
 
-    @Query("SELECT e FROM Entree e WHERE "
-            + "e.numero LIKE :numero AND "
-            + "e.dateEntree <= :dateEntree ")
+    @Query("SELECT e FROM Entree e, Lot l WHERE e.dateEntree >= :dateOperation AND "
+            + "e.categorie.id= :id AND l.entree.id=e.id AND "
+            + " l.fourniture.designation LIKE :designation ")
     Page<Entree> findPaginated(
-            @Param("numero") String numero,
-            @Param("dateEntree") Date dateEntree,
+            @Param("id") long categorieID,
+            @Param("dateOperation") Date dateOperation,
+            @Param("designation") String designation,
             Pageable pageable
     );
+
+    @Query("SELECT e FROM Entree e, Lot l WHERE e.dateEntree >= :dateOperation "
+            + " AND l.entree.id=e.id AND "
+            + " l.fourniture.designation LIKE :designation ")
+    Page<Entree> findPaginated(
+            @Param("dateOperation") Date dateOperation,
+            @Param("designation") String designation,
+            Pageable pageable
+    );
+
 }
