@@ -11,9 +11,15 @@ import com.cami.persistence.model.Lot;
 import com.cami.persistence.service.ICategorieService;
 import com.cami.persistence.service.IFournitureService;
 import com.cami.persistence.service.ILotService;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -45,11 +51,46 @@ public class FournitureController
     private ICategorieService iCategorieService;
 
     @RequestMapping(value = "/{id}/show", method = RequestMethod.GET)
-    public String showAction(@PathVariable("id") final Long id, final ModelMap model)
+    public String showAction(@PathVariable("id") final Long id, final ModelMap model, WebRequest webRequest)
     {
+        final Integer page = webRequest.getParameter("page") != null ? Integer.valueOf(webRequest.getParameter("page")) : 0;
+        final Integer size = webRequest.getParameter("size") != null ? Integer.valueOf(webRequest.getParameter("size")) : 55;
         final Fourniture fourniture = iFournitureService.findOne(id);
-        List<Lot> listeLots = lotService.findByFourniture(id);
-        model.addAttribute("lots", listeLots);
+        Page<Lot> resultPage = lotService.findByFourniture(id, page, size);
+        model.addAttribute("lots", resultPage.getContent());
+        model.addAttribute("page", page);
+        model.addAttribute("Totalpage", resultPage.getTotalPages());
+        model.addAttribute("size", size);
+        model.addAttribute("fourniture", fourniture);
+        return "/fourniture/show";
+    }
+    
+    @RequestMapping(value = "/{id}/search", method = RequestMethod.GET)
+    public String searchAction(@PathVariable("id") final Long id, final ModelMap model, WebRequest webRequest)
+    {
+        System.out.println("inside controller"+webRequest.getParameter("debut") );
+        SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy");
+        final Integer page = webRequest.getParameter("page") != null ? Integer.valueOf(webRequest.getParameter("page")) : 0;
+        final Integer size = webRequest.getParameter("size") != null ? Integer.valueOf(webRequest.getParameter("size")) : 55;
+        final Integer quantite = webRequest.getParameter("quantite") != null && !webRequest.getParameter("quantite").equals("")? Integer.valueOf(webRequest.getParameter("quantite")) : null;
+        final String debut = webRequest.getParameter("debut") != null && !webRequest.getParameter("debut").equals("") ? webRequest.getParameter("debut") : "1970/12/31";
+        final String fin = webRequest.getParameter("fin") != null && !webRequest.getParameter("fin").equals("")? webRequest.getParameter("fin") : "2999/12/31";
+        System.out.println("debut ="+debut);
+        Date dateDebut = parsedDateFrom(debut, "1970/12/31", dateFormatter);
+        Date dateFin = parsedDateFrom(fin, "2999/12/31", dateFormatter);
+        final Fourniture fourniture = iFournitureService.findOne(id);
+        System.out.println("Debut = "+dateDebut.toString() + " Fin = "+dateFin.toString());
+        Page<Lot> resultPage = lotService.search(id, dateDebut, dateFin, quantite, page, size);
+        List<Lot> lots = new ArrayList<>();
+        for (Lot lot : resultPage.getContent()) {
+            lot.setEntree(null);
+            lot.setFourniture(null);
+            lots.add(lot);
+        }
+        model.addAttribute("lots",lots);
+        model.addAttribute("page", page);
+        model.addAttribute("Totalpage", resultPage.getTotalPages());
+        model.addAttribute("size", size);
         model.addAttribute("fourniture", fourniture);
         return "/fourniture/show";
     }
@@ -155,6 +196,35 @@ public class FournitureController
             results.put(category.getId(), category.getIntitule());
         }
         return results;
+    }
+    
+    
+     /**
+     * Pour Convertir une chaine de charactères en java.util.Date suivant un
+     * format donné
+     *
+     * @exception ParseException
+     * @param dateFormat : le format de sortie de la date
+     * @param dateString : la chaine de charactères à convertir en date
+     * @return result: la java.util.Date obtenue après conversion
+     */
+    private Date parsedDateFrom(String dateString, String dateLimite, SimpleDateFormat dateFormat)
+    {
+        Date result= new Date();
+        SimpleDateFormat dateFormatter = dateFormat;
+        try
+        {
+            result = dateFormatter.parse(dateString);
+        }
+        catch (ParseException ex)
+        {
+            try {
+                result = dateFormatter.parse(dateLimite);
+            } catch (ParseException ex1) {
+                Logger.getLogger(FournitureController.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+        }
+        return result;
     }
 
 }

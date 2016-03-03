@@ -15,8 +15,10 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Min;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.format.annotation.DateTimeFormat;
+
 
 /**
  *
@@ -52,6 +54,7 @@ public class Lot extends EntityObject
     @ManyToOne
     private LigneOperation ligneOperation;
 
+    @JsonIgnore
     @ManyToOne
     private Entree entree;
 

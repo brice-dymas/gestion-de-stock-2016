@@ -28,9 +28,6 @@ public interface ILotDao extends JpaRepository<Lot, Long>, JpaSpecificationExecu
     @Query("SELECT l FROM Lot l WHERE l.fourniture.id = :idFourniture AND l.quantite>0 ORDER BY l.id ASC")
     public List<Lot> findByFournitureForFifo(@Param("idFourniture") long id);
 
-    @Query("SELECT l FROM Lot l WHERE l.fourniture.id = :idFourniture")
-    public List<Lot> findByFourniture(@Param("idFourniture") long id);
-
     @Query("SELECT l FROM Lot l WHERE l.fourniture.id = :idFourniture AND l.quantite > 0")
     public List<Lot> findByFournitureForPerte(@Param("idFourniture") long id);
 
@@ -61,7 +58,8 @@ public interface ILotDao extends JpaRepository<Lot, Long>, JpaSpecificationExecu
             + "l.prixVenteUnitaire = :prixVenteUnitaire AND "
             + "l.quantite = :quantite AND "
             + "l.totalMontant = :totalMontant AND "
-            + "l.etat LIKE :etat ")
+            + "l.etat LIKE :etat AND "
+            + "l.fourniture.id = :idFourniture")
     Page<Lot> searchLots(
             @Param("numero") String numero,
             @Param("dateEntree") Date dateEntree,
@@ -72,5 +70,31 @@ public interface ILotDao extends JpaRepository<Lot, Long>, JpaSpecificationExecu
             @Param("etat") String etat,
             Pageable pageable
     );
+    
+    @Query("SELECT l FROM Lot l WHERE l.fourniture.id = :idFourniture AND "
+            + "l.dateEntree BETWEEN :debut AND :fin")
+    Page<Lot> searchLots(
+            @Param("idFourniture") Long id,
+            @Param("debut") Date debut,
+            @Param("fin") Date fin,
+            Pageable pageable
+    );
+    
+     @Query("SELECT l FROM Lot l WHERE l.fourniture.id = :idFourniture AND "
+            + "l.dateEntree BETWEEN :debut AND :fin AND "
+            + "l.quantite = :quantite")
+    Page<Lot> searchLots(
+            @Param("idFourniture") Long id,
+            @Param("debut") Date debut,
+            @Param("fin") Date fin,
+            @Param("quantite") int quantite,
+            Pageable pageable
+    );
+    
+    
+   
+    
+    @Query("SELECT l FROM Lot l WHERE l.fourniture.id = :idFourniture")
+    public Page<Lot> findByFourniture(@Param("idFourniture") long id, Pageable pageable);
 
 }

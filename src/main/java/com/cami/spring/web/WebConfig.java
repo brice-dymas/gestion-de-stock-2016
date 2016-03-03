@@ -49,6 +49,15 @@ public class WebConfig extends WebMvcConfigurerAdapter
         resolver.setSuffix(".jsp");
         return resolver;
     }
+    
+    /*
+     * Configure View resolver to provide JSON output using JACKSON library to
+     * convert object in JSON format.
+     */
+    @Bean
+    public ViewResolver getJsonViewResolver() {
+        return new JsonViewResolver();
+    }
 
     @Override
     public void configureContentNegotiation(final ContentNegotiationConfigurer configurer)
@@ -70,6 +79,7 @@ public class WebConfig extends WebMvcConfigurerAdapter
         resolver.setContentNegotiationManager(manager);
         final List<ViewResolver> resolvers = new ArrayList<>();
         resolvers.add(getInternalResourceViewResolver());
+        resolvers.add(getJsonViewResolver());
         resolver.setViewResolvers(resolvers);
         return resolver;
     }

@@ -60,55 +60,27 @@
         <hr>
         <div class="row">
             <div class="col-md-12">
-                <fieldset>
-                    <legend>
-                        <spring:message code="entree.lots" />
-                    </legend>
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr class="btn-primary">
-                                <th><spring:message code="lot.numero" /></th>
-                                <th><spring:message code="fourniture.designation" /></th>
-                                <th><spring:message code="lot.dateEntree" /></th>
-                                <th><spring:message code="lot.quantite" /></th>
-                                <th><spring:message code="lot.prixUnitaire" /></th>
-                                <th><spring:message code="lot.prixUnitaireVente" /></th>
-                                <th><spring:message code="lot.motantTotal" /></th>
-                                <th><spring:message code="lot.etat" /></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <c:if test="${0 eq lots.size()}" >
-                                <tr>
-                                    <td class="text-center label-danger" colspan="8">
-                                        <spring:message code="empty.data" />
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </c:if>
-                    <c:if test="${0 ne lots.size()}" >
-                        <c:forEach var="lot" items="${lots}">
-                            <tr>
-                                <td>${lot.numero}</td>
-                                <td>${lot.fourniture.designation} </td>
-                                <td> <fmt:formatDate value="${lot.dateEntree}" pattern="dd/MM/yyyy" /> </td>
-                                <td>${lot.quantite} </td>
-                                <td>${lot.prixUnitaire} </td>
-                                <td>${lot.prixVenteUnitaire} </td>
-                                <td>${lot.totalMontant} </td>
-                                <td>${lot.etat} </td>
-                            </tr>
-                        </c:forEach>
-                        </tbody>
-                        </table>
-                    </c:if>
-                </fieldset>
+                
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active"><a href="#entree" aria-controls="home" role="tab" data-toggle="tab">Entrée</a></li>
+                    <li role="presentation"><a href="#sortie" aria-controls="profile" role="tab" data-toggle="tab">Sortie</a></li>
+                    <li role="presentation"><a href="#audit" aria-controls="messages" role="tab" data-toggle="tab">Audit</a></li>
+                    <li role="presentation"><a href="#perte" aria-controls="settings" role="tab" data-toggle="tab">Perte</a></li>
+                </ul>
+
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="entree"><%@include file="partial/showlot.jsp" %></div>
+                    <div role="tabpanel" class="tab-pane" id="sortie">...</div>
+                    <div role="tabpanel" class="tab-pane" id="audit">...</div>
+                    <div role="tabpanel" class="tab-pane" id="perte">...</div>
+                </div>
             </div>
         </div>
 
         <div class="row">
-            <div class="col-md-6 col-md-offset-4">
+            <div class="col-md-12">
                 <hr/>
                 <spring:url value="/fourniture/delete" var="fourniture_delete"/>
                 <form:form method="post" commandName="fourniture" action="${fourniture_delete}">
@@ -132,5 +104,6 @@
                 </form:form>
             </div>
         </div>
+
     </tiles:putAttribute>
 </tiles:insertDefinition>

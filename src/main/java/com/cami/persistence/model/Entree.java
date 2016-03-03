@@ -20,6 +20,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.springframework.format.annotation.DateTimeFormat;
 
 /**
@@ -46,7 +47,8 @@ public class Entree extends EntityObject
     @ManyToOne(targetEntity = Role.class, optional = false, fetch = FetchType.EAGER)
     protected Role user;
 
-    @OneToMany(targetEntity = Lot.class, fetch = FetchType.LAZY, mappedBy = "entree")
+    @JsonIgnore
+    @OneToMany(targetEntity = Lot.class, fetch = FetchType.EAGER, mappedBy = "entree")
     List<Lot> lots = new ArrayList<>();
 
     public Entree()
