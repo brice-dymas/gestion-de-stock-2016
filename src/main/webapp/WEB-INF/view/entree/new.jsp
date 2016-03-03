@@ -15,17 +15,15 @@
         <div class="row">
             <div class="col-md-12">
                 <h4>
-                <c:choose>
-    <c:when test="${not empty entreeForm.entree.ligneAuditId}">
-       Audit : ${audit.numero} - Equilibrage des stocks : ${fourniture.designation}
-    </c:when>    
-    <c:otherwise>
-        <spring:message code="entree.new" />
-        <br />
-    </c:otherwise>
-</c:choose>
-                
-                    
+                    <c:choose>
+                        <c:when test="${not empty entreeForm.entree.ligneAuditId}">
+                            Audit : ${audit.numero} - Equilibrage des stocks : ${fourniture.designation}
+                        </c:when>
+                        <c:otherwise>
+                            <spring:message code="entree.new" />
+                            <br />
+                        </c:otherwise>
+                    </c:choose>
                	</h4>
                 <hr/>
             </div>
@@ -59,7 +57,7 @@
                         <c:if test="${not empty entreeForm.entree.ligneAuditId}">
                             <form:hidden id="ligneAuditId" path="entree.ligneAuditId"/>
                         </c:if>
-                        
+
                     </div>
                 </div>
             </div>
@@ -182,9 +180,9 @@
                     <c:if test="${not empty audit.id}">
                         <spring:url value="/audit/${audit.id}/show" var="entree_audit"/>
                         <a href="${entree_audit}" class="btn btn-sm  btn-warning">
-                        <span class="glyphicon glyphicon-edit"></span>
-                        Consulter l'audit
-                    </a>
+                            <span class="glyphicon glyphicon-edit"></span>
+                            Consulter l'audit
+                        </a>
                     </c:if>
                 </div>
             </div>

@@ -11,9 +11,11 @@
     <tiles:putAttribute name="body">
         <div class="row">
             <div class="col-md-9">
-                <div class="row">
-                    <spring:message code="agence.list" />
-                    <hr/>
+                <div >
+                    <h3>
+                        <spring:message code="agence.list" />
+                        <hr/>
+                    </h3>
                 </div>
                 <div class="dropdown pull-right ">
                     <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
@@ -22,12 +24,12 @@
                         <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-                        <li role="presentation"><a role="menuitem" tabindex="-1" href="?size=5">5</a></li>
-                        <li role="presentation"><a role="menuitem" tabindex="-1" href="?size=10">10</a></li>
-                        <li role="presentation"><a role="menuitem" tabindex="-1" href="?size=20">20</a></li>
-                        <li role="presentation"><a role="menuitem" tabindex="-1" href="?size=30">30</a></li>
-                        <li role="presentation"><a role="menuitem" tabindex="-1" href="?size=40">40</a></li>
-                        <li role="presentation"><a role="menuitem" tabindex="-1" href="?size=50">50</a></li>
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="?querycode=${agence.code}&queryintitule=${agence.intitule}&queryregion=${agence.region}&size=5">5</a></li>
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="?querycode=${agence.code}&queryintitule=${agence.intitule}&queryregion=${agence.region}size=10">10</a></li>
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="?querycode=${agence.code}&queryintitule=${agence.intitule}&queryregion=${agence.region}size=20">20</a></li>
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="?querycode=${agence.code}&queryintitule=${agence.intitule}&queryregion=${agence.region}size=30">30</a></li>
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="?querycode=${agence.code}&queryintitule=${agence.intitule}&queryregion=${agence.region}size=40">40</a></li>
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="?querycode=${agence.code}&queryintitule=${agence.intitule}&queryregion=${agence.region}size=50">50</a></li>
                     </ul>
                 </div>
                 <table class="table table-condensed table-hover table-bordered">
@@ -53,11 +55,12 @@
                     </table>
 
                     <div class="row">
-                        <a href="${agenceNew}" class="btn btn-primary btn-sm">
-                            <span class="glyphicon glyphicon-new-window"></span>
-                            <spring:message code="action.nouveau" />
-                        </a>
-
+                        <div>
+                            <a href="${agenceNew}" class="btn btn-primary btn-sm">
+                                <span class="glyphicon glyphicon-new-window"></span>
+                                <spring:message code="action.nouveau" />
+                            </a>
+                        </div>
 
                         <div class="pull-right">
                             <ul class="pager">
@@ -106,23 +109,24 @@
                     </tbody>
                     </table>
                     <div class="row">
-                        <a href="${agenceNew}" class="btn btn-primary btn-sm">
-                            <span class="glyphicon glyphicon-new-window"></span>
-                            <spring:message code="action.nouveau" />
-                        </a>
-
+                        <div>
+                            <a href="${agenceNew}" class="btn btn-primary btn-sm">
+                                <span class="glyphicon glyphicon-new-window"></span>
+                                <spring:message code="action.nouveau" />
+                            </a>
+                        </div>
 
 
                         <div class="pull-right">
                             <ul class="pager">
 
                                 <li>
-                                    <a href="?page=0&size=${size}" <c:if test="${page eq 0}">class ="btn btn-sm disabled"</c:if>>
+                                    <a href="?querycode=${agence.code}&queryintitule=${agence.intitule}&queryregion=${agence.region}&page=0&size=${size}" <c:if test="${page eq 0}">class ="btn btn-sm disabled"</c:if>>
                                             <span class="glyphicon glyphicon-fast-backward"></span>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="?page=${page-1}&size=${size}" <c:if test="${page eq 0}">class ="btn btn-sm disabled"</c:if>>
+                                        <a href="?querycode=${agence.code}&queryintitule=${agence.intitule}&queryregion=${agence.region}&page=${page-1}&size=${size}" <c:if test="${page eq 0}">class ="btn btn-sm disabled"</c:if>>
                                             <span class="glyphicon glyphicon-backward"></span>
                                         </a>
                                     </li>
@@ -130,12 +134,12 @@
                                         <input type="text" class="pager_detail text-center" readonly value="${page+1}/${Totalpage}"/>
                                 </li>
                                 <li>
-                                    <a href="?page=${page+1}&size=${size}" <c:if test="${page+1 eq Totalpage}">class ="btn btn-sm disabled"</c:if>>
+                                    <a href="?querycode=${agence.code}&queryintitule=${agence.intitule}&queryregion=${agence.region}&page=${page+1}&size=${size}" <c:if test="${page+1 eq Totalpage}">class ="btn btn-sm disabled"</c:if>>
                                             <span class="glyphicon glyphicon-forward"></span>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="?page=${Totalpage-1}&size=${size}" <c:if test="${page+1 eq Totalpage}">class ="btn btn-sm disabled"</c:if>>
+                                        <a href="?querycode=${agence.code}&queryintitule=${agence.intitule}&queryregion=${agence.region}&page=${Totalpage-1}&size=${size}" <c:if test="${page+1 eq Totalpage}">class ="btn btn-sm disabled"</c:if>>
                                             <span class="glyphicon glyphicon-fast-forward"></span>
                                         </a>
                                     </li>
@@ -143,6 +147,46 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-md-3">
+                        <div>
+                            <h3>
+                            <spring:message code="action.rechercher" />
+                        </h3>
+                        <hr/>
+                    </div>
+                    <spring:url value="/agence/" var="agence_home"
+                                htmlEscape="true" />
+
+                    <form:form method="get" commandName="agence" action="${agence_home}">
+                        <div class="form-group">
+                            <label>
+                                <spring:message code="agence.code" />
+                            </label>
+                            <input type="text" class="form-control input-sm" name="querycode"/>
+                            <input type="hidden" value="${size}" name="size"/>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <spring:message code="agence.intitule" />
+                            </label>
+                            <input type="text"  class="form-control input-sm" name="queryintitule"/>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <spring:message code="agence.region" />
+                            </label>
+                            <input type="text" class="form-control input-sm" name="queryregion"/>
+                        </div>
+                        <hr/>
+                        <button class="btn btn-default btn-sm">
+                            <span class="glyphicon glyphicon-search"></span> <spring:message code="search"/></button>
+                            <spring:url value="/agence/" htmlEscape="true" var="agence_home" />
+                        <a href="${agence_home}" class="btn btn-default btn-sm">
+                            <span class="glyphicon glyphicon-refresh"></span>
+                            <spring:message code="search.delete" />
+                        </a>
+                    </form:form>
+                </div>
             </c:if>
         </div>
 

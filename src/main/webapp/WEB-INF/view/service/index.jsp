@@ -11,9 +11,11 @@
     <tiles:putAttribute name="body">
         <div class="row">
             <div class="col-md-9">
-                <div class="row">
-                    <spring:message code="departement.list" />
-                    <hr/>
+                <div>
+                    <h3>
+                        <spring:message code="departement.list" />
+                        <hr/>
+                    </h3>
                 </div>
                 <div class="dropdown pull-right ">
                     <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
@@ -22,12 +24,12 @@
                         <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-                        <li role="presentation"><a role="menuitem" tabindex="-1" href="?size=5">5</a></li>
-                        <li role="presentation"><a role="menuitem" tabindex="-1" href="?size=10">10</a></li>
-                        <li role="presentation"><a role="menuitem" tabindex="-1" href="?size=20">20</a></li>
-                        <li role="presentation"><a role="menuitem" tabindex="-1" href="?size=30">30</a></li>
-                        <li role="presentation"><a role="menuitem" tabindex="-1" href="?size=40">40</a></li>
-                        <li role="presentation"><a role="menuitem" tabindex="-1" href="?size=50">50</a></li>
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="?querycode=${departement.code}&queryintitule=${departement.intitule}&size=5">5</a></li>
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="?querycode=${departement.code}&queryintitule=${departement.intitule}&size=10">10</a></li>
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="?querycode=${departement.code}&queryintitule=${departement.intitule}&size=20">20</a></li>
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="?querycode=${departement.code}&queryintitule=${departement.intitule}&size=30">30</a></li>
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="?querycode=${departement.code}&queryintitule=${departement.intitule}&size=40">40</a></li>
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="?querycode=${departement.code}&queryintitule=${departement.intitule}&size=50">50</a></li>
                     </ul>
                 </div>
                 <table class="table table-condensed table-hover table-bordered">
@@ -116,12 +118,12 @@
                             <ul class="pager">
 
                                 <li>
-                                    <a href="?page=0&size=${size}" <c:if test="${page eq 0}">class ="btn btn-sm disabled"</c:if>>
+                                    <a href="?querycode=${departement.code}&queryintitule=${departement.intitule}&page=0&size=${size}" <c:if test="${page eq 0}">class ="btn btn-sm disabled"</c:if>>
                                             <span class="glyphicon glyphicon-fast-backward"></span>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="?page=${page-1}&size=${size}" <c:if test="${page eq 0}">class ="btn btn-sm disabled"</c:if>>
+                                        <a href="?querycode=${departement.code}&queryintitule=${departement.intitule}&page=${page-1}&size=${size}" <c:if test="${page eq 0}">class ="btn btn-sm disabled"</c:if>>
                                             <span class="glyphicon glyphicon-backward"></span>
                                         </a>
                                     </li>
@@ -129,12 +131,12 @@
                                         <input type="text" class="pager_detail text-center" readonly value="${page+1}/${Totalpage}"/>
                                 </li>
                                 <li>
-                                    <a href="?page=${page+1}&size=${size}" <c:if test="${page+1 eq Totalpage}">class ="btn btn-sm disabled"</c:if>>
+                                    <a href="?querycode=${departement.code}&queryintitule=${departement.intitule}&page=${page+1}&size=${size}" <c:if test="${page+1 eq Totalpage}">class ="btn btn-sm disabled"</c:if>>
                                             <span class="glyphicon glyphicon-forward"></span>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="?page=${Totalpage-1}&size=${size}" <c:if test="${page+1 eq Totalpage}">class ="btn btn-sm disabled"</c:if>>
+                                        <a href="?querycode=${departement.code}&queryintitule=${departement.intitule}&page=${Totalpage-1}&size=${size}" <c:if test="${page+1 eq Totalpage}">class ="btn btn-sm disabled"</c:if>>
                                             <span class="glyphicon glyphicon-fast-forward"></span>
                                         </a>
                                     </li>
@@ -142,6 +144,40 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-md-3">
+                        <div>
+                            <h3>
+                            <spring:message code="action.rechercher" />
+                        </h3>
+                        <hr/>
+                    </div>
+                    <spring:url value="/service/" var="service_home"
+                                htmlEscape="true" />
+
+                    <form:form method="get" commandName="service" action="${service_home}">
+                        <div class="form-group">
+                            <label>
+                                <spring:message code="departement.code" />
+                            </label>
+                            <input type="text" class="form-control input-sm" name="querycode"/>
+                            <input type="hidden" value="${size}" name="size"/>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <spring:message code="departement.intitule" />
+                            </label>
+                            <input type="text"  class="form-control input-sm" name="queryintitule"/>
+                        </div>
+                        <hr/>
+                        <button class="btn btn-default btn-sm">
+                            <span class="glyphicon glyphicon-search"></span> <spring:message code="search"/></button>
+                            <spring:url value="/service/" htmlEscape="true" var="service_home" />
+                        <a href="${service_home}" class="btn btn-default btn-sm">
+                            <span class="glyphicon glyphicon-refresh"></span>
+                            <spring:message code="search.delete" />
+                        </a>
+                    </form:form>
+                </div>
             </c:if>
         </div>
 

@@ -25,6 +25,6 @@ public interface IFournitureService extends IOperations<Fourniture>
 
     public List<Fourniture> findExisting();
 
-    public Page<Fourniture> findPaginated(String reference, String designation,
-            int quantite, int seuil, int nombrePage, Integer size);
+    Page<Fourniture> findPaginated(Long Id, String designation, String reference,
+            int nombrePage, Integer size);
 }

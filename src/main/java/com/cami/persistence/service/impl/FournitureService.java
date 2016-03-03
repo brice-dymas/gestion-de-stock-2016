@@ -59,7 +59,7 @@ public class FournitureService extends AbstractService<Fourniture> implements IF
         Fourniture fournitureToUpdate = iFournitureDao.findOne(entity.getId());
         fournitureToUpdate.setReference(entity.getReference());
         fournitureToUpdate.setDesignation(entity.getDesignation());
-        fournitureToUpdate.setQuantite(entity.getQuantite());
+//        fournitureToUpdate.setQuantite(entity.getQuantite());
         fournitureToUpdate.setSeuil(entity.getSeuil());
         fournitureToUpdate.setCategorie(iCategorieDao.findOne(entity.getCategorie().getId()));
         return iFournitureDao.save(fournitureToUpdate);
@@ -75,12 +75,6 @@ public class FournitureService extends AbstractService<Fourniture> implements IF
     public void deleteById(long entityId)
     {
         iFournitureDao.delete(entityId);
-    }
-
-    @Override
-    public Page<Fourniture> findPaginated(String reference, String designation, int quantite, int seuil, int nombrePage, Integer size)
-    {
-        return iFournitureDao.searchFournitures('%' + reference + '%', '%' + designation + '%', '%' + quantite + '%', '%' + seuil + '%', new PageRequest(nombrePage, size));
     }
 
     @Override
@@ -100,5 +94,25 @@ public class FournitureService extends AbstractService<Fourniture> implements IF
                     fourniture.getDesignation());
         }
         return listMap;
+    }
+
+    @Override
+    public Page<Fourniture> findPaginated(Long Id, String designation, String reference, int nombrePage, Integer size)
+    {
+        System.out.println("lancement de la recherche ...");
+        System.out.println("affichage des parametres ...");
+        System.out.println("categorieID= " + Id + " designation = " + designation + " reference = " + reference);
+        System.out.println("execution de la requete ...");
+        if (Id == -1)
+        {
+            System.out.println("sans parametre de type categorie");
+            return iFournitureDao.findPaginated('%' + designation + '%', '%' + reference + '%', new PageRequest(nombrePage, size));
+        }
+        else
+        {
+            System.out.println("avec parametre de type categorie");
+            return iFournitureDao.findPaginated(Id, '%' + designation + '%', '%' + reference + '%', new PageRequest(nombrePage, size));
+        }
+
     }
 }

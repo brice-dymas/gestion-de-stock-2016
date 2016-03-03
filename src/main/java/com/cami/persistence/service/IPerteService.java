@@ -20,6 +20,8 @@ public interface IPerteService extends IOperations<Perte>
 
     public List<Perte> create(List<Perte> pertes);
 
+    public List<Perte> update(Long id, List<Perte> pertes);
+
     public Perte findPerteByLigneAudit(Long ligneAuditId);
 
     Page<Perte> findPagenated(String numero, int quantite, Date datePerte, int page, Integer size);

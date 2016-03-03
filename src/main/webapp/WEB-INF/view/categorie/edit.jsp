@@ -9,17 +9,17 @@
     <tiles:putAttribute name="body">
 
         <div class="row">
-            <div class="col-md-12">
-                <h4>
+            <div class="col-md-12 col-md-offset-1">
+                <h3>
                     <spring:message code="categorie.edit" />
-                </h4>
+                </h3>
                 <hr/>
             </div>
             <spring:url htmlEscape="true" value="/categorie/${categorie.id}/update" var="edit" />
             <spring:url value="/categorie/" var="categories" />
 
             <div class="row">
-                <div class="col-md-6 col-md-offset-3">
+                <div class="col-md-6 col-md-offset-2">
                     <form:form method="post" commandName="categorie" action="${edit}">
                         <div class="form-group">
                             <form:label path="" for="intitule">
@@ -30,7 +30,7 @@
                         </div>
                         <hr />
                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                        <div class="panel-footer">
+                        <div>
                             <button type="submit" class="btn btn-primary btn-sm">
                                 <span class="glyphicon glyphicon-save"></span>
                                 <spring:message code="action.enregistrer" />

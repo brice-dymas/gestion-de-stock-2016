@@ -77,11 +77,11 @@ public class DepartementController
     public String indexAction(final ModelMap model, final WebRequest webRequest)
     {
 
-        final String code = webRequest.getParameter("code") != null ? webRequest.getParameter("code") : "";
-        final String intitule = webRequest.getParameter("intitule") != null ? webRequest.getParameter("intitule") : "";
+        final String code = webRequest.getParameter("querycode") != null ? webRequest.getParameter("querycode") : "";
+        final String intitule = webRequest.getParameter("queryintitule") != null ? webRequest.getParameter("queryintitule") : "";
 
         final Integer page = webRequest.getParameter("page") != null ? Integer.valueOf(webRequest.getParameter("page")) : 0;
-        final Integer size = webRequest.getParameter("size") != null ? Integer.valueOf(webRequest.getParameter("size")) : 55;
+        final Integer size = webRequest.getParameter("size") != null ? Integer.valueOf(webRequest.getParameter("size")) : 5;
 
         final Page<Departement> resultPage = iDepartementService.searchDepartements(code, intitule, page, size);
 

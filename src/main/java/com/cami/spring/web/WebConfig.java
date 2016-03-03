@@ -116,7 +116,7 @@ public class WebConfig extends WebMvcConfigurerAdapter
     public LocaleResolver sessionLocaleResolver()
     {
         final SessionLocaleResolver localeResolver = new SessionLocaleResolver();
-        localeResolver.setDefaultLocale(new Locale("en"));
+        localeResolver.setDefaultLocale(new Locale("fr"));
 
         return localeResolver;
     }

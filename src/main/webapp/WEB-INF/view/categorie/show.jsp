@@ -14,7 +14,7 @@
 <tiles:insertDefinition name="layout">
     <tiles:putAttribute name="body">
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-12 col-md-offset-1">
                 <h3>
                     <spring:message code="categorie.show" />
                 </h3>
@@ -23,7 +23,7 @@
         </div>
 
         <div class="row">
-            <div class="col-md-4 col-md-offset-4" id="table_show">
+            <div class="col-md-4 col-md-offset-2" id="table_show">
                 <table class="table table-bordered">
                     <tbody>
                         <tr>
@@ -39,7 +39,7 @@
 
 
         <div class="row">
-            <div class="col-md-6 col-md-offset-4">
+            <div class="col-md-6 col-md-offset-2">
                 <hr/>
                 <spring:url value="/categorie/delete" var="categorie_delete"/>
                 <form:form method="post" commandName="categorie" action="${categorie_delete}">

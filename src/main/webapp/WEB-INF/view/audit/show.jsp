@@ -67,18 +67,28 @@
                                     <td>
                                         <c:choose>
                                             <c:when test="${ligneOperation.quantiteEcart < 0}">
-                                                <spring:url value="/entree/${ligneOperation.id}/equilibre" htmlEscape="true" var="entree_new" />
-                                                <a href="${entree_new}" class="btn btn-success btn-sm">
-                                                    <span class="glyphicon glyphicon-open"></span>
-                                                    <spring:message code="action.equilibre" />
-                                                </a>
+                                                <c:if test="${ligneOperation.fourniture.manque > 0}" >
+                                                    <spring:url value="/entree/${ligneOperation.id}/equilibre" htmlEscape="true" var="entree_new" />
+                                                    <a href="${entree_new}" class="btn btn-success btn-sm">
+                                                        <span class="glyphicon glyphicon-open"></span>
+                                                        <spring:message code="action.equilibre" />
+                                                    </a>
+                                                </c:if>
+                                                <c:if test="${ligneOperation.fourniture.manque eq 0}" >
+                                                    <spring:message code="stock.ok" />
+                                                </c:if>
                                             </c:when>
                                             <c:when test="${ligneOperation.quantiteEcart > 0}">
-                                                <spring:url value="/perte/${ligneOperation.id}/new" htmlEscape="true" var="perte_new" />
-                                                <a href="${perte_new}" class="btn btn-danger btn-sm">
-                                                    <span class="glyphicon glyphicon-open"></span>
-                                                    <spring:message code="action.perte" />
-                                                </a>
+                                                <c:if test="${ligneOperation.fourniture.perte > 0}" >
+                                                    <spring:url value="/perte/${ligneOperation.id}/new" htmlEscape="true" var="perte_new" />
+                                                    <a href="${perte_new}" class="btn btn-danger btn-sm">
+                                                        <span class="glyphicon glyphicon-open"></span>
+                                                        <spring:message code="action.perte" />
+                                                    </a>
+                                                </c:if>
+                                                <c:if test="${ligneOperation.fourniture.perte eq 0}" >
+                                                    <spring:message code="stock.ok" />
+                                                </c:if>
                                             </c:when>
                                             <c:otherwise>
                                                 <spring:message code="stock.ok" />

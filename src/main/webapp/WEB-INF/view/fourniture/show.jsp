@@ -24,7 +24,7 @@
         </div>
 
         <div class="row">
-            <div class="col-md-10 col-md-offset-1" id="table_show">
+            <div class="col-md-10 col-md-offset-0" id="table_show">
                 <table class="table table-bordered">
                     <tbody>
                         <tr>

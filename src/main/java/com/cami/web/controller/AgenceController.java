@@ -44,15 +44,20 @@ public class AgenceController
     public String indexAction(final ModelMap model, final WebRequest webRequest)
     {
 
-        final String code = webRequest.getParameter("code") != null ? webRequest.getParameter("code") : "";
-        final String intitule = webRequest.getParameter("intitule") != null ? webRequest.getParameter("intitule") : "";
-        final String region = webRequest.getParameter("region") != null ? webRequest.getParameter("region") : "";
+        final String code = webRequest.getParameter("querycode") != null ? webRequest.getParameter("querycode") : "";
+        final String intitule = webRequest.getParameter("queryintitule") != null ? webRequest.getParameter("queryintitule") : "";
+        final String region = webRequest.getParameter("queryregion") != null ? webRequest.getParameter("queryregion") : "";
 
         final Integer page = webRequest.getParameter("page") != null ? Integer.valueOf(webRequest.getParameter("page")) : 0;
-        final Integer size = webRequest.getParameter("size") != null ? Integer.valueOf(webRequest.getParameter("size")) : 55;
+        final Integer size = webRequest.getParameter("size") != null ? Integer.valueOf(webRequest.getParameter("size")) : 5;
 
         final Page<Agence> resultPage = iAgenceService.findPaginated(code, intitule, region, page, size);
+        Agence agence = new Agence();
+        agence.setCode(code);
+        agence.setIntitule(intitule);
+        agence.setRegion(region);
         model.addAttribute("page", page);
+        model.addAttribute("agence", agence);
         model.addAttribute("Totalpage", resultPage.getTotalPages());
         model.addAttribute("size", size);
         model.addAttribute("agences", resultPage.getContent());

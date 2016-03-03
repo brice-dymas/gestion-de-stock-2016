@@ -24,6 +24,6 @@ public interface IEntreeService extends IOperations<Entree>
 
     public List<Entree> findByUser(User user);
 
-    Page<Entree> findPaginated(String numero, Date dateOperation,
-            String observation, int nombrePage, Integer size);
+    Page<Entree> findPaginated(long categorieID, Date dateOperation,
+            String designation, int page, Integer size);
 }

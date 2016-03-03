@@ -19,9 +19,14 @@ import com.cami.persistence.service.IOperationService;
 import com.cami.persistence.service.IRoleService;
 import com.cami.persistence.service.ITypeOperationService;
 import com.cami.web.form.SortieForm;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -92,16 +97,52 @@ public class SortieController
     @RequestMapping(method = RequestMethod.GET)
     public String indexAction(final ModelMap model, final WebRequest webRequest)
     {
+        SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy");
+        final long departementID = webRequest.getParameter("querydepartement") != null
+                && !webRequest.getParameter("querydepartement").equals("")
+                        ? Long.valueOf(webRequest.getParameter("querydepartement"))
+                        : -1;
         final Integer page = webRequest.getParameter("page") != null
                 ? Integer.valueOf(webRequest.getParameter("page"))
                 : 0;
         final Integer size = webRequest.getParameter("size") != null
                 ? Integer.valueOf(webRequest.getParameter("size"))
                 : 5;
+        final String dateOperationString = webRequest.getParameter("querydateoperation") != null
+                ? webRequest.getParameter("querydateoperation")
+                : "01/01/1960";
+        final String designation = webRequest.getParameter("querydesignation") != null
+                ? webRequest.getParameter("querydesignation") : "";
+        Date dateOperation = new Date();
+        try
+        {
+            dateOperation = dateFormatter.parse(dateOperationString);
+        }
+        catch (ParseException ex)
+        {
+            try
+            {
+                dateOperation = dateFormatter.parse("01/01/1960");
+            }
+            catch (ParseException ex1)
+            {
+                Logger.getLogger(SortieController.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+        }
 
-        final Page<Operation> resultPage = sortieService.findPaginated(page, size);
+        final Page<Operation> resultPage = sortieService.findPaginated(departementID, dateOperation, "sortie", designation, page, size);
+
         final Operation sortie = new Operation();
+        TypeOperation typeOperation = new TypeOperation();
+        Departement departement = new Departement();
+        typeOperation.setIntitule("Audit");
+        departement.setId(departementID);
+
+        sortie.setDateOperation(dateOperation);
+        sortie.setDepartement(departement);
+        sortie.setTypeOperation(typeOperation);
         model.addAttribute("sortie", sortie);
+        model.addAttribute("querydesignation", designation);
         model.addAttribute("page", page);
         model.addAttribute("Totalpage", resultPage.getTotalPages());
         model.addAttribute("size", size);

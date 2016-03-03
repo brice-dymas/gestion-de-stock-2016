@@ -31,16 +31,14 @@ public interface IFournitureDao extends JpaRepository<Fourniture, Long>, JpaSpec
     @Query("SELECT f FROM Fourniture f WHERE f.quantite>0")
     public List<Fourniture> findExisting();
 
-    @Query("SELECT f FROM Fourniture f WHERE "
-            + "f.reference LIKE :reference AND "
-            + "f.designation LIKE :designation AND "
-            + "f.quantite = :quantite AND "
-            + "f.seuil = :seuil ")
-    public Page<Fourniture> searchFournitures(
-            @Param("reference") String reference,
-            @Param("designation") String designation,
-            @Param("quantite") int quantite,
-            @Param("seuil") int seuil,
-            Pageable pageable
-    );
+    @Query("SELECT F FROM Fourniture F WHERE F.designation LIKE :designation"
+            + " and F.reference LIKE :reference")
+    Page<Fourniture> findPaginated(@Param("designation") String designation,
+            @Param("reference") String reference, Pageable pageable);
+
+    @Query("SELECT F FROM Fourniture F WHERE F.categorie.id = :categorieId "
+            + " AND F.designation LIKE :designation and F.reference LIKE :reference")
+    Page<Fourniture> findPaginated(@Param("categorieId") Long Id,
+            @Param("designation") String designation, @Param("reference") String reference, Pageable pageable);
+
 }
