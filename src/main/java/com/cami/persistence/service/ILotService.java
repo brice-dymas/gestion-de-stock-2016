@@ -11,7 +11,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 /**
  *
@@ -38,6 +37,6 @@ public interface ILotService extends IOperations<Lot>
 
     Page<Lot> searchLots(String numero, Date dateEntree, float prixUnitaire, float prixVenteUnitaire,
             int quantite, float totalMontant, String etat, int page, Integer size);
-    
-    Page<Lot> search(long id, Date debut,Date fin, Integer quantite, int page, Integer size);
+
+    Page<Lot> search(long id, Date debut, Date fin, Integer quantite, int page, Integer size);
 }

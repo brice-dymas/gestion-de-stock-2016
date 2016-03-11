@@ -60,7 +60,7 @@
         <hr>
         <div class="row">
             <div class="col-md-12">
-                
+
                 <!-- Nav tabs -->
                 <ul class="nav nav-tabs" role="tablist">
                     <li role="presentation" class="active"><a href="#entree" aria-controls="home" role="tab" data-toggle="tab">Entrée</a></li>

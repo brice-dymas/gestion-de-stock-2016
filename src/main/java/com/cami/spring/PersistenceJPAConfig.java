@@ -57,7 +57,7 @@ public class PersistenceJPAConfig
         dataSource
                 .setUrl("jdbc:mysql://localhost:3306/cami?useUnicode=yes&characterEncoding=UTF-8");
         dataSource.setUsername("root");
-        dataSource.setPassword("elise");
+        dataSource.setPassword("sando");
         return dataSource;
     }
 

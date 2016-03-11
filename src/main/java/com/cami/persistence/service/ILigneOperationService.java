@@ -8,6 +8,7 @@ package com.cami.persistence.service;
 import com.cami.persistence.IOperations;
 import com.cami.persistence.model.LigneOperation;
 import java.util.List;
+import org.springframework.data.domain.Page;
 
 /**
  *
@@ -17,5 +18,9 @@ public interface ILigneOperationService extends IOperations<LigneOperation>
 {
 
     public List<LigneOperation> filterByOperation(Long id);
+
+    public Page<LigneOperation> findByFourniture(final long id, final String typeOperation, int nombrePage, int size);
+
+    public Page<LigneOperation> findByFourniture(final long id, int nombrePage, int size);
 
 }
