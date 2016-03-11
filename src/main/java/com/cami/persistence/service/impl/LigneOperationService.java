@@ -9,6 +9,7 @@ import com.cami.persistence.dao.ILigneOperationDao;
 import com.cami.persistence.model.LigneOperation;
 import com.cami.persistence.service.ILigneOperationService;
 import com.cami.persistence.service.common.AbstractService;
+import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -40,9 +41,15 @@ public class LigneOperationService extends AbstractService<LigneOperation> imple
     }
 
     @Override
-    public Page<LigneOperation> findByFourniture(long id, String typeOperation, int nombrePage, int size)
+    public Page<LigneOperation> findByFourniture(long id, String typeOperation, Date debut, Date fin, int page, int size)
     {
-        return ligneOperationDao.filterByFournitureId(id, '%' + typeOperation + '%', new PageRequest(nombrePage, size));
+        return ligneOperationDao.filterByFournitureId(id, '%' + typeOperation + '%', debut, fin, new PageRequest(page, size));
+    }
+
+    @Override
+    public Page<LigneOperation> findByFourniture(long id, Date debut, Date fin, int page, int size)
+    {
+        return ligneOperationDao.filterByFournitureId(id, debut, fin, new PageRequest(page, size));
     }
 
     @Override

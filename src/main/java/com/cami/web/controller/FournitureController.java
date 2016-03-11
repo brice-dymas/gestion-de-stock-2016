@@ -108,26 +108,27 @@ public class FournitureController
     @RequestMapping(value = "/{id}/searchAudits", method = RequestMethod.GET)
     public String searchAuditsAction(@PathVariable("id") final Long id, final ModelMap model, WebRequest webRequest)
     {
+        logger.log(Level.INFO, "Dans searchAuditAction du controlleur fourniture");
         SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy");
         final Integer page = webRequest.getParameter("page") != null ? Integer.valueOf(webRequest.getParameter("page")) : 0;
         final Integer size = webRequest.getParameter("size") != null ? Integer.valueOf(webRequest.getParameter("size")) : 55;
-        final Integer quantite = webRequest.getParameter("quantite") != null && !webRequest.getParameter("quantite").equals("") ? Integer.valueOf(webRequest.getParameter("quantite")) : null;
         final String debut = webRequest.getParameter("debut") != null && !webRequest.getParameter("debut").equals("") ? webRequest.getParameter("debut") : "1970/12/31";
         final String fin = webRequest.getParameter("fin") != null && !webRequest.getParameter("fin").equals("") ? webRequest.getParameter("fin") : "2999/12/31";
-        System.out.println("debut =" + debut);
-        Date dateDebut = parsedDateFrom(debut, "1970/12/31", dateFormatter);
+        Date dateDebut = parsedDateFrom(debut, "1970/01/01", dateFormatter);
         Date dateFin = parsedDateFrom(fin, "2999/12/31", dateFormatter);
         final Fourniture fourniture = iFournitureService.findOne(id);
-        System.out.println("Debut = " + dateDebut.toString() + " Fin = " + dateFin.toString());
-        Page<Lot> resultPage = lotService.search(id, dateDebut, dateFin, quantite, page, size);
-        List<Lot> lots = new ArrayList<>();
-        for (Lot lot : resultPage.getContent())
+        logger.log(Level.INFO, "Debut = {0} Fin = {1}", new Object[]
         {
-            lot.setEntree(null);
-            lot.setFourniture(null);
-            lots.add(lot);
+            dateDebut.toString(), dateFin.toString()
+        });
+        Page<LigneOperation> resultPage = ligneOperationService.findByFourniture(id, "Audit", dateDebut, dateFin, page, size);
+        List<LigneOperation> ligneOperations = new ArrayList<>();
+        for (LigneOperation ligneOperation : resultPage.getContent())
+        {
+            ligneOperations.add(ligneOperation);
         }
-        model.addAttribute("lots", lots);
+        logger.log(Level.WARNING, "nombre re resultats = {0}", ligneOperations.size());
+        model.addAttribute("ligneOperations", ligneOperations);
         model.addAttribute("page", page);
         model.addAttribute("Totalpage", resultPage.getTotalPages());
         model.addAttribute("size", size);
