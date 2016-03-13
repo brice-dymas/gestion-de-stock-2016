@@ -2,10 +2,10 @@
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <fieldset>
     <legend>
-        <spring:message code="fourniture.audits" />
+        <spring:message code="fourniture.pertes" />
     </legend>
 
-    <button class="btn btn-default pull-left" data-toggle="modal" data-target="#searchLigneOperationModal">
+    <button class="btn btn-default pull-left" data-toggle="modal" data-target="#searchLignePerteModal">
         <spring:message code="action.rechercher" />
     </button>
 
@@ -37,8 +37,8 @@
                 <th><spring:message code="ligneOperation.observation" /></th>
             </tr>
         </thead>
-        <tbody id="ligneOperationContent">
-            <c:if test="${0 eq ligneOperations.size()}" >
+        <tbody id="lignePerteContent">
+            <c:if test="${ lignePertes.size() le 0}" >
                 <tr>
                     <td class="text-center label-danger" colspan="8">
                         <spring:message code="empty.data" />
@@ -47,16 +47,16 @@
             </tbody>
         </table>
     </c:if>
-    <c:if test="${0 ne ligneOperations.size()}" >
-        <c:forEach var="ligneOperation" items="${ligneOperations}">
+    <c:if test="${0 ne lignePertes.size()}" >
+        <c:forEach var="lignePerte" items="${lignePertes}">
             <tr>
-                <td>${ligneOperation.operation.numero} </td>
-                <td>${ligneOperation.operation.dateOperation} </td>
-                <td>${ligneOperation.operation.departement.intitule} </td>
-                <td>${ligneOperation.fourniture.quantite} </td>
-                <td>${ligneOperation.quantitePhysique} </td>
-                <td>${ligneOperation.quantiteEcart} </td>
-                <td>${ligneOperation.observation} </td>
+                <td>${lignePerte.operation.numero} </td>
+                <td>${lignePerte.operation.dateOperation} </td>
+                <td>${lignePerte.operation.departement.intitule} </td>
+                <td>${lignePerte.fourniture.quantite} </td>
+                <td>${lignePerte.quantitePhysique} </td>
+                <td>${lignePerte.quantiteEcart} </td>
+                <td>${lignePerte.observation} </td>
             </tr>
         </c:forEach>
     </tbody>
@@ -66,12 +66,12 @@
         <ul class="pager">
 
             <li>
-                <a id="fast_back_ligneOperation" href="page=0&size=${size}" <c:if test="${page eq 0}">class ="btn btn-sm disabled"</c:if>>
+                <a id="fast_back_lignePerte" href="page=0&size=${size}" <c:if test="${page eq 0}">class ="btn btn-sm disabled"</c:if>>
                         <span class="glyphicon glyphicon-fast-backward"></span>
                     </a>
                 </li>
                 <li>
-                    <a id="back_ligneOperation" href="page=${page-1}&size=${size}" <c:if test="${page eq 0}">class ="btn btn-sm disabled"</c:if>>
+                    <a id="back_lignePerte" href="page=${page-1}&size=${size}" <c:if test="${page eq 0}">class ="btn btn-sm disabled"</c:if>>
                         <span class="glyphicon glyphicon-backward"></span>
                     </a>
                 </li>
@@ -79,25 +79,25 @@
                     <input type="text" id="pager_detail" class="pager_detail text-center" readonly value="${page+1}/${Totalpage}"/>
             </li>
             <li>
-                <a id="forward_ligneOperation" href="page=${page+1}&size=${size}" <c:if test="${page+1 eq Totalpage}">class ="btn btn-sm disabled"</c:if>>
+                <a id="forward_lignePerte" href="page=${page+1}&size=${size}" <c:if test="${page+1 eq Totalpage}">class ="btn btn-sm disabled"</c:if>>
                         <span class="glyphicon glyphicon-forward"></span>
                     </a>
                 </li>
                 <li>
-                    <a id="fast_forward_ligneOperation" href="page=${Totalpage-1}&size=${size}" <c:if test="${page+1 eq Totalpage}">class ="btn btn-sm disabled"</c:if>>
+                    <a id="fast_forward_lignePerte" href="page=${Totalpage-1}&size=${size}" <c:if test="${page+1 eq Totalpage}">class ="btn btn-sm disabled"</c:if>>
                         <span class="glyphicon glyphicon-fast-forward"></span>
                     </a>
                 </li>
             </ul>
         </div>
 
-        <div class="modal fade" tabindex="-1" role="dialog" id="searchLigneOperationModal">
+        <div class="modal fade" tabindex="-1" role="dialog" id="searchLignePerteModal">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                         <h4 class="modal-title">
-                        <spring:message code="fourniture.searchAudits" />
+                        <spring:message code="fourniture.searchPertes" />
                     </h4>
                 </div>
                 <div class="modal-body">
@@ -107,11 +107,11 @@
                                 <fieldset>
                                     <div class="form-group">
                                         <label><spring:message code="debut" />:</label>
-                                        <input class="form-control" name="dateDebut" id="dateDebut"/>
+                                        <input class="form-control" name="dateDebutPerte" id="dateDebutPerte"/>
                                     </div>
                                     <div class="form-group">
                                         <label><spring:message code="fin" />:</label>
-                                        <input class="form-control" name="dateFin" id="dateFin"/>
+                                        <input class="form-control" name="dateFinPerte" id="dateFinPerte"/>
                                     </div>
                                 </fieldset>
                             </form>
@@ -122,7 +122,7 @@
                     <button type="button" class="btn btn-default" data-dismiss="modal">
                         <spring:message code="action.fermer" />
                     </button>
-                    <a href='#' id="searchLigneOperation" class="btn btn-primary">
+                    <a href='#' id="searchLignePerte" class="btn btn-primary">
                         <spring:message code="action.rechercher" />
                     </a>
                 </div>
@@ -134,71 +134,71 @@
 </fieldset>
 
 
-<spring:url value="fourniture/${fourniture.id}/searchAudits.json" var="fourniture_search"/>
+<spring:url value="fourniture/${fourniture.id}/searchPertes.json" var="fourniture_search"/>
 <script src="<c:url value="/resources/js/jquery-ui.js" />"></script>
 <script>
     $(function () {
-        $("#dateDebut, #dateFin").datepicker({
+        $("#dateDebutPerte, #dateFinPerte").datepicker({
             changeMonth: true,
             changeYear: true,
             dateFormat: "dd/mm/yy",
             showButtonPanel: false
         });
         var href = "";
-        $("#searchLigneOperation").on("mouseenter", function () {
+        $("#searchLignePerte").on("mouseenter", function () {
             href = "";
-            href += "dateDebut=" + $("#dateDebut").val();
-            href += "&dateFin=" + $("#dateFin").val();
-            $("#searchLigneOperation").attr("href", href);
+            href += "dateDebutPerte=" + $("#dateDebutPerte").val();
+            href += "&dateFinPerte=" + $("#dateFinPerte").val();
+            $("#searchLignePerte").attr("href", href);
         });
-        $("#searchLigneOperation").on("click", function () {
-            queryLigneOperation(href);
+        $("#searchLignePerte").on("click", function () {
+            queryLignePerte(href);
             return false;
         });
 
-        $("#fast_back_ligneOperation").on("click", function () {
-            if (!$("#fast_back_ligneOperation").hasClass("disabled")) {
-                queryLigneOperation(href + "&" + $("#fast_back_ligneOperation").attr("href"));
+        $("#fast_back_lignePerte").on("click", function () {
+            if (!$("#fast_back_lignePerte").hasClass("disabled")) {
+                queryLignePerte(href + "&" + $("#fast_back_lignePerte").attr("href"));
             }
             return false;
         });
-        $("#back_ligneOperation").on("click", function () {
-            if (!$("#back_ligneOperation").hasClass("disabled")) {
-                queryLigneOperation(href + "&" + $("#back_ligneOperation").attr("href"));
+        $("#back_lignePerte").on("click", function () {
+            if (!$("#back_lignePerte").hasClass("disabled")) {
+                queryLignePerte(href + "&" + $("#back_lignePerte").attr("href"));
             }
             return false;
         });
-        $("#forward_ligneOperation").on("click", function () {
-            if (!$("#forward_ligneOperation").hasClass("disabled")) {
-                queryLigneOperation(href + "&" + $("#forward_ligneOperation").attr("href"));
+        $("#forward_lignePerte").on("click", function () {
+            if (!$("#forward_lignePerte").hasClass("disabled")) {
+                queryLignePerte(href + "&" + $("#forward_lignePerte").attr("href"));
             }
             return false;
         });
-        $("#fast_forward_ligneOperation").on("click", function () {
-            if (!$("#fast_forward_ligneOperation").hasClass("disabled")) {
-                queryLigneOperation(href + "&" + $("#fast_forward_ligneOperation").attr("href"));
+        $("#fast_forward_lignePerte").on("click", function () {
+            if (!$("#fast_forward_lignePerte").hasClass("disabled")) {
+                queryLignePerte(href + "&" + $("#fast_forward_lignePerte").attr("href"));
             }
             return false;
         });
         $("a[id=size_value]").each(function (index, value) {
             $(this).on("click", function () {
                 if (href === "") {
-                    queryLigneOperation($(this).attr("href"));
+                    queryLignePerte($(this).attr("href"));
                 } else {
 
-                    queryLigneOperation(href + "&" + $(this).attr("href"));
+                    queryLignePerte(href + "&" + $(this).attr("href"));
                 }
                 return false;
             });
 
         });
 
-        function queryLigneOperation(href) {
+        function queryLignePerte(href) {
             var url = getBaseURL() + "${fourniture_search}?" + href;
             var row = "";
             console.log(url);
             $.get(url, function (data) {
-                $.each(data["ligneOperations"], function (index, value) {
+                $.each(data["lignePertes"], function (index, value) {
                     row += "<tr><td>" + value["operation"]['numero'] + "</td>";
                     row += "<td>" + value["operation"]['dateOperation'] + "</td>";
                     row += "<td>" + value["operation"]["departement"]['intitule'] + "</td>";
@@ -210,35 +210,35 @@
 
                 var page = parseInt(data["page"]);
                 var totalPage = parseInt(data["Totalpage"]);
-                $("#fast_back_ligneOperation").attr("href", "page=0" + "&size=" + data["size"]);
-                $("#back_ligneOperation").attr("href", "page=" + (page - 1) + "&size=" + data["size"]);
-                $("#forward_ligneOperation").attr("href", "page=" + (page + 1) + "&size=" + data["size"]);
-                $("#fast_forward_ligneOperation").attr("href", "page=" + (totalPage - 1) + "&size=" + data["size"]);
+                $("#fast_back_lignePerte").attr("href", "page=0" + "&size=" + data["size"]);
+                $("#back_lignePerte").attr("href", "page=" + (page - 1) + "&size=" + data["size"]);
+                $("#forward_lignePerte").attr("href", "page=" + (page + 1) + "&size=" + data["size"]);
+                $("#fast_forward_lignePerte").attr("href", "page=" + (totalPage - 1) + "&size=" + data["size"]);
                 if (page === 0) {
-                    if (!$("#fast_back_ligneOperation").hasClass("disabled")) {
-                        $("#fast_back_ligneOperation").addClass("disabled");
-                        $("#back_ligneOperation").addClass("disabled");
+                    if (!$("#fast_back_lignePerte").hasClass("disabled")) {
+                        $("#fast_back_lignePerte").addClass("disabled");
+                        $("#back_lignePerte").addClass("disabled");
                     }
                 } else {
-                    if ($("#fast_back_ligneOperation").hasClass("disabled")) {
-                        $("#fast_back_ligneOperation").removeClass("disabled");
-                        $("#back_ligneOperation").removeClass("disabled");
+                    if ($("#fast_back_lignePerte").hasClass("disabled")) {
+                        $("#fast_back_lignePerte").removeClass("disabled");
+                        $("#back_lignePerte").removeClass("disabled");
                     }
                 }
 
                 if (page + 1 === totalPage) {
-                    if (!$("#fast_forward_ligneOperation").hasClass("disabled")) {
-                        $("#forward_ligneOperation").addClass("disabled");
-                        $("#fast_forward_ligneOperation").addClass("disabled");
+                    if (!$("#fast_forward_lignePerte").hasClass("disabled")) {
+                        $("#forward_lignePerte").addClass("disabled");
+                        $("#fast_forward_lignePerte").addClass("disabled");
                     }
                 } else {
-                    if ($("#fast_forward_ligneOperation").hasClass("disabled")) {
-                        $("#forward_ligneOperation").removeClass("disabled");
-                        $("#fast_forward_ligneOperation").removeClass("disabled");
+                    if ($("#fast_forward_lignePerte").hasClass("disabled")) {
+                        $("#forward_lignePerte").removeClass("disabled");
+                        $("#fast_forward_lignePerte").removeClass("disabled");
                     }
                 }
 
-                $("#ligneOperationContent").html(row);
+                $("#lignePerteContent").html(row);
                 $("#size").html(data["size"]);
                 $("#pager_detail").val((page + 1) + "/" + totalPage);
             });

@@ -10,6 +10,7 @@ import com.cami.persistence.service.IAgenceService;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -24,6 +25,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
  * @author samuel   < smlfolong@gmail.com >
  */
 @Controller
+@Secured(
+        {
+            "ROLE_USER", "ROLE_ADMIN"
+        })
 @RequestMapping("/agence")
 public class AgenceController
 {
@@ -77,16 +82,12 @@ public class AgenceController
     public String createAction(@Valid final Agence agence, final BindingResult result,
             final ModelMap model, final RedirectAttributes redirectAttributes)
     {
-        System.out.println("in controller " + agence.getCode() + "-" + agence.getIntitule());
-        if (result.hasErrors())
-        {
+        if (result.hasErrors()) {
             model.addAttribute("error", "error");
             model.addAttribute("agence", agence);
             return "agence/new";
         }
-        else
-        {
-            System.out.println(agence.getCode() + "-" + agence.getIntitule());
+        else {
             redirectAttributes.addFlashAttribute("info", "alert.success.new");
             final Agence agenceCreated = iAgenceService.create(agence);
             return "redirect:/agence/" + agenceCreated.getId() + "/show";
@@ -114,15 +115,11 @@ public class AgenceController
             @PathVariable("id") final Long id, final ModelMap model,
             final BindingResult result, final RedirectAttributes redirectAttributes)
     {
-
-        System.out.println(agence.getCode() + "-" + agence.getIntitule());
-        if (result.hasErrors())
-        {
+        if (result.hasErrors()) {
             model.addAttribute("error", "error");
             return "agence/edit";
         }
-        else
-        {
+        else {
             redirectAttributes.addFlashAttribute("info", "alert.success.new");
             iAgenceService.update(agence);
             return "redirect:/agence/" + agence.getId() + "/show";

@@ -12,6 +12,7 @@ package com.cami.web.controller;
 import com.cami.persistence.model.Role;
 import com.cami.persistence.service.IRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -32,6 +33,7 @@ public class LeController
     @Autowired
     IRoleService roleService;
 
+    @Secured({"ROLE_USER", "ROLE_ADMIN"})
     @RequestMapping(value = "/welcome**", method = RequestMethod.GET)
     public ModelAndView welcomePage()
     {
@@ -56,13 +58,11 @@ public class LeController
     {
 
         ModelAndView model = new ModelAndView();
-        if (error != null)
-        {
+        if (error != null) {
             model.addObject("error", "Mot de Passe ou Nom d'Utilisateur Incorrect !");
         }
 
-        if (logout != null)
-        {
+        if (logout != null) {
             model.addObject("error", "Deconnexion reussie");
         }
         model.setViewName("login");
@@ -71,12 +71,20 @@ public class LeController
 
     }
 
+    @Secured(
+            {
+                "ROLE_USER", "ROLE_ADMIN"
+            })
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String indexAction(final ModelMap model, final WebRequest webRequest)
     {
         return "hello";
     }
 
+    @Secured(
+            {
+                "ROLE_USER", "ROLE_ADMIN"
+            })
     @RequestMapping(value = "/index.xhtml", method = RequestMethod.GET)
     public String homeAction(final ModelMap model)
     {
@@ -93,8 +101,7 @@ public class LeController
 
         //check if user is login
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (!(auth instanceof AnonymousAuthenticationToken))
-        {
+        if (!(auth instanceof AnonymousAuthenticationToken)) {
             UserDetails userDetail = (UserDetails) auth.getPrincipal();
             model.addObject("username", userDetail.getUsername());
         }

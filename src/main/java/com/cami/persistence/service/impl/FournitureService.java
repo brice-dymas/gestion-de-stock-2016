@@ -88,8 +88,7 @@ public class FournitureService extends AbstractService<Fourniture> implements IF
     {
         final List<Fourniture> fournitures = iFournitureDao.findByCategorieName('%' + categorie + '%');
         Map<Long, String> listMap = new HashMap<>();
-        for (Fourniture fourniture : fournitures)
-        {
+        for (Fourniture fourniture : fournitures) {
             listMap.put(fourniture.getId(),
                     fourniture.getDesignation());
         }
@@ -99,18 +98,10 @@ public class FournitureService extends AbstractService<Fourniture> implements IF
     @Override
     public Page<Fourniture> findPaginated(Long Id, String designation, String reference, int nombrePage, Integer size)
     {
-        System.out.println("lancement de la recherche ...");
-        System.out.println("affichage des parametres ...");
-        System.out.println("categorieID= " + Id + " designation = " + designation + " reference = " + reference);
-        System.out.println("execution de la requete ...");
-        if (Id == -1)
-        {
-            System.out.println("sans parametre de type categorie");
+        if (Id == -1) {
             return iFournitureDao.findPaginated('%' + designation + '%', '%' + reference + '%', new PageRequest(nombrePage, size));
         }
-        else
-        {
-            System.out.println("avec parametre de type categorie");
+        else {
             return iFournitureDao.findPaginated(Id, '%' + designation + '%', '%' + reference + '%', new PageRequest(nombrePage, size));
         }
 

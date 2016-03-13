@@ -59,33 +59,17 @@ public class LotService extends AbstractService<Lot> implements ILotService
     @Override
     public Lot update(Lot entity)
     {
-        System.out.println("in lot service");
-        System.out.println("updating lot");
         Lot lotToUpdate = iLotDao.findOne(entity.getId());
-        System.out.println("lot fetched");
-//        Entree entree = iLotDao.findByEntreeId(lotToUpdate.getEntree().getId());
-        System.out.println("entree feteched");
         Fourniture fourniture = iFournitureDao.findOne(entity.getFourniture().getId());
-        System.out.println("fourniture fetched");
         lotToUpdate.setDateEntree(entity.getDateEntree());
-        System.out.println("date feteched");
         lotToUpdate.setNumero(entity.getNumero());
-        System.out.println("numero fetched");
         lotToUpdate.setPrixUnitaire(entity.getPrixUnitaire());
-        System.out.println("PU fetched");
         lotToUpdate.setPrixVenteUnitaire(entity.getPrixVenteUnitaire());
-        System.out.println("PUV fetched");
         lotToUpdate.setQuantite(entity.getQuantite());
-        System.out.println("Qte fetched");
         lotToUpdate.setTotalMontant(entity.getTotalMontant());
-        System.out.println("montant T fetched");
         lotToUpdate.setEtat(entity.getEtat());
-        System.out.println("etat fetched");
         lotToUpdate.setModifiable(entity.isModifiable());
-        System.out.println("modifiable setted");
         lotToUpdate.setFourniture(fourniture);
-        System.out.println("fourniture setted");
-        System.out.println("now launching the ultimate update ....");
         return iLotDao.save(lotToUpdate);
     }
 
@@ -148,8 +132,7 @@ public class LotService extends AbstractService<Lot> implements ILotService
     {
         List<Fourniture> fournitures = iLotDao.getEntreeFournitures(id);
         Map<Long, String> listMap = new HashMap<>();
-        for (Fourniture fourniture : fournitures)
-        {
+        for (Fourniture fourniture : fournitures) {
             listMap.put(fourniture.getId(),
                     fourniture.getDesignation());
         }
@@ -161,8 +144,7 @@ public class LotService extends AbstractService<Lot> implements ILotService
     {
         List<Lot> lots = iLotDao.findByFournitureForPerte(id);
         Map<Long, String> listMap = new HashMap<>();
-        for (Lot lot : lots)
-        {
+        for (Lot lot : lots) {
             listMap.put(lot.getId(), lot.getNumero() + " - " + lot.getDateEntree());
         }
         return listMap;
@@ -171,16 +153,10 @@ public class LotService extends AbstractService<Lot> implements ILotService
     @Override
     public Page<Lot> search(long id, Date debut, Date fin, Integer quantite, int page, Integer size)
     {
-
-        System.out.println("Debut = " + debut.toString() + " Fin = " + fin.toString());
-        System.out.println("Quantite = " + quantite + " " + id + " " + page + " " + size + "");
-        if (quantite == null)
-        {
-            System.out.println("Exectution ici");
+        if (quantite == null) {
             return iLotDao.searchLots(id, debut, fin, new PageRequest(page, size));
         }
-        else
-        {
+        else {
             return iLotDao.searchLots(id, debut, fin, quantite, new PageRequest(page, size));
         }
     }

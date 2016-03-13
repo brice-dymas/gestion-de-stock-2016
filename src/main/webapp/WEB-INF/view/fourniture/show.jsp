@@ -74,7 +74,7 @@
                     <div role="tabpanel" class="tab-pane active" id="entree"><%@include file="partial/showlot.jsp" %></div>
                     <div role="tabpanel" class="tab-pane" id="sortie">...</div>
                     <div role="tabpanel" class="tab-pane" id="audit"><%@include file="partial/showAudits.jsp" %></div>
-                    <div role="tabpanel" class="tab-pane" id="perte">...</div>
+                    <div role="tabpanel" class="tab-pane" id="perte"><%@include file="partial/showPertes.jsp" %></div>
                 </div>
             </div>
         </div>
@@ -104,6 +104,5 @@
                 </form:form>
             </div>
         </div>
-
     </tiles:putAttribute>
 </tiles:insertDefinition>

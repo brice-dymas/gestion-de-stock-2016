@@ -20,6 +20,7 @@ import java.util.Map;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -35,6 +36,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
  * @author samuel   < smlfolong@gmail.com >
  */
 @Controller
+@Secured(
+        {
+            "ROLE_USER", "ROLE_ADMIN"
+        })
 @RequestMapping("/perte")
 public class PerteController
 {
@@ -112,27 +117,20 @@ public class PerteController
         final LigneOperation ligneOperation = ligneOperationService.findOne(id);
         List<Perte> pertes = perteForm.getListPertes();
         int totalPerte = 0;
-        for (Perte perte : pertes)
-        {
+        for (Perte perte : pertes) {
             perte.setLigneOperation(ligneOperation);
             totalPerte += perte.getQuantite();
         }
 
-        if (result.hasErrors() | totalPerte > ligneOperation.getQuantiteEcart())
-        {
-            System.out.println("Dans Perte controller erreur" + result.getFieldError());
+        if (result.hasErrors() | totalPerte > ligneOperation.getQuantiteEcart()) {
             Map<Long, String> lots = lotService.getFournituresForPerte(ligneOperation.getFourniture().getId());
             model.addAttribute("perte", perteForm);
             model.addAttribute("ligneOperation", ligneOperation);
             model.addAttribute("lots", lots);
             model.addAttribute("error", "error");
         }
-        else
-        {
-            System.out.println("Dans Perte Controller sans erreur debut...");
-//            perteService.create(equilibre);
+        else {
             perteService.create(pertes);
-            System.out.println("Dans perte controller fin...");
             redirectAttributes.addFlashAttribute("info", "alert.success.new");
         }
         return "redirect:/perte/";
@@ -142,8 +140,6 @@ public class PerteController
     public String deleteAction(final Perte perte, final ModelMap model)
     {
         Perte perteToDelete = perteService.findOne(perte.getId());
-        System.out.println("deleteAction of a perte =" + perteToDelete.getId());
-
         perteService.delete(perteToDelete);
         return "redirect:/perte/";
     }
@@ -155,11 +151,9 @@ public class PerteController
 
         final Perte perte = perteService.findOne(id);
         final LigneOperation ligneOperation = ligneOperationService.findOne(perte.getLigneOperation().getId());
-        System.out.println("Dans perte controller ligneOperation fourniture = " + ligneOperation.getFourniture().getDesignation());
         List<Perte> pertes = perteForm.getListPertes();
 
-        if (result.hasErrors())
-        {
+        if (result.hasErrors()) {
             Map<Long, String> lots = lotService.getFournituresForPerte(ligneOperation.getFourniture().getId());
             model.addAttribute("error", "error");
             model.addAttribute("perteForm", perteForm);
@@ -168,8 +162,7 @@ public class PerteController
             model.addAttribute("lots", lots);
             return "perte/edit";
         }
-        else
-        {
+        else {
             perteService.update(id, pertes);
             redirectAttributes.addFlashAttribute("info", "alert.success.new");
             return "redirect:/perte/";
@@ -181,9 +174,7 @@ public class PerteController
     {
         Map<Long, String> map = new HashMap<>();
         List<Lot> lots = lotService.findAll();
-//        List<Lot> lots = lotService.filterByLigneAudit(id);
-        for (Lot lot : lots)
-        {
+        for (Lot lot : lots) {
             map.put(lot.getId(), "Lot --> " + lot.getNumero() + " Fourniture --> " + lot.getFourniture().getDesignation());
         }
         return map;

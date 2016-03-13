@@ -29,6 +29,19 @@ public interface ILigneOperationDao extends JpaRepository<LigneOperation, Long>,
     Page<LigneOperation> filterByFournitureId(@Param("id") final long id,
             Pageable pageable);
 
+//    @Query("SELECT L FROM LigneOperation L WHERE L.fourniture.id= :id AND "
+//            + " L.operation.dateOperation >= :debut AND L.operation.dateOperation <= :fin ")
+//    Page<LigneOperation> filterByFournitureId(@Param("id") final long id,
+//            @Param("debut") Date debut,
+//            @Param("fin") Date fin, Pageable pageable);
+//
+//    @Query("SELECT L FROM LigneOperation L WHERE L.fourniture.id= :id "
+//            + " AND L.operation.typeOperation.intitule LIKE :type AND "
+//            + " L.operation.dateOperation >= :debut AND L.operation.dateOperation <= :fin ")
+//    Page<LigneOperation> filterByFournitureId(@Param("id") final long id,
+//            @Param("type") final String typeOperation,
+//            @Param("debut") Date debut,
+//            @Param("fin") Date fin, Pageable pageable);
     @Query("SELECT L FROM LigneOperation L WHERE L.fourniture.id= :id AND "
             + " L.operation.dateOperation BETWEEN :debut AND :fin ")
     Page<LigneOperation> filterByFournitureId(@Param("id") final long id,
@@ -42,5 +55,4 @@ public interface ILigneOperationDao extends JpaRepository<LigneOperation, Long>,
             @Param("type") final String typeOperation,
             @Param("debut") Date debut,
             @Param("fin") Date fin, Pageable pageable);
-
 }
