@@ -30,6 +30,7 @@ import java.util.logging.Logger;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -45,6 +46,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
  * @author Brice GUEMKAM <briceguemkam@gmail.com>
  */
 @Controller
+@Secured(
+        {
+            "ROLE_USER", "ROLE_ADMIN"
+        })
 @RequestMapping("/sortie")
 public class SortieController
 {
@@ -114,18 +119,14 @@ public class SortieController
         final String designation = webRequest.getParameter("querydesignation") != null
                 ? webRequest.getParameter("querydesignation") : "";
         Date dateOperation = new Date();
-        try
-        {
+        try {
             dateOperation = dateFormatter.parse(dateOperationString);
         }
-        catch (ParseException ex)
-        {
-            try
-            {
+        catch (ParseException ex) {
+            try {
                 dateOperation = dateFormatter.parse("01/01/1960");
             }
-            catch (ParseException ex1)
-            {
+            catch (ParseException ex1) {
                 Logger.getLogger(SortieController.class.getName()).log(Level.SEVERE, null, ex1);
             }
         }
@@ -168,31 +169,14 @@ public class SortieController
             final RedirectAttributes redirectAttributes)
     {
 
-//        boolean depasser = false;
-//        System.out.println("dans le controller");
-//        List<LigneOperation>  ligneOperations = sortieForm.getSortie().getLigneOperations();
-//        for (LigneOperation ligneOperation : ligneOperations)
-//        {
-//            if (ligneOperation.getQuantite() > ligneOperation.getLot().getFourniture().getQuantite())
-//            {
-//                depasser=true;
-//            }
-//        }
-//        if (result.hasErrors() || depasser == true) {
-        if (result.hasErrors())
-        {
-            System.out.println("nul ou erreur" + result.getFieldError());
+        if (result.hasErrors()) {
             model.addAttribute("error", "error");
             model.addAttribute("sortieForm", sortieForm);
             return "sortie/new";
         }
-        else
-        {
-            System.out.println("non nul");
+        else {
             redirectAttributes.addFlashAttribute("info", "alert.success.new");
             sortieService.create(sortieForm.getSortie());
-            System.out.println("object created");
-//            return "redirect:/sortie/";
             return "redirect:/sortie/" + sortieForm.getSortie().getId() + "/show";
 
         }
@@ -203,8 +187,6 @@ public class SortieController
     public String deleteAction(final Operation sortie, final ModelMap model)
     {
         Operation sortieToDelete = sortieService.findOne(sortie.getId());
-        System.out.println("deleteAction of a sortie =" + sortieToDelete.getId());
-
         sortieService.delete(sortieToDelete);
         return "redirect:/sortie/";
     }
@@ -215,16 +197,12 @@ public class SortieController
             final BindingResult result,
             final RedirectAttributes redirectAttributes)
     {
-        System.out.println("enter");
-        if (result.hasErrors())
-        {
-            System.out.println("il ya eu erreur de modification");
+        if (result.hasErrors()) {
             model.addAttribute("sortie", sortieForm);
             model.addAttribute("error", "error");
             return "sortie/edit";
         }
-        else
-        {
+        else {
             redirectAttributes.addFlashAttribute("info", "alert.success.new");
             sortieService.restoreInitialBdState(sortieForm.getSortie());
             sortieService.update(sortieForm.getSortie());
@@ -237,8 +215,7 @@ public class SortieController
     {
         Map<Long, String> map = new HashMap<>();
         List<Departement> departements = departementService.findAll();
-        for (Departement departement : departements)
-        {
+        for (Departement departement : departements) {
             map.put(departement.getId(), departement.getIntitule());
         }
         return map;
@@ -249,8 +226,7 @@ public class SortieController
     {
         Map<Long, String> map = new HashMap<>();
         List<Fourniture> fournitures = fournitureService.findExisting();
-        for (Fourniture fourniture : fournitures)
-        {
+        for (Fourniture fourniture : fournitures) {
             map.put(fourniture.getId(), fourniture.getDesignation());
         }
         return map;

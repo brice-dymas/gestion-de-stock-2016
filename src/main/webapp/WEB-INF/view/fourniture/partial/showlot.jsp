@@ -1,13 +1,13 @@
-
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
+<%@taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <fieldset>
     <legend>
         <spring:message code="entree.lots" />
     </legend>
 
-    <button class="btn btn-default pull-left" data-toggle="modal" data-target="#searchLotModal"> Search</button>
+    <button class="btn btn-default pull-left" data-toggle="modal" data-target="#searchLotModal">
+        <spring:message code="action.rechercher" />
+    </button>
 
     <div class="dropdown pull-right ">
         <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
@@ -137,16 +137,15 @@
 
 <spring:url value="fourniture/${fourniture.id}/search.json" var="fourniture_search"/>
 <script src="<c:url value="/resources/js/jquery-ui.js" />"></script>
-
 <script>
     $(function () {
-        var href = "";
         $("#debut, #fin").datepicker({
             changeMonth: true,
             changeYear: true,
             dateFormat: "dd/mm/yy",
             showButtonPanel: false
-        }).datepicker("option", "showAnim", "clip");
+        });
+        var href = "";
         $("#searchLot").on("mouseenter", function () {
             href = "";
             href += "debut=" + $("#debut").val();
@@ -158,7 +157,6 @@
             queryLot(href);
             return false;
         });
-
         $("#fast_back_lot").on("click", function () {
             if (!$("#fast_back_lot").hasClass("disabled")) {
                 queryLot(href + "&" + $("#fast_back_lot").attr("href"));
@@ -183,20 +181,16 @@
             }
             return false;
         });
-
         $("a[id=size_value]").each(function (index, value) {
             $(this).on("click", function () {
                 if (href === "") {
                     queryLot($(this).attr("href"));
                 } else {
-
                     queryLot(href + "&" + $(this).attr("href"));
                 }
                 return false;
             });
-
         });
-
         function queryLot(href) {
             var url = getBaseURL() + "${fourniture_search}?" + href;
             var row = "";
@@ -212,7 +206,6 @@
                     row += "<td>" + value["totalMontant"] + "</td>";
                     row += "<td>" + value["etat"] + "</td></tr>";
                 });
-
                 var page = parseInt(data["page"]);
                 var totalPage = parseInt(data["Totalpage"]);
                 $("#fast_back_lot").attr("href", "page=0" + "&size=" + data["size"]);
@@ -230,7 +223,6 @@
                         $("#back_lot").removeClass("disabled");
                     }
                 }
-
                 if (page + 1 === totalPage) {
                     if (!$("#fast_forward_lot").hasClass("disabled")) {
                         $("#forward_lot").addClass("disabled");
@@ -242,18 +234,14 @@
                         $("#fast_forward_lot").removeClass("disabled");
                     }
                 }
-
                 $("#lotContent").html(row);
                 $("#size").html(data["size"]);
                 $("#pager_detail").val((page + 1) + "/" + totalPage);
             });
         }
-
         function getBaseURL() {
             var url = location.href;  // entire url including querystring - also: window.location.href;
             var baseURL = url.substring(0, url.indexOf('/', 14));
-
-
             if (baseURL.indexOf('http://localhost') !== -1) {
                 // Base Url for localhost
                 var url = location.href;  // window.location.href;
@@ -261,13 +249,11 @@
                 var index1 = url.indexOf(pathname);
                 var index2 = url.indexOf("/", index1 + 1);
                 var baseLocalUrl = url.substr(0, index2);
-
                 return baseLocalUrl + "/";
             } else {
                 // Root Url for domain name
                 return baseURL + "/";
             }
-
         }
     });
 </script>

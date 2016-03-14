@@ -20,6 +20,7 @@ import java.util.logging.Logger;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -33,6 +34,10 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
+@Secured(
+        {
+            "ROLE_USER", "ROLE_ADMIN"
+        })
 @RequestMapping("/user")
 public class UserController
 {
@@ -58,15 +63,12 @@ public class UserController
         final Integer page = webRequest.getParameter("page") != null ? Integer.valueOf(webRequest.getParameter("page")) : 0;
         final Integer size = webRequest.getParameter("size") != null ? Integer.valueOf(webRequest.getParameter("size")) : 55;
 
-        System.out.println("querynom = " + nom);
-
         final User user = new User();
         user.setNom(nom);
         final Role role = new Role();
         role.setUser(user);
 
         final Page<Role> resultPage = roleService.retrieveUsers(nom, page, size);
-        System.out.println("taille users =" + resultPage.getContent().size());
         model.addAttribute("page", page);
         model.addAttribute("user", role);
         model.addAttribute("Totalpage", resultPage.getTotalPages());
@@ -83,6 +85,7 @@ public class UserController
         return "user/show";
     }
 
+    @Secured("ROLE_ADMIN")
     @RequestMapping(value = "/new", method = RequestMethod.GET)
     public String newAction(final ModelMap model)
     {
@@ -91,30 +94,26 @@ public class UserController
         return "user/new";
     }
 
+    @Secured("ROLE_ADMIN")
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public String createAction(@Valid final Role role,
             final BindingResult result, final ModelMap model,
             final RedirectAttributes redirectAttributes)
     {
-        System.out.println("nous somme dans le USER_controlleur  ");
         if (result.hasErrors()) {
-            System.out.println("il ya ereur");
             model.addAttribute("error", "error");
             model.addAttribute("user", role);
             return "user/new";
         }
         if (!role.getUser().getPassword().equals(role.getUser().getConfirmPassword())) {
-            System.out.println("mots de passe not identiques: password=" + role.getUser().getPassword() + " et confirm=" + role.getUser().getConfirmPassword());
             model.addAttribute("user", role);
             model.addAttribute("password.error", "password.error");
             return "user/new";
         }
         else {
-
             try {
                 redirectAttributes.addFlashAttribute("info", "alert.success.new");
                 role.getUser().setEnabled(true);
-                System.out.println("depuis controller: role=" + role.getRole());
                 roleService.createRole(role);
                 return "redirect:/user/" + role.getId() + "/show";
             }
@@ -130,10 +129,10 @@ public class UserController
 
     }
 
+    @Secured("ROLE_ADMIN")
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public String deleteAction(final Role role, final ModelMap model)
     {
-        System.out.println("in delete action for user with ID=" + role.getId());
         Role roleToDelete = roleService.findOne(role.getId());
         if (roleToDelete.getUser().isEnabled() == true) {
             roleToDelete.getUser().setEnabled(false);
@@ -141,12 +140,11 @@ public class UserController
         else {
             roleToDelete.getUser().setEnabled(true);
         }
-
-        System.out.println("deleteAction of a user =" + roleToDelete.getId() + " -Role=" + roleToDelete.getRole() + " username=" + roleToDelete.getUser().getUsername() + " enabled=" + roleToDelete.getUser().isEnabled());
         roleService.updateUser(roleToDelete);
         return "redirect:/user/";
     }
 
+    @Secured("ROLE_ADMIN")
     @RequestMapping(value = "{id}/edit", method = RequestMethod.GET)
     public String editAction(@PathVariable("id") final Long id, final ModelMap model)
     {
@@ -191,44 +189,35 @@ public class UserController
             final RedirectAttributes redirectAttributes)
     {
         redirectAttributes.addFlashAttribute("info", "alert.success.new");
-        System.out.println("in controller user role= " + role.getRole());
         final Role roleUpdated = roleService.updateUser(role);
-        System.out.println("là c sur tout va bien et le role nouveau c " + roleUpdated.getRole());
         return "redirect:/welcome";
 
     }
 
+    @Secured("ROLE_ADMIN")
     @RequestMapping(value = "/{id}/update", method = RequestMethod.POST)
     public String updateAction(final ModelMap model, @PathVariable("id") final Long id,
             @Valid final Role role, final BindingResult result,
             final RedirectAttributes redirectAttributes)
     {
-        System.out.println("here we are in the controller update method");
-        System.out.println("the role= " + role.getRole() + " -P=" + role.getUser().getPassword() + " -U" + role.getUser().getUsername());
         if (result.hasErrors()) {
-            System.out.println("erreur lors de l'update");
             model.addAttribute("error", "error");
             model.addAttribute("user", role);
             return "user/edit";
         }
         if (!role.getUser().getPassword().equals(role.getUser().getConfirmPassword())) {
-            System.out.println("mots de passe not identiques: password=" + role.getUser().getPassword() + " et confirm=" + role.getUser().getConfirmPassword());
             model.addAttribute("password.error", "password.error");
             model.addAttribute("user", role);
             return "user/edit";
         }
         else {
-            System.out.println("tout va bien ... ou presque! ");
             try {
 
                 redirectAttributes.addFlashAttribute("info", "alert.success.new");
-                System.out.println("in controller user role= " + role.getRole());
                 final Role roleUpdated = roleService.updateUser(role);
-                System.out.println("là c sur tout va bien et le role nouveau c " + roleUpdated.getRole());
                 return "redirect:/user/" + roleUpdated.getId() + "/show";
             }
             catch (Exception ex) {
-                System.out.println("le username choisi existant");
                 model.addAttribute("exist", "exist");
                 model.addAttribute("user", role);
                 Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);

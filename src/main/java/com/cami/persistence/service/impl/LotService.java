@@ -13,7 +13,6 @@ import com.cami.persistence.model.Fourniture;
 import com.cami.persistence.model.Lot;
 import com.cami.persistence.service.ILotService;
 import com.cami.persistence.service.common.AbstractService;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -29,7 +28,8 @@ import org.springframework.stereotype.Service;
  * @author Brice GUEMKAM <briceguemkam@gmail.com>
  */
 @Service("lotService")
-public class LotService extends AbstractService<Lot> implements ILotService {
+public class LotService extends AbstractService<Lot> implements ILotService
+{
 
     @Autowired
     private ILotDao iLotDao;
@@ -41,12 +41,14 @@ public class LotService extends AbstractService<Lot> implements ILotService {
     private IFournitureDao iFournitureDao;
 
     @Override
-    protected PagingAndSortingRepository<Lot, Long> getDao() {
+    protected PagingAndSortingRepository<Lot, Long> getDao()
+    {
         return iLotDao;
     }
 
     @Override
-    public Lot create(Lot entity) {
+    public Lot create(Lot entity)
+    {
         Entree entree = iEntreeDao.findOne(entity.getEntree().getId());
         Fourniture fourniture = iFournitureDao.findOne(entity.getFourniture().getId());
         entity.setEntree(entree);
@@ -55,84 +57,79 @@ public class LotService extends AbstractService<Lot> implements ILotService {
     }
 
     @Override
-    public Lot update(Lot entity) {
-        System.out.println("in lot service");
-        System.out.println("updating lot");
+    public Lot update(Lot entity)
+    {
         Lot lotToUpdate = iLotDao.findOne(entity.getId());
-        System.out.println("lot fetched");
-//        Entree entree = iLotDao.findByEntreeId(lotToUpdate.getEntree().getId());
-        System.out.println("entree feteched");
         Fourniture fourniture = iFournitureDao.findOne(entity.getFourniture().getId());
-        System.out.println("fourniture fetched");
         lotToUpdate.setDateEntree(entity.getDateEntree());
-        System.out.println("date feteched");
         lotToUpdate.setNumero(entity.getNumero());
-        System.out.println("numero fetched");
         lotToUpdate.setPrixUnitaire(entity.getPrixUnitaire());
-        System.out.println("PU fetched");
         lotToUpdate.setPrixVenteUnitaire(entity.getPrixVenteUnitaire());
-        System.out.println("PUV fetched");
         lotToUpdate.setQuantite(entity.getQuantite());
-        System.out.println("Qte fetched");
         lotToUpdate.setTotalMontant(entity.getTotalMontant());
-        System.out.println("montant T fetched");
         lotToUpdate.setEtat(entity.getEtat());
-        System.out.println("etat fetched");
         lotToUpdate.setModifiable(entity.isModifiable());
-        System.out.println("modifiable setted");
         lotToUpdate.setFourniture(fourniture);
-        System.out.println("fourniture setted");
-        System.out.println("now launching the ultimate update ....");
         return iLotDao.save(lotToUpdate);
     }
 
     @Override
-    public void delete(Lot entity) {
+    public void delete(Lot entity)
+    {
         iLotDao.delete(entity);
     }
 
     @Override
-    public void deleteById(long entityId) {
+    public void deleteById(long entityId)
+    {
         iLotDao.delete(entityId);
     }
 
     @Override
-    public Page<Lot> findByFourniture(long id, int page, int size) {
+    public Page<Lot> findByFourniture(long id, int page, int size)
+    {
         return iLotDao.findByFourniture(id, new PageRequest(page, size));
     }
 
     @Override
-    public Page<Lot> searchLots(String numero, Date dateEntree, float prixUnitaire, float prixVenteUnitaire, int quantite, float totalMontant, String etat, int page, Integer size) {
+    public Page<Lot> searchLots(String numero, Date dateEntree, float prixUnitaire, float prixVenteUnitaire, int quantite, float totalMontant, String etat, int page, Integer size)
+    {
         return iLotDao.searchLots('%' + numero + '%', dateEntree, prixUnitaire, prixVenteUnitaire, quantite, totalMontant, '%' + etat + '%', new PageRequest(page, size));
     }
 
     @Override
-    public List<Lot> findByEntreeId(long id) {
+    public List<Lot> findByEntreeId(long id)
+    {
         return iLotDao.findByEntreeId(id);
     }
 
     @Override
-    public List<Lot> findByEntreeIdForEdit(long id) {
+    public List<Lot> findByEntreeIdForEdit(long id)
+    {
         return iLotDao.findByEntreeIdForEdit(id);
     }
 
     @Override
-    public List<Lot> findLotsForFifo(long id) {
+    public List<Lot> findLotsForFifo(long id)
+    {
         return iLotDao.findByFournitureForFifo(id);
     }
 
     @Override
-    public List<Lot> filterByLigneAudit(long id) {
+    public List<Lot> filterByLigneAudit(long id)
+    {
         return iLotDao.filterByLigneAudit(id);
     }
 
     @Override
-    public Lot findOneByLigneAudit(long id) {
+    public Lot findOneByLigneAudit(long id)
+    {
         return iLotDao.findOneByLigneAudit(id);
     }
 
     @Override
-    public Map<Long, String> getEntreeFournitures(long id) {
+    public Map<Long, String> getEntreeFournitures(long id)
+    {
         List<Fourniture> fournitures = iLotDao.getEntreeFournitures(id);
         Map<Long, String> listMap = new HashMap<>();
         for (Fourniture fourniture : fournitures) {
@@ -143,7 +140,8 @@ public class LotService extends AbstractService<Lot> implements ILotService {
     }
 
     @Override
-    public Map<Long, String> getFournituresForPerte(long id) {
+    public Map<Long, String> getFournituresForPerte(long id)
+    {
         List<Lot> lots = iLotDao.findByFournitureForPerte(id);
         Map<Long, String> listMap = new HashMap<>();
         for (Lot lot : lots) {
@@ -153,16 +151,13 @@ public class LotService extends AbstractService<Lot> implements ILotService {
     }
 
     @Override
-    public Page<Lot> search(long id, Date debut, Date fin, Integer quantite, int page, Integer size) {
-        
-        System.out.println("Debut = "+debut.toString() + " Fin = "+fin.toString());
-        System.out.println("Quantite = "+quantite+" "+id+" "+page+" "+size+"");
+    public Page<Lot> search(long id, Date debut, Date fin, Integer quantite, int page, Integer size)
+    {
         if (quantite == null) {
-            System.out.println("Exectution ici");
             return iLotDao.searchLots(id, debut, fin, new PageRequest(page, size));
-        }else {
+        }
+        else {
             return iLotDao.searchLots(id, debut, fin, quantite, new PageRequest(page, size));
         }
     }
-
 }

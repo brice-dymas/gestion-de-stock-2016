@@ -15,6 +15,7 @@ import java.util.Map;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -30,6 +31,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
  * @author samuel   < smlfolong@gmail.com >
  */
 @Controller
+@Secured(
+        {
+            "ROLE_USER", "ROLE_ADMIN"
+        })
 @RequestMapping("/service")
 public class DepartementController
 {
@@ -101,18 +106,12 @@ public class DepartementController
     public String createAction(@Valid final Departement departement, final BindingResult result,
             final ModelMap model, final RedirectAttributes redirectAttributes)
     {
-        System.out.println("dans le controller");
-        System.out.println("dans le controller");
-        if (result.hasErrors())
-        {
-            System.out.println("dans le controller avec erreur");
+        if (result.hasErrors()) {
             model.addAttribute("error", "error");
             model.addAttribute("departement", departement);
             return "service/new";
         }
-        else
-        {
-            System.out.println("dans le controller sans erreur");
+        else {
             redirectAttributes.addFlashAttribute("info", "alert.success.new");
             iDepartementService.create(departement);
             return "redirect:/service/" + departement.getId() + "/show";
@@ -124,14 +123,12 @@ public class DepartementController
             final BindingResult result, final RedirectAttributes redirectAttributes)
     {
 
-        if (result.hasErrors())
-        {
+        if (result.hasErrors()) {
             model.addAttribute("error", "error");
             model.addAttribute("departement", departement);
             return "service/edit";
         }
-        else
-        {
+        else {
             redirectAttributes.addFlashAttribute("info", "alert.success.new");
             iDepartementService.update(departement);
             return "redirect:/service/" + departement.getId() + "/show";
@@ -146,8 +143,7 @@ public class DepartementController
 
         final List<Agence> agences = iAgenceService.findAll();
 
-        for (Agence agence : agences)
-        {
+        for (Agence agence : agences) {
             map.put(agence.getId(), agence.getIntitule());
         }
 

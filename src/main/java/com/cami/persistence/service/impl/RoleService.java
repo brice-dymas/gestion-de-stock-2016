@@ -62,9 +62,7 @@ public class RoleService extends AbstractService<Role> implements IRoleService
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         role.setRole(getTheRealRoleOf(role.getRole()));
-        System.out.println("Role Service et role of this user befor save= " + role.getRole());
         user = userDao.save(user);
-//        System.out.println("Role Service et role of this user befor save= " + role.getRole());
         role.setUser(user);
         return roleDao.save(role);
     }
@@ -78,25 +76,15 @@ public class RoleService extends AbstractService<Role> implements IRoleService
         final Role userConnected = roleDao.retrieveAUser(auth.getName()); // get the current logged user
         final Role roleToUpdate = roleDao.findOne(role.getId());
         User userToUpdate;
-        System.out.println("updating user with ID " + role.getId());
-        System.out.println("in updateUser service method ...");
 
-        if (!userConnected.getRole().equals("ROLE_ADMIN"))
-        {
-            System.out.println("userConected is not admin launching his update of password ...");
+        if (!userConnected.getRole().equals("ROLE_ADMIN")) {
             userToUpdate = userDao.findByUsername(userConnected.getUser().getUsername());
-            System.out.println("his username is " + userToUpdate.getUsername());
-            System.out.println("encrypting his password ...");
             userToUpdate.setPassword(passwordEncoder.encode(role.getUser().getPassword()));
-            System.out.println(" password encrypted  \n Saving new configuration ....");
             userToUpdate = userDao.save(userToUpdate);
-            System.out.println("configuration saved");
             roleToUpdate.setUser(userToUpdate);
-            System.out.println("updating cache ....");
             return roleDao.save(roleToUpdate);
         }
-        else
-        {
+        else {
             userToUpdate = role.getUser();
             userToUpdate.setEnabled(role.getUser().isEnabled());
             userToUpdate.setNom(role.getUser().getNom());
@@ -108,14 +96,7 @@ public class RoleService extends AbstractService<Role> implements IRoleService
             final String vraiRole = getTheRealRoleOf(role.getRole());
             roleToUpdate.setUser(userToUpdate);
             roleToUpdate.setRole(vraiRole);
-            System.out.println("in update service user role= " + roleToUpdate.getRole());
-            System.out.println("updating ... ");
             Role r = roleDao.save(roleToUpdate);
-            System.out.println("update finished");
-            System.out.println("userToUpdate's username is " + r.getUser().getUsername());
-            System.out.println("\n \n \n \n in updateUser service method displaying user updated ");
-            System.out.println("deleteAction of a user =" + role.getId() + " -Role=" + role.getRole() + " username=" + role.getUser().getUsername() + " enabled=" + role.getUser().isEnabled());
-
             return r;
         }
 
@@ -124,15 +105,10 @@ public class RoleService extends AbstractService<Role> implements IRoleService
     @Override
     public Page<Role> findPaginated(String nom, int page, Integer size)
     {
-        System.out.println("debut find");
-        if (nom.length() < 1)
-        {
-            System.out.println("find sans param");
+        if (nom.length() < 1) {
             return roleDao.findAll(new PageRequest(page, size, Sort.Direction.ASC, "id"));
         }
-        else
-        {
-            System.out.println("find- avec nomParam=" + nom);
+        else {
             return roleDao.findPaginated('%' + nom + '%', new PageRequest(page, size, Sort.Direction.ASC, "id"));
         }
     }
@@ -158,21 +134,14 @@ public class RoleService extends AbstractService<Role> implements IRoleService
     private String getTheRealRoleOf(String roleToBuildFrom)
     {
         String role = "ros";
-        System.out.println("in the getTheRealRoleOf method and roleToBuildFrom is " + roleToBuildFrom);
-        if (roleToBuildFrom.equals("2") | roleToBuildFrom.equals("ROLE_TRESORIER"))
-        {
+        if (roleToBuildFrom.equals("2") | roleToBuildFrom.equals("ROLE_TRESORIER")) {
             role = "ROLE_TRESORIER";
-            System.out.println("roleToBuildFrom=2 donc role =" + role);
         }
-        if (roleToBuildFrom.equals("1") | roleToBuildFrom.equals("ROLE_ADMIN"))
-        {
+        if (roleToBuildFrom.equals("1") | roleToBuildFrom.equals("ROLE_ADMIN")) {
             role = "ROLE_ADMIN";
-            System.out.println("roleToBuildFrom=1 donc role =" + role);
         }
-        if (roleToBuildFrom.equals("3") | roleToBuildFrom.equals("ROLE_COMMERCIAL"))
-        {
+        if (roleToBuildFrom.equals("3") | roleToBuildFrom.equals("ROLE_COMMERCIAL")) {
             role = "ROLE_COMMERCIAL";
-            System.out.println("roleToBuildFrom=3 donc role =" + role);
         }
         return role;
     }
@@ -180,14 +149,10 @@ public class RoleService extends AbstractService<Role> implements IRoleService
     @Override
     public Page<Role> retrieveUsers(String nom, int page, Integer size)
     {
-        if (nom.length() < 1)
-        {
-            System.out.println("find sans param");
+        if (nom.length() < 1) {
             return roleDao.findAll(new PageRequest(page, size, Sort.Direction.ASC, "role"));
         }
-        else
-        {
-            System.out.println("find- avec nomParam=" + nom);
+        else {
             return roleDao.retrieveUsers('%' + nom + '%', new PageRequest(page, size, Sort.Direction.ASC, "role"));
         }
     }
@@ -204,10 +169,6 @@ public class RoleService extends AbstractService<Role> implements IRoleService
         return roleDao.retrieveAUser(username);
     }
 
-//    public boolean exists(User user)
-//    {
-//        return roleDao.retrieveAUser(user.getUsername()) instanceof Role;
-//    }
     @Override
     public void disableEntity(Role entity)
     {

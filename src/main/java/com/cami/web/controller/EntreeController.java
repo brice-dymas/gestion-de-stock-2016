@@ -28,6 +28,7 @@ import java.util.logging.Logger;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -43,6 +44,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
  * @author samuel   < smlfolong@gmail.com >
  */
 @Controller
+@Secured(
+        {
+            "ROLE_USER", "ROLE_ADMIN"
+        })
 @RequestMapping("/entree")
 public class EntreeController
 {
@@ -71,8 +76,7 @@ public class EntreeController
         List<Lot> listeLots = lotService.findByEntreeId(id);
         model.addAttribute("lots", listeLots);
         model.addAttribute("entree", entree);
-        if (entree.getLigneAuditId() != null)
-        {
+        if (entree.getLigneAuditId() != null) {
             Long idAudit = ligneOperationService.findOne(entree.getLigneAuditId()).getOperation().getId();
             model.addAttribute("idaudit", idAudit);
         }
@@ -90,7 +94,6 @@ public class EntreeController
         Entree entree = new Entree();
         entree.setLigneAuditId(id);
         entree.setCategorie(categori);
-        System.out.println(categori);
         final EntreeForm entreeForm = new EntreeForm();
         entreeForm.setEntree(entree);
         model.addAttribute("entreeForm", entreeForm);
@@ -137,7 +140,6 @@ public class EntreeController
         final Categorie categori = categorieService.getCategorie(categorie);
         Entree entree = new Entree();
         entree.setCategorie(categori);
-        System.out.println(categori);
         final EntreeForm entreeForm = new EntreeForm();
         entreeForm.setEntree(entree);
         model.addAttribute("entreeForm", entreeForm);
@@ -162,18 +164,14 @@ public class EntreeController
         final String designation = webRequest.getParameter("querydesignation") != null
                 ? webRequest.getParameter("querydesignation") : "";
         Date dateOperation = new Date();
-        try
-        {
+        try {
             dateOperation = dateFormatter.parse(dateOperationString);
         }
-        catch (ParseException ex)
-        {
-            try
-            {
+        catch (ParseException ex) {
+            try {
                 dateOperation = dateFormatter.parse("01/01/1960");
             }
-            catch (ParseException ex1)
-            {
+            catch (ParseException ex1) {
                 Logger.getLogger(SortieController.class.getName()).log(Level.SEVERE, null, ex1);
             }
         }
@@ -199,31 +197,20 @@ public class EntreeController
     public String createAction(final ModelMap model, @Valid final EntreeForm entree,
             final BindingResult result, final RedirectAttributes redirectAttributes)
     {
-        System.out.println("dans la methode create du controller");
-        System.out.println("tout parametre pret");
-        if (result.hasErrors())
-        {
-            System.out.println(" dans le entree controller avec errerur ");
+        if (result.hasErrors()) {
             Map<Long, String> fournitures = fournitureService.findByCategorieName(entree.getEntree().getCategorie().getIntitule());
             model.addAttribute("error", "error");
             model.addAttribute("entreeForm", entree);
             model.addAttribute("fournitures", fournitures);
-            System.out.println("Ligne Audit = " + entree.getEntree().getLigneAuditId());
             return "entree/new";
         }
-        else
-        {
+        else {
 
             String categorieName = entree.getEntree().getCategorie().getIntitule();
             final Categorie categorie = categorieService.getCategorie(categorieName);
             entree.getEntree().setCategorie(categorie);
-            System.out.println(" dans le entree controller sans erreur ");
             redirectAttributes.addFlashAttribute("info", "alert.success.new");
-            System.out.println("Categorie = " + entree.getEntree().getCategorie().getIntitule());
-            System.out.println("categorie ID = " + entree.getEntree().getCategorie().getId());
             entreeService.create(entree.getEntree());
-            System.out.println("tout est fini");
-
             return "redirect:/entree/" + entree.getEntree().getId() + "/show";
 
         }
@@ -233,16 +220,12 @@ public class EntreeController
     public String updateAction(@PathVariable("id") final Long id, final ModelMap model, @Valid final EntreeForm entree,
             final BindingResult result, final RedirectAttributes redirectAttributes)
     {
-        if (result.hasErrors())
-        {
-            System.out.println(" dans le entree controller pour update avec errerur ");
+        if (result.hasErrors()) {
             model.addAttribute("error", "error");
             model.addAttribute("entreeForm", entree);
             return "entree/edit";
         }
-        else
-        {
-            System.out.println(" dans le entree controller sans errerur ");
+        else {
             redirectAttributes.addFlashAttribute("info", "alert.success.new");
             entree.getEntree().setId(id);
             entreeService.update(entree.getEntree());
@@ -255,8 +238,7 @@ public class EntreeController
     {
         Map<Long, String> result = new HashMap<>();
         List<Categorie> categories = categorieService.findAll();
-        for (Categorie category : categories)
-        {
+        for (Categorie category : categories) {
             result.put(category.getId(), category.getIntitule());
         }
         return result;

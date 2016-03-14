@@ -25,8 +25,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories(basePackages
-        =
-        {
+        = {
             "com.cami.persistence.dao"
         })
 public class PersistenceJPAConfig
@@ -37,8 +36,7 @@ public class PersistenceJPAConfig
     {
         final LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(dataSource());
-        em.setPackagesToScan(new String[]
-        {
+        em.setPackagesToScan(new String[]{
             "com.cami.persistence.model"
         });
 
@@ -54,10 +52,9 @@ public class PersistenceJPAConfig
     {
         final BasicDataSource dataSource = new BasicDataSource();
         dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-        dataSource
-                .setUrl("jdbc:mysql://localhost:3306/cami?useUnicode=yes&characterEncoding=UTF-8");
+        dataSource.setUrl("jdbc:mysql://localhost:3306/cami?useUnicode=yes&characterEncoding=UTF-8");
         dataSource.setUsername("root");
-        dataSource.setPassword("");
+        dataSource.setPassword("sando");
         return dataSource;
     }
 

@@ -7,9 +7,12 @@ package com.cami.web.controller;
 
 import com.cami.persistence.model.Categorie;
 import com.cami.persistence.service.ICategorieService;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -24,6 +27,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
  * @author samuel   < smlfolong@gmail.com >
  */
 @Controller
+@Secured(
+        {
+            "ROLE_USER", "ROLE_ADMIN"
+        })
 @RequestMapping("/categorie")
 public class CategorieController
 {
@@ -88,18 +95,13 @@ public class CategorieController
     public String createAction(@Valid final Categorie categorie, final ModelMap model,
             final BindingResult result, final RedirectAttributes redirectAttributes)
     {
-        System.out.println("dans categorie controller");
-
-        if (result.hasErrors())
-        {
-            System.out.println("il y'a eu erreur");
+        if (result.hasErrors()) {
+            Logger.getLogger(CategorieController.class.getName()).log(Level.INFO, "il y'a eu erreur");
             model.addAttribute("error", "error");
             model.addAttribute("categorie", categorie);
             return "categorie/new";
         }
-        else
-        {
-            System.out.println("il y'a pas eu erreur");
+        else {
             redirectAttributes.addFlashAttribute("info", "alert.success.new");
             iCategorieService.create(categorie);
             return "redirect:/categorie/" + categorie.getId() + "/show";
@@ -112,13 +114,11 @@ public class CategorieController
             final BindingResult result, final RedirectAttributes redirectAttributes)
     {
 
-        if (result.hasErrors())
-        {
+        if (result.hasErrors()) {
             model.addAttribute("error", "error");
             return "categorie/edit";
         }
-        else
-        {
+        else {
             redirectAttributes.addFlashAttribute("info", "alert.success.new");
             iCategorieService.update(categorie);
             return "redirect:/categorie/" + categorie.getId() + "/show";

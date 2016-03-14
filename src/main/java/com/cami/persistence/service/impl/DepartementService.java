@@ -39,7 +39,6 @@ public class DepartementService extends AbstractService<Departement> implements 
     @Override
     public Departement create(Departement entity)
     {
-        System.out.println("dans le service sans erreur");
         entity.setAgence(iAgenceDao.findOne(entity.getAgence().getId()));
         return iDepartementDao.save(entity);
     }

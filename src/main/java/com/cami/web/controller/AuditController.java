@@ -29,6 +29,7 @@ import java.util.logging.Logger;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -44,6 +45,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
  * @author samuel   < smlfolong@gmail.com >
  */
 @Controller
+@Secured(
+        {
+            "ROLE_USER", "ROLE_ADMIN"
+        })
 @RequestMapping("/audit")
 public class AuditController
 {
@@ -114,18 +119,14 @@ public class AuditController
         final String designation = webRequest.getParameter("querydesignation") != null
                 ? webRequest.getParameter("querydesignation") : "";
         Date dateOperation = new Date();
-        try
-        {
+        try {
             dateOperation = dateFormatter.parse(dateOperationString);
         }
-        catch (ParseException ex)
-        {
-            try
-            {
+        catch (ParseException ex) {
+            try {
                 dateOperation = dateFormatter.parse("01/01/1960");
             }
-            catch (ParseException ex1)
-            {
+            catch (ParseException ex1) {
                 Logger.getLogger(SortieController.class.getName()).log(Level.SEVERE, null, ex1);
             }
         }
@@ -167,19 +168,13 @@ public class AuditController
             final BindingResult result,
             final RedirectAttributes redirectAttributes)
     {
-        if (result.hasErrors())
-        {
-            System.out.println("Dans Audit controller erreur" + result.getFieldError());
+        if (result.hasErrors()) {
             model.addAttribute("error", "error");
             model.addAttribute("auditForm", auditForm);
             return "audit/new";
         }
-        else
-        {
-            System.out.println("Dans Audit controller sans erreur");
-            System.out.println("Debut create");
+        else {
             auditService.createAudit(auditForm.getAudit());
-            System.out.println("Fin create");
             redirectAttributes.addFlashAttribute("info", "alert.success.new");
             return "redirect:/audit/" + auditForm.getAudit().getId() + "/show";
         }
@@ -189,7 +184,6 @@ public class AuditController
     public String deleteAction(final Operation audit)
     {
         Operation auditToDelete = auditService.findOne(audit.getId());
-        System.out.println("deleteAction of a audit =" + auditToDelete.getId());
         auditService.delete(auditToDelete);
         return "redirect:/audit/";
     }
@@ -199,15 +193,12 @@ public class AuditController
             final BindingResult result,
             final RedirectAttributes redirectAttributes)
     {
-        System.out.println("Dans Audit Controller debut ok...");
-        if (result.hasErrors())
-        {
+        if (result.hasErrors()) {
             model.addAttribute("error", "error");
             model.addAttribute("auditForm", auditForm);
             return "audit/edit";
         }
-        else
-        {
+        else {
             auditService.updateAudit(auditForm.getAudit());
             redirectAttributes.addFlashAttribute("info", "alert.success.new");
             return "redirect:/audit/" + auditForm.getAudit().getId() + "/show";
@@ -219,8 +210,7 @@ public class AuditController
     {
         Map<Long, String> map = new HashMap<>();
         List<Departement> departements = departementService.findAll();
-        for (Departement departement : departements)
-        {
+        for (Departement departement : departements) {
             map.put(departement.getId(), departement.getIntitule());
         }
         return map;
@@ -231,8 +221,7 @@ public class AuditController
     {
         Map<Long, String> map = new HashMap<>();
         List<Fourniture> fournitures = fournitureService.findExisting();
-        for (Fourniture fourniture : fournitures)
-        {
+        for (Fourniture fourniture : fournitures) {
             map.put(fourniture.getId(), fourniture.getDesignation());
         }
         return map;

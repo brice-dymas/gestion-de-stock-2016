@@ -28,6 +28,8 @@ import com.cami.persistence.service.common.AbstractService;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -86,62 +88,30 @@ public class OperationService extends AbstractService<Operation> implements IOpe
     @Transactional
     public Operation create(Operation operation)
     {
-        System.out.println("DEBUT SAVE SORTIE");
-
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println("fetching user connected");
         final Role userConnected = roleDao.retrieveAUser(auth.getName()); // get the current logged user
-        System.out.println("setting user");
         operation.setUser(userConnected);
-        System.out.println("setting dept");
         operation.setDepartement(departementService.findOne(operation.getDepartement().getId()));
-        System.out.println("dept setted");
         operation.setTypeOperation(typeOperationDao.findByIntitule("sortie"));
-        System.out.println("now saving ...");
         operation = operationDao.save(operation);
-        System.out.println("saving ended");
-
-        System.out.println("Debut LigneOperation - size : " + operation.getLigneOperations().size());
-        for (final LigneOperation ligneOperation : operation.getLigneOperations())
-        {
-            System.out.println("tour ligne 1");
-            if (ligneOperation == null)
-            {
-                System.out.println("Ligne Operation null");
+        for (final LigneOperation ligneOperation : operation.getLigneOperations()) {
+            if (ligneOperation == null) {
+                Logger.getLogger(OperationService.class.getName()).log(Level.INFO, "ligne d'opération nulle");
             }
-            else
-            {
-                System.out.println("Ligne Operation correct");
-                System.out.println("setting operation");
+            else {
+                Logger.getLogger(OperationService.class.getName()).log(Level.INFO, "ligne d'opération correcte");
                 ligneOperation.setOperation(operation);
-                System.out.println("operation setted");
-                System.out.println("setting lot");
-//                ligneOperation.setLots(iLotDao.findOne(ligneOperation.getLots().getId()));
-                System.out.println("lot setted");
-                System.out.println("setting fourniture");
                 Fourniture fourniture = fournitureDao.findOne(ligneOperation.getFourniture().getId());
                 ligneOperation.setFourniture(fourniture);
                 List<Lot> lotsToUpdate = doFifo(ligneOperation);
-                System.out.println(" fourniture getted now modifying ...");
                 fourniture.setQuantite(fourniture.getQuantite() - ligneOperation.getQuantite());
-                System.out.println(" fourniture getted now updating ...");
                 fournitureDao.save(fourniture);
-                System.out.println("setting state");
-                System.out.println(" fourniture update ...");
-                System.out.println("state setted");
-                System.out.println("now saving");
-                for (Lot lotsToUpdate1 : lotsToUpdate)
-                {
+                for (Lot lotsToUpdate1 : lotsToUpdate) {
                     lotService.update(lotsToUpdate1);
                 }
                 ligneOperationDao.save(ligneOperation);
-                System.out.println("item saved");
             }
         }
-
-        System.out.println("FIN SAVE");
-        System.out.println("redirecting to controller method ... ");
-        System.out.println("showin sorti id=" + operation);
         return operation;
     }
 
@@ -149,7 +119,6 @@ public class OperationService extends AbstractService<Operation> implements IOpe
     @Override
     public Operation createAudit(Operation operation)
     {
-        System.out.println("Dans la methode create audit");
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         final Role userConnected = roleDao.retrieveAUser(auth.getName());
         operation.setUser(userConnected);
@@ -157,27 +126,18 @@ public class OperationService extends AbstractService<Operation> implements IOpe
         operation.setTypeOperation(typeOperationDao.findByIntitule("audit"));
         Operation audit = operationDao.save(operation);
 
-        for (final LigneOperation ligneOperation : audit.getLigneOperations())
-        {
-            if (ligneOperation == null)
-            {
-                System.out.println("LigneOperation null");
+        for (final LigneOperation ligneOperation : audit.getLigneOperations()) {
+            if (ligneOperation == null) {
+                Logger.getLogger(OperationService.class.getName()).log(Level.INFO, "ligne d'opération nulle");
             }
-            else
-            {
+            else {
                 Fourniture fourniture = fournitureDao.findOne(ligneOperation.getFourniture().getId());
-                System.out.println("ligne operation non nulle");
+                Logger.getLogger(OperationService.class.getName()).log(Level.INFO, "ligne d'opération  non nulle");
                 ligneOperation.setOperation(audit);
-                System.out.println("quantitePhysique = " + ligneOperation.getQuantitePhysique());
                 ligneOperation.setFourniture(fourniture);
-                System.out.println("Quantite Machine =" + ligneOperation.getFourniture().getQuantite());
-                System.out.println("type opération = " + ligneOperation.getOperation().getTypeOperation().getIntitule());
-                System.out.println("avant save ligne operation = " + ligneOperation);
                 LigneOperation lp = ligneOperationDao.save(ligneOperation);
-                System.out.println("apres save ligne operation = " + ligneOperation);
 
-                if (lp.getQuantiteEcart() > 0)
-                {
+                if (lp.getQuantiteEcart() > 0) {
                     fourniture.setPerte(lp.getQuantiteEcart());
                     fournitureDao.save(fourniture);
                 }
@@ -192,8 +152,7 @@ public class OperationService extends AbstractService<Operation> implements IOpe
     public void delete(Operation entity)
     {
         List<LigneOperation> ligneOperations = ligneOperationDao.filterByOperationId(entity.getId());
-        for (LigneOperation ligneOperation : ligneOperations)
-        {
+        for (LigneOperation ligneOperation : ligneOperations) {
             ligneOperationDao.delete(ligneOperation);
         }
         operationDao.delete(entity);
@@ -216,14 +175,11 @@ public class OperationService extends AbstractService<Operation> implements IOpe
         editOperation.setUser(userConnected);
         editOperation = operationDao.save(editOperation);
 
-        for (final LigneOperation ligneOperation : operation.getLigneOperations())
-        {
-            if (ligneOperation == null)
-            {
-                System.out.println("Ligne Operation null");
+        for (final LigneOperation ligneOperation : operation.getLigneOperations()) {
+            if (ligneOperation == null) {
+                Logger.getLogger(OperationService.class.getName()).log(Level.INFO, "ligne d'opération nulle");
             }
-            else
-            {
+            else {
                 ligneOperation.setId(null);
                 ligneOperation.setOperation(editOperation);
                 fourniture = fournitureDao.findOne(ligneOperation.getFourniture().getId());
@@ -231,8 +187,7 @@ public class OperationService extends AbstractService<Operation> implements IOpe
                 List<Lot> lotsToUpdate = doFifoForUpdate(ligneOperation);
                 fourniture.setQuantite(fourniture.getQuantite() - ligneOperation.getQuantite());
                 fournitureDao.save(fourniture);
-                for (Lot lotsToUpdate1 : lotsToUpdate)
-                {
+                for (Lot lotsToUpdate1 : lotsToUpdate) {
                     lotService.update(lotsToUpdate1);
                 }
                 ligneOperationDao.save(ligneOperation);
@@ -246,8 +201,7 @@ public class OperationService extends AbstractService<Operation> implements IOpe
     public Operation updateAudit(Operation operation)
     {
         List<LigneOperation> ligneOperations = ligneOperationDao.filterByOperationId(operation.getId());
-        for (LigneOperation ligneOp : ligneOperations)
-        {
+        for (LigneOperation ligneOp : ligneOperations) {
             ligneOperationDao.delete(ligneOp);
         }
 
@@ -256,10 +210,8 @@ public class OperationService extends AbstractService<Operation> implements IOpe
         final Role userConnected = roleDao.retrieveAUser(auth.getName());
         auditToUpdate.setUser(userConnected);
         final Operation audit = operationDao.save(auditToUpdate);
-        System.out.println("Dans operation service id = " + audit.getNumero());
 
-        for (LigneOperation ligneOperation : operation.getLigneOperations())
-        {
+        for (LigneOperation ligneOperation : operation.getLigneOperations()) {
             ligneOperation.setOperation(audit);
             ligneOperation.setDateRegulation(ligneOperation.getDateRegulation());
             ligneOperation.setObservation(ligneOperation.getObservation());
@@ -296,14 +248,12 @@ public class OperationService extends AbstractService<Operation> implements IOpe
         List<LigneOperation> ligneOperationsToRemove = ligneOperationDao.filterByOperationId(operation.getId());
 
         //On retire les anciennes quantités des lots
-        for (LigneOperation ligneOperation : ligneOperationsToRemove)
-        {
+        for (LigneOperation ligneOperation : ligneOperationsToRemove) {
             fourniture = ligneOperation.getFourniture();
             fourniture.setQuantite(fourniture.getQuantite() + ligneOperation.getQuantite());
             fournitureDao.save(fourniture);
             List<Journal> journals = journalDao.findByLigneOperationID(ligneOperation.getId());
-            for (Journal journal : journals)
-            {
+            for (Journal journal : journals) {
                 lot = journal.getLot();
                 lot.setQuantite(lot.getQuantite() + journal.getQuantiteRetirer());
                 iLotDao.save(lot);
@@ -319,20 +269,17 @@ public class OperationService extends AbstractService<Operation> implements IOpe
         final List<Lot> listLots = lotService.findLotsForFifo(ligneOperation.getFourniture().getId());
         List<Lot> lotsModifier = new ArrayList<>();
         int quantiteRetrait = ligneOperation.getQuantite();
-        for (int i = 0; i < listLots.size() && quantiteRetrait > 0; i++)
-        {
+        for (int i = 0; i < listLots.size() && quantiteRetrait > 0; i++) {
             Journal journal = new Journal();
             journal.setLigneOperation(ligneOperation);
 
-            if (listLots.get(i).getQuantite() <= quantiteRetrait)
-            {
+            if (listLots.get(i).getQuantite() <= quantiteRetrait) {
                 quantiteRetrait -= listLots.get(i).getQuantite();
                 journal.setLot(listLots.get(i));
                 journal.setQuantiteRetirer(listLots.get(i).getQuantite());
                 listLots.get(i).setQuantite(0);
             }
-            if (listLots.get(i).getQuantite() > quantiteRetrait)
-            {
+            if (listLots.get(i).getQuantite() > quantiteRetrait) {
                 listLots.get(i).setQuantite(listLots.get(i).getQuantite() - quantiteRetrait);
                 journal.setLot(listLots.get(i));
                 journal.setQuantiteRetirer(quantiteRetrait);
@@ -351,19 +298,16 @@ public class OperationService extends AbstractService<Operation> implements IOpe
         final List<Lot> listLots = lotService.findLotsForFifo(ligneOperation.getFourniture().getId());
         List<Lot> lotsModifier = new ArrayList<>();
         int quantiteRetrait = ligneOperation.getQuantite();
-        for (int i = 0; i < listLots.size() && quantiteRetrait > 0; i++)
-        {
+        for (int i = 0; i < listLots.size() && quantiteRetrait > 0; i++) {
             Journal journal = new Journal();
             journal.setLigneOperation(ligneOperation);
-            if (listLots.get(i).getQuantite() <= quantiteRetrait)
-            {
+            if (listLots.get(i).getQuantite() <= quantiteRetrait) {
                 quantiteRetrait -= listLots.get(i).getQuantite();
                 journal.setLot(listLots.get(i));
                 journal.setQuantiteRetirer(listLots.get(i).getQuantite());
                 listLots.get(i).setQuantite(0);
             }
-            if (listLots.get(i).getQuantite() > quantiteRetrait)
-            {
+            if (listLots.get(i).getQuantite() > quantiteRetrait) {
                 listLots.get(i).setQuantite(listLots.get(i).getQuantite() - quantiteRetrait);
 
                 journal.setLot(listLots.get(i));
@@ -386,12 +330,10 @@ public class OperationService extends AbstractService<Operation> implements IOpe
     @Override
     public Page<Operation> findPaginated(long departementID, Date dateOperation, String intitule, String designation, int page, Integer size)
     {
-        if (departementID == -1)
-        {
+        if (departementID == -1) {
             return operationDao.findPaginated(dateOperation, '%' + intitule + '%', '%' + designation + '%', new PageRequest(page, size));
         }
-        else
-        {
+        else {
             return operationDao.findPaginated(departementID, dateOperation, '%' + intitule + '%', '%' + designation + '%', new PageRequest(page, size));
         }
     }

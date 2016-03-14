@@ -153,15 +153,9 @@ public class LigneOperation extends EntityObject
     @PrePersist
     public void calculQuantiteEcart()
     {
-        System.out.println("dans la préPersist de ligne operation");
-        if (this.operation.getTypeOperation().getIntitule().equalsIgnoreCase("audit"))
-        {
-            System.out.println("dans prePersist ligne operation");
+        if (this.operation.getTypeOperation().getIntitule().equalsIgnoreCase("audit")) {
             int valeurEcart;
-            System.out.println("Quantite fourniture = " + this.fourniture.getQuantite());
-            System.out.println("Quantite Physique fourniture = " + this.quantitePhysique);
             valeurEcart = this.fourniture.getQuantite() - this.quantitePhysique;
-            System.out.println("ecart = " + valeurEcart);
             this.setQuantiteEcart(valeurEcart);
         }
     }
